@@ -1,10 +1,10 @@
 # Project-Playbook
 
 ## Team
-Mark Nudalo
-Vedika Amin
-James Halsey
-Nick Capozzi
+- Mark Nudalo
+- Vedika Amin
+- James Halsey
+- Nick Capozzi
 
 ## Overview
 This is our senior project codename **Project Playbook**.
