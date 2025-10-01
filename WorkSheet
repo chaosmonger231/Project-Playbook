@@ -1,0 +1,10 @@
+## October 10/1/2025 - Mark Nudalo ##
+  * Created a Landing page with username and password
+  * Created a TEMPORARY favicon. Must replace this with a something new
+  * Added a loader animation.
+  * Created a second page called "Learning_Page". This is where the user goes after a successful log in
+
+  Note:
+  * Log-in is not done nore cybersecure.
+  * Learning_Page needs structure
+
