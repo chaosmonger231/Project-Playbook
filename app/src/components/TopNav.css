@@ -1,0 +1,101 @@
+/* Top bar spans full width */
+.topnav {
+  position: sticky;         /* stays at top when scrolling (optional) */
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+
+  /* subtle translucent bar over your gradient */
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+
+  /* soft border + rounded corners (optional) */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0 0 10px 10px;
+}
+
+/* brand/title */
+.topnav .brand {
+  font-weight: 800;
+  color: #800606;
+  opacity: 0.95;
+  letter-spacing: 0.2px;
+}
+
+/* links row */
+.topnav .links {
+  display: flex;
+  gap: 12px;
+  flex: 1;                  /* pushes actions to the right */
+}
+
+/* individual links (NavLink) */
+.topnav .links a {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  text-decoration: none;
+  color: #929701;           /* light text */
+  transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+  opacity: 0.9;
+}
+
+.topnav .links a:hover {
+  background: rgba(255, 255, 255, 0.18);
+  opacity: 1;
+}
+
+/* active route */
+.topnav .links a.active {
+  background: #3b82f6;      /* blue chip */
+  color: #fff;
+}
+
+/* right-side actions (e.g., Sign out) */
+.topnav .actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* signout button (if you pass className="signout-btn") */
+.signout-btn {
+  height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 10px;
+  font-weight: 800;
+  color: #fff;
+  background: #111827;      /* near-black */
+  cursor: pointer;
+  transition: transform .05s ease, opacity .2s ease, background .2s ease;
+}
+
+.signout-btn:hover { opacity: 0.92; }
+.signout-btn:active { transform: translateY(0.5px); }
+.signout-btn:disabled { opacity: 0.6; cursor: default; }
+
+/* small screens */
+@media (max-width: 520px) {
+  .topnav {
+    gap: 10px;
+    padding: 8px 10px;
+  }
+  .topnav .links {
+    gap: 8px;
+  }
+  .topnav .links a,
+  .signout-btn {
+    height: 34px;
+    padding: 0 10px;
+    border-radius: 8px;
+    font-weight: 700;
+  }
+}

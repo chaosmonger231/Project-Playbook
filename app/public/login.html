@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign in • Project Playbook</title>
+  <style>
+
+body {
+  margin: 0; min-height: 100dvh; display: grid; place-items: center;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: #90D5FF; color: #111827;
+}
+
+#card {
+  width: min(420px, 92%);
+  background: #fff;
+  border-radius: 14px;
+  /* ⬇️ more padding so fields don’t feel cramped */
+  padding: 28px;           /* was 24px */
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+  display: grid;
+  gap: 12px;
+}
+
+h1 { margin: 0 0 12px; font-size: 1.25rem; color: #111827; }
+.row { display: grid; gap: 10px; }
+
+input, button, label { font-size: 16px; }
+
+/* make inputs respect container padding */
+input {
+  box-sizing: border-box;  /* <-- important */
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  width: 100%;
+  background: #fff;
+  color: #111827;
+}
+
+input::placeholder { color: #6b7280; opacity: 1; }
+
+/* container centers the whole unit */
+.check-row {
+  display: flex;
+  justify-content: center;   /* centers horizontally */
+  margin-top: 4px;
+}
+
+/* label + checkbox stay together on one line */
+.check {
+  display: inline-flex;      /* sits inline, doesn't stretch full width */
+  align-items: center;       /* vertically align checkbox + text */
+  gap: 8px;                  /* space between box and text */
+  white-space: nowrap;       /* keep "Create a new account" on one line */
+  color: #111827;
+}
+
+/* optional: make the checkbox a bit larger and aligned */
+.check input {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+}
+
+.actions { display: grid; gap: 10px; margin-top: 4px; }
+
+/* This whole thing is just for the OR LMAO */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 10px 0;
+}
+.divider::before,
+.divider::after {
+  content: "";
+  height: 1px;
+  background: #e5e7eb;   /* light gray line */
+  flex: 1;
+}
+.divider span {
+  font-weight: 600;
+  color: #6b7280;        /* gray text */
+}
+
+/* This whole thing is just for the OR LMAO */
+
+button {
+  padding: 12px; border: 0; border-radius: 10px; cursor: pointer; font-weight: 700;
+  background: #3b82f6; color: #fff;
+}
+.google { background: #fff; color: #1f2937; border: 1px solid #d1d5db; }
+.hint { color: #6b7280; font-size: 14px; }
+.err { color: #dc2626; min-height: 1.25em; }
+  </style>
+</head>
+<body>
+  <div id="card">
+    <h1>Welcome to Project Playbook</h1>
+
+    <form id="loginForm" class="row" novalidate>
+      <input id="email" type="email" placeholder="Email" autocomplete="username" required />
+      <input id="password" type="password" placeholder="Password" autocomplete="current-password" required />
+
+      <div class="actions">
+        <button type="submit">Continue</button>
+        <div class="divider"><span>OR</span></div>
+        <button type="button" id="googleBtn" class="google">Continue with Google</button>
+      </div>
+
+    <div class="check-row">
+        <label class="check">
+            <input id="create" type="checkbox" />
+            <span>Create a new account</span>
+        </label>
+    </div>
+
+      <div id="err" class="err"></div>
+      <div class="hint">You'll be redirected to the app after signing in.</div>
+    </form>
+  </div>
+
+  <!-- Firebase (modular v12.4.0) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
+    import {
+      getAuth, setPersistence, browserLocalPersistence,
+      signInWithEmailAndPassword, createUserWithEmailAndPassword,
+      GoogleAuthProvider, signInWithPopup, onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDRvU612Xh4GZzhfnH8mkrZyi2ctYvIF_4",
+      authDomain: "projectplaybookauth-3c020.firebaseapp.com",
+      projectId: "projectplaybookauth-3c020",
+      storageBucket: "projectplaybookauth-3c020.firebasestorage.app",
+      messagingSenderId: "74028554477",
+      appId: "1:74028554477:web:6c4fba11754bb8aa1a94e4",
+      measurementId: "G-2B8L1S5TE3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    try { getAnalytics(app); } catch (_) { /* analytics may require HTTPS; ignore locally */ }
+
+    const auth = getAuth(app);
+    await setPersistence(auth, browserLocalPersistence);
+
+    // If already signed in, go straight to the app
+    onAuthStateChanged(auth, (user) => {
+      if (user) window.location.href = "/";
+    });
+
+    // Form handlers
+    const form = document.getElementById("loginForm");
+    const err  = document.getElementById("err");
+    const emailEl = document.getElementById("email");
+    const passEl  = document.getElementById("password");
+    const createEl = document.getElementById("create");
+    const googleBtn = document.getElementById("googleBtn");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      err.textContent = "";
+      const email = (emailEl.value || "").trim();
+      const pass  = passEl.value;
+
+      if (!email || !pass) { err.textContent = "Please enter email and password."; return; }
+
+      try {
+        if (createEl.checked) {
+          await createUserWithEmailAndPassword(auth, email, pass);
+        } else {
+          await signInWithEmailAndPassword(auth, email, pass);
+        }
+        window.location.href = "/"; // into your React app
+      } catch (e) {
+        err.textContent = e?.message || "Authentication failed";
+      }
+    });
+
+    googleBtn.addEventListener("click", async () => {
+      err.textContent = "";
+      try {
+        await signInWithPopup(auth, new GoogleAuthProvider());
+        window.location.href = "/";
+      } catch (e) {
+        err.textContent = e?.message || "Google sign-in failed";
+      }
+    });
+  </script>
+</body>
+</html>

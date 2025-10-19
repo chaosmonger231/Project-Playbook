@@ -1,0 +1,59 @@
+/* ---- Global reset / layout ---- */
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  font-family: system-ui, Arial, sans-serif;
+  background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+}
+
+/* ---- App frame ---- */
+.app {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;     /* TopNav on top, then layout row */
+}
+
+/* Row with sidebar (left) + content (right) */
+.layout {
+  flex: 1;
+  display: flex;
+  min-height: 0;              /* prevents overflow issues */
+}
+
+/* Sidebar (button styles live in Sidebar.css) */
+.sidenav {
+  width: 200px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+  border-right: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 100%;
+}
+
+/* Main content area */
+.content {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+}
+
+/* White card for page content */
+.box {
+  flex: 1;
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  min-height: 300px;
+}
+
+/* Optional: inner width constraint if you want */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
