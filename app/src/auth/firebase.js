@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, setPersistence, browserSessionPersistence } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDRvU612Xh4GZzhfnH8mkrZyi2ctYvIF_4",
@@ -13,3 +13,6 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+
+setPersistence(auth, browserSessionPersistence)
+  .catch(e => console.warn("Auth persistence not set:", e));
