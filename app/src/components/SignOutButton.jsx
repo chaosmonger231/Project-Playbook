@@ -9,7 +9,7 @@ export default function SignOutButton({ className = "" }) {
     try {
       setBusy(true);
       await signOut(auth);              // works for Email/Password and Google
-      window.location.replace("/login.html"); // jump back to login
+      window.location.replace("/login"); // jump back to login
     } catch (e) {
       console.error("Sign out failed", e);
       setBusy(false);
