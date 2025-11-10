@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Graphs from "./pages/Graphs";
 import Train from "./pages/Train";
 import Data from "./pages/Data";
+import AccountPage from "./pages/AccountPage.jsx";
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       { path: "/data", element: <Data /> },
     ],
   },
+
+  // Place for standalone pages
+  { path: "/account", element: <AccountPage />},
+
 ]);
 
 createRoot(document.getElementById("root")).render(
