@@ -9,6 +9,7 @@ import Graphs from "./pages/Graphs";
 import Train from "./pages/Train";
 import Data from "./pages/Data";
 import AccountPage from "./pages/AccountPage.jsx";
+import Onboarding from "./pages/Onboarding";
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
       { path: "/graphs", element: <Graphs /> },
       { path: "/train", element: <Train /> },
       { path: "/data", element: <Data /> },
+      { path: "/onboarding", element: <Onboarding /> },
     ],
   },
 

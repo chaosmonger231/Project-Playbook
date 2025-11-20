@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, setPersistence, browserSessionPersistence } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDRvU612Xh4GZzhfnH8mkrZyi2ctYvIF_4",
@@ -13,6 +14,9 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+
+// connects PP frontend to Firestore DB
+export const db = getFirestore(app);
 
 setPersistence(auth, browserSessionPersistence)
   .catch(e => console.warn("Auth persistence not set:", e));
