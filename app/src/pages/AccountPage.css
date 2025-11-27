@@ -1,73 +1,161 @@
+/* Page and main card layout */
 .account-page {
-  padding: 24px;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
+  align-items: flex-start;
+  padding: 2rem 1.5rem;            /* side padding on small screens */
+  background: #1d4ed8;             /* your blue background */
+}
+
+@media (min-width: 1024px) {
+  .account-page {
+    padding: 3rem 4rem;            /* more side padding on bigger screens */
+  }
 }
 
 .account-card {
   width: 100%;
-  max-width: 760px;
-  background: #fff;
-  color: #111;
-  border-radius: 14px;
-  box-shadow: 0 16px 40px rgba(0,0,0,.12), 0 4px 10px rgba(0,0,0,.06);
-  padding: 24px;
-}
-
-.account-card h1 {
-  margin: 0 0 8px 0;
-  font-size: 1.5rem;
-  font-weight: 800;
-}
-
-.muted {
-  color: #6b7280;
-  margin-bottom: 20px;
-}
-
-.grid {
-  display: grid;
-  gap: 14px;
-  grid-template-columns: 1fr 1fr;
-}
-
-.grid label {
-  display: grid;
-  gap: 6px;
-  font-weight: 600;
-}
-
-.grid input {
-  height: 38px;
-  padding: 0 12px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
+  max-width: 1200px;
+  margin: 0 auto;
   background: #f9fafb;
+  border-radius: 1.25rem;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.25);
 }
 
-.row {
-  display: flex;
-  gap: 10px;
-  margin-top: 16px;
+/* heading + helper text */
+.account-card h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #0f172a;
 }
 
-.btn {
-  height: 38px;
-  padding: 0 16px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  background: #f3f4f6;
-  font-weight: 700;
+.account-card .muted {
+  margin: 0 0 1.5rem;
+  font-size: 0.95rem;
+  color: #6b7280;
+}
+
+/* === GRID OF WHITE BOXES === */
+.account-grid {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;       /* mobile: 1 per row */
+}
+
+@media (min-width: 640px) {
+  .account-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2 per row */
+  }
+}
+
+@media (min-width: 1024px) {
+  .account-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3×2 on desktop */
+  }
+}
+
+/* base white box */
+.account-tile {
+  background: #ffffff;
+  border-radius: 0.9rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08);
+  min-height: 140px;
+}
+
+/* clickable vs static */
+.account-tile--clickable {
   cursor: pointer;
+  transition:
+    box-shadow 0.15s ease,
+    transform 0.08s ease,
+    border-color 0.15s ease,
+    background-color 0.15s ease;
 }
 
-.btn.primary {
-  background: #3b82f6;
-  color: #fff;
-  border-color: transparent;
+.account-tile--clickable:hover {
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.16);
+  transform: translateY(-1px);
+  border-color: #2563eb;
+  background-color: #f1f5f9;
 }
 
-@media (max-width: 640px) {
-  .grid { grid-template-columns: 1fr; }
-  .account-card { padding: 18px; }
+.account-tile--clickable:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+}
+
+.account-tile--center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* "box-ier" text styling */
+.account-tile-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 0.3rem;
+}
+
+.account-tile-subtitle {
+  font-size: 0.98rem;
+  font-weight: 500;
+  color: #111827;
+  word-break: break-word;
+}
+
+/* edit panel */
+.edit-panel {
+  margin-top: 1.75rem;
+  padding: 1rem 1.1rem;
+  background: #eff6ff;
+  border-radius: 0.9rem;
+  border: 1px solid #bfdbfe;
+}
+
+.edit-panel h2 {
+  margin: 0 0 0.6rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.edit-input {
+  width: 100%;
+  font-size: 0.96rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.5rem;
+  border: 1px solid #9ca3af;
+  margin-bottom: 0.8rem;
+}
+
+.edit-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px #2563eb33;
+}
+
+.edit-buttons {
+  gap: 0.5rem;
+}
+
+.edit-hint {
+  margin-top: 0.55rem;
+  font-size: 0.78rem;
+  color: #4b5563;
+}
+
+.buttons-row {
+  margin-top: 1.75rem;
 }

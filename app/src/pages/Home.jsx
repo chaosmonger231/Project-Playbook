@@ -1,8 +1,8 @@
 import { useOutletContext } from "react-router-dom";
 
 // Following imports for testing Firestore connection. Comment it out when done.
-import { db } from "../auth/firebase";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+// import { db } from "../auth/firebase";
+// import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 export default function Home() {
   const { selected } = useOutletContext();
