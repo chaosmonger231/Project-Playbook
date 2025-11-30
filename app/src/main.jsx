@@ -13,6 +13,7 @@ import Onboarding from "./pages/Onboarding";
 import "./index.css";
 import { UserProvider } from "./auth/UserContext.jsx";
 import Playbook2 from "./pages/Playbook2.jsx";
+import Playbook3 from "./pages/Playbook3.jsx";
 
 
 const router = createBrowserRouter([
@@ -47,7 +48,8 @@ const router = createBrowserRouter([
       { path: "/graphs", element: <Graphs /> },
       { path: "/train", element: <Train /> },
       { path: "/data", element: <Data /> },
-      { path: "/playbook2", element: <Playbook2 /> }
+      { path: "/playbook2", element: <Playbook2 /> },
+      { path: "/playbook3", element: <Playbook3 />}
     ],
   },
 ]);

@@ -51,9 +51,76 @@ body {
   min-height: 300px;
 }
 
+/* All h3 headings inside the white content box */
+.box h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid #111827; /* black line */
+}
+
 /* Optional: inner width constraint if you want */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+}
+
+/* ---- Home + Cybersecurity News layout ---- */
+
+.home-layout {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+/* Left side: the normal Overview content */
+.home-main {
+  flex: 2;
+}
+
+/* Right side: the news panel */
+.news-panel {
+  flex: 1;
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: #0f172a;              /* dark card to contrast white .box */
+  border: 1px solid #1e293b;
+  max-height: 800px;
+  overflow-y: auto;
+  color: #e5e7eb;                   /* light text */
+}
+
+.news-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid #f97316;
+}
+
+.news-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.news-item + .news-item {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #1f2933;
+}
+
+.news-item-headline {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.news-item-meta {
+  font-size: 0.78rem;
+  opacity: 0.8;
+  display: flex;
+  gap: 4px;
+  margin-top: 2px;
 }

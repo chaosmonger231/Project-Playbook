@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ransomware Detection & Response Playbook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 24px;
+      line-height: 1.6;
+      background: #f3f4f6;
+      color: #111827;
+    }
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 24px 28px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+    h1, h2, h3 {
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.8rem;
+      border-bottom: 2px solid #111827;
+      padding-bottom: 0.4rem;
+    }
+    h2 {
+      font-size: 1.3rem;
+      border-bottom: 1px solid #d1d5db;
+      padding-bottom: 0.35rem;
+    }
+    h3 {
+      font-size: 1.1rem;
+      margin-top: 1.2rem;
+    }
+    p {
+      margin: 0.4rem 0;
+    }
+    ul, ol {
+      margin: 0.2rem 0 0.8rem 1.4rem;
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.9rem;
+      background: #f9fafb;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+    pre {
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 10px 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    .callout {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 10px 12px;
+      margin: 0.8rem 0;
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+    .tagline {
+      font-size: 0.9rem;
+      color: #4b5563;
+      margin-bottom: 0.5rem;
+    }
+    hr {
+      margin: 1.2rem 0;
+      border: none;
+      border-top: 1px solid #e5e7eb;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Ransomware Detection &amp; Response Playbook</h1>
+    <p class="tagline">
+      This playbook helps small and mid-sized organizations detect ransomware activity early and respond in a structured way.
+    </p>
+
+    <h2>1. Ransomware Context</h2>
+    <p>
+      Ransomware is a type of malware that encrypts critical files or entire systems and demands payment to restore access.
+      It can arrive through many payload types, but the most common delivery methods are:
+    </p>
+    <ul>
+      <li>Phishing emails with malicious links or attachments</li>
+      <li>Compromised or misused remote access tools (for example, RDP or VPN)</li>
+      <li>Unpatched internet-facing services and vulnerable applications</li>
+    </ul>
+    <p>
+      Once inside, a malicious actor can quickly disable or encrypt large parts of the network if containment is not performed early in the attack.
+      In modern environments, ransomware is typically created and coordinated by organized criminal groups or syndicates.
+    </p>
+    <p>
+      These groups often target smaller organizations, municipalities, and schools because they usually lack robust security tools,
+      have limited staffing, and may have slower detection and response processes.
+    </p>
+
+    <h3>Double Extortion and Data Theft</h3>
+    <p>
+      Many ransomware groups do more than just encrypt files. They may also steal sensitive information such as personally identifiable information (PII)
+      and then threaten to release it publicly unless the ransom is paid. This tactic is known as <strong>double extortion</strong>.
+    </p>
+    <div class="callout">
+      The FBI advises against paying ransomware demands because there is no guarantee that the attacker will restore access,
+      and paying a ransom:
+      <ul>
+        <li>Does not guarantee data recovery</li>
+        <li>Supports and funds criminal activity</li>
+        <li>Encourages future attacks against other organizations</li>
+      </ul>
+      Reference: FBI IC3 Ransomware Guidance (ic3.gov).
+    </div>
+
+    <h3>Ransomware Stages</h3>
+    <p>Ransomware incidents typically occur in three primary stages:</p>
+    <ol>
+      <li>
+        <strong>Initial access</strong> – The attacker gains entry through methods such as phishing emails, unpatched services, or vulnerable remote tools.
+      </li>
+      <li>
+        <strong>Execution &amp; spread</strong> – Malicious code runs and begins encrypting local and shared files, spreading as widely as possible across the network.
+      </li>
+      <li>
+        <strong>Ransom demand &amp; impact</strong> – The victim sees ransom notes (files, images, or renamed extensions) and the attacker demands a payment,
+        often in cryptocurrency, in exchange for a decryption key.
+      </li>
+    </ol>
+    <p>
+      These stages show why detection is so important. The goal is to identify ransomware activity and trigger containment and communication
+      steps <strong>before</strong> data is encrypted.
+    </p>
+
+    <hr />
+
+    <h2>2. SOP: Downloading Pre-Configured Tools</h2>
+    <p>
+      This Standard Operating Procedure describes how to download and deploy pre-configured rules for
+      <strong>Wazuh Manager</strong> and a <strong>Suricata Sensor</strong>.
+      An accompanying video may be provided, but these written steps are sufficient to complete the setup.
+    </p>
+
+    <h3>Prerequisites</h3>
+    <ul>
+      <li>
+        <strong>Wazuh Manager</strong>
+        <ul>
+          <li>Wazuh Manager is already installed on a server.</li>
+          <li>Endpoints already have Wazuh Agents deployed.</li>
+          <li>You have SSH or local access to the Wazuh Manager server.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Suricata Sensor</strong>
+        <ul>
+          <li>Suricata is installed and active.</li>
+          <li>You can access <code>/etc/suricata/</code> on the sensor system.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3>2.1 Wazuh Rules Deployment</h3>
+    <p>Once prerequisites are complete, Wazuh rules are deployed first, followed by Suricata rules.</p>
+
+    <h4>Step 1 – Upload the XML rules file</h4>
+    <p>
+      Download <code>WazuhRules.xml</code> from this playbook and upload it to:
+    </p>
+    <pre>/var/ossec/etc/rules/</pre>
+    <p>Example upload using SCP during an SSH connection:</p>
+    <pre>scp local_ransomware_rules.xml ExampleUser@wazuh-manager:/var/ossec/etc/rules/</pre>
+
+    <h4>Step 2 – Validate XML syntax</h4>
+    <p>Validate the rules file syntax to ensure it was uploaded correctly:</p>
+    <pre>/var/ossec/bin/wazuh-logtest</pre>
+    <p>
+      If you see a message such as <code>Loaded ruleset successfully</code>, the rules are valid.
+      If not, correct the formatting and re-run the command. Using AI tools to help fix formatting is acceptable
+      as long as no PII or internal company data is included.
+    </p>
+
+    <h4>Step 3 – Confirm Wazuh is loading the rules</h4>
+    <p>Open the main Wazuh configuration file:</p>
+    <pre>sudo nano /var/ossec/etc/ossec.conf</pre>
+    <p>Look for a ruleset entry similar to:</p>
+    <pre>&lt;ruleset&gt;
+  &lt;rule_file&gt;WazuhRules.xml&lt;/rule_file&gt;
+&lt;/ruleset&gt;
+    </pre>
+    <p>
+      If this block is missing, add it to ensure Wazuh loads the new rule file, assuming the upload to
+      <code>/var/ossec/etc/rules/</code> was successful.
+    </p>
+
+    <h4>Step 4 – Restart Wazuh Manager</h4>
+    <p>Restart Wazuh Manager so the new rules are applied:</p>
+    <pre>sudo systemctl restart wazuh-manager</pre>
+    <p>
+      After this step, Wazuh Manager should read and alert on the uploaded ransomware rule set.
+      These rules should be tested in a safe environment before deployment in production.
+    </p>
+
+    <h3>2.2 Suricata Rules Deployment</h3>
+    <p>
+      Suricata rules deployment occurs on each Suricata Sensor node created in the relevant playbook.
+    </p>
+
+    <h4>Step 1 – Upload the rules file</h4>
+    <p>
+      Upload <code>SuricataRansomware.rules</code> to Suricata’s rules directory:
+    </p>
+    <pre>/etc/suricata/rules/SuricataRansomware.rules</pre>
+    <p>Example SCP command:</p>
+    <pre>scp SuricataRansomware.rules ExampleUser@suricata-sensor:/etc/suricata/rules/</pre>
+
+    <h4>Step 2 – Add the file to Suricata’s configuration</h4>
+    <p>Edit the main Suricata configuration file:</p>
+    <pre>sudo nano /etc/suricata/suricata.yaml</pre>
+    <p>In the <code>rule-files</code> section, ensure the ransomware rules file is listed:</p>
+    <pre>rule-files:
+  - SuricataRansomware.rules
+    </pre>
+
+    <h4>Step 3 – Validate the configuration</h4>
+    <p>Validate the Suricata configuration with:</p>
+    <pre>sudo suricata -T -c /etc/suricata/suricata.yaml -v</pre>
+    <p>
+      A successful validation shows a message similar to:
+      <code>Configuration provided was successfully loaded</code>.
+      If this is not shown, fix any configuration issues and re-run the test. AI tools may again be used to help
+      format YAML safely as long as no PII or sensitive internal data is included.
+    </p>
+
+    <h4>Step 4 – Restart Suricata</h4>
+    <p>Restart Suricata so the ransomware rules are applied:</p>
+    <pre>sudo systemctl restart suricata</pre>
+    <p>
+      At this point, Suricata should be reading and alerting on the uploaded ransomware rule set, which has been tested
+      in a safe environment before use.
+    </p>
+
+    <hr />
+
+    <h2>3. Drafting a Communication Tree</h2>
+    <p>
+      A communication tree ensures rapid, reliable, and organized communication during a cybersecurity incident.
+      It helps prevent delays, confusion, or duplicated work when a ransomware alert is raised.
+    </p>
+    <p>To design a communication tree, answer these core questions:</p>
+    <ul>
+      <li>
+        <strong>Who is the first person called?</strong><br />
+        For small and medium-sized government agencies or organizations, this is often the head IT worker
+        or endpoint manager.
+      </li>
+      <li>
+        <strong>Who gets called next?</strong><br />
+        Identify the second most reliable person who can respond to cybersecurity threats.
+      </li>
+      <li>
+        <strong>What is the fallback if they don’t answer?</strong><br />
+        Define what happens if the first two or three contacts are unavailable. If automated quarantine is not possible,
+        physically removing the device from the network may be the safest fallback.
+      </li>
+      <li>
+        <strong>What team or group activates based on that call?</strong><br />
+        Many ransomware attacks occur outside normal working hours. A defined on-call team or response group
+        is essential to avoid large-scale impact.
+      </li>
+    </ul>
+    <p>
+      Once these questions are answered, create a simple top-down organizational chart and distribute it to relevant staff.
+      This ensures everyone knows who is responsible, who to contact, and how the playbooks on this site should be followed
+      during a real incident.
+    </p>
+
+    <hr />
+
+    <h2>4. Draft Notification Template</h2>
+    <p>
+      A draft notification template helps ensure that alerts and escalations include all relevant details
+      and can be sent quickly under pressure. This template can be customized per organization.
+    </p>
+
+    <h3>4.1 Template</h3>
+    <pre>1) Incident Summary
+
+&lt;Alert Name&gt; was detected on &lt;endpoint&gt; at &lt;alert time&gt;.
+The logged-in user at the time was &lt;localuser&gt;.
+The originating process was &lt;process&gt;.
+
+Incident Severity:
+&lt;Malicious, Suspicious, Benign&gt;
+
+Mitigation Status:
+&lt;Mitigated, Not Mitigated, Under Investigation, False Positive&gt;
+
+
+2) Detection Details
+
+Alert Name:
+Endpoint Hostname:
+Internal Endpoint IP:
+External Endpoint IP:
+Logged-in User:
+Command Line Activity (if Wazuh):
+Network Log (if Suricata):
+File Modification Activity:
+
+
+3) OSINT Analysis
+
+&lt;IP/Command/Filename&gt; was deemed &lt;malicious, suspicious, benign&gt;.
+
+The &lt;IP/Command/Filename&gt; has the following reputation on VirusTotal:
+VirusTotal Reputation: &lt;link to VirusTotal report&gt;
+
+The &lt;IP&gt; has the following reputation on AbuseIPDB:
+AbuseIPDB Reputation: &lt;link to AbuseIPDB report&gt;
+
+
+4) Analyst Notes
+
+- Explain what the indicator of compromise was and the risk it poses.
+- Identify how far into the ransomware attack chain this alert is:
+
+  - Reconnaissance
+  - Credential Access
+  - Lateral Movement
+  - Privilege Escalation
+  - Backup Deletion
+  - Encryption
+  - Data Exfiltration
+
+- Note any duplicate alert detections on additional endpoints.
+- Note any other related alerts on the same hostname.
+
+Include Recommended Actions:
+
+Based on the alert activity, the following is recommended:
+&lt;Quarantine host, or note the host has already been quarantined&gt;
+&lt;Block IP&gt;
+&lt;Run AV scan&gt;
+&lt;Remove the following files: file path&gt;
+    </pre>
+
+    <hr />
+
+    <h2>5. Containment, Quarantine, and Next Steps</h2>
+    <p>
+      This playbook is designed specifically for the ransomware detection rules provided here. If an organization
+      adds additional rules or tooling, some containment steps may need to be adjusted.
+    </p>
+
+    <h3>Containment Playbook (Compromised Endpoint)</h3>
+    <ul>
+      <li>
+        <strong>Remove the endpoint from the network.</strong><br />
+        This can be done through the Wazuh agent (if supported by your environment) or by manually disconnecting
+        the device from the network.
+      </li>
+      <li>
+        <strong>Identify the suspicious process.</strong><br />
+        Use the alert details to determine the likely malicious process. Tools such as
+        <code>taskkill</code> (Windows) or <code>systemctl</code>/<code>ps</code> (Linux)
+        can help list and stop suspicious processes.
+      </li>
+      <li>
+        <strong>Follow up with your internal recovery procedures.</strong><br />
+        This may include validating backups, restoring systems, and reviewing logs for lateral movement or data exfiltration.
+      </li>
+    </ul>
+
+    <p>
+      Combined with the deployment of Wazuh and Suricata rules, this containment approach helps reduce the impact of
+      ransomware incidents by enabling earlier detection and more organized response.
+    </p>
+  </main>
+</body>
+</html>

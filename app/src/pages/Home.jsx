@@ -1,6 +1,7 @@
 import { useOutletContext, useNavigate } from "react-router-dom";
 import { useUser } from "../auth/UserContext";
 import CurrentUserName from "../components/CurrentUserName";
+import CyberNewsPanel from "../components/CyberNewsPanel";
 
 // Following imports for testing Firestore connection. Comment it out when done.
 // import { db } from "../auth/firebase";
@@ -21,10 +22,13 @@ export default function Home() {
     // COORDINATOR HOME
     if (selected === "box1") {
       mainContent = (
-        <section>
-          <h3>Overview</h3>
-          <p>Overview content goes here.</p>
-        </section>
+        <div className="home-layout">
+          <section className="home-main">
+            <h3>Overview</h3>
+            <p>Overview content goes here.</p>
+          </section>
+          <CyberNewsPanel />
+        </div>
       );
     } else if (selected === "box2") {
       mainContent = (
@@ -41,25 +45,52 @@ export default function Home() {
             improvements.
           </p>
 
-          <button
-            type="button"
-            onClick={() => navigate("/playbook2")}
+          <div
             style={{
               marginTop: "0.75rem",
-              padding: "0.45rem 0.9rem",
-              borderRadius: "999px",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "0.9rem",
-              fontWeight: 500,
-              background: "#2563eb",
-              color: "#fff",
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.5rem",
+              maxWidth: "260px",
             }}
           >
-            Open Playbook 2
-          </button>
+            <button
+              type="button"
+              onClick={() => navigate("/playbook2")}
+              style={{
+                padding: "0.45rem 0.9rem",
+                borderRadius: "999px",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "0.9rem",
+                fontWeight: 500,
+                background: "#2563eb",
+                color: "#fff",
+              }}
+            >
+              Open Playbook 2
+            </button>
 
+            {/* 🔽 New button for Playbook 3 goes right under Playbook 2 */}
+            <button
+              type="button"
+              onClick={() => navigate("/playbook3")}
+              style={{
+                padding: "0.45rem 0.9rem",
+                borderRadius: "999px",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "0.9rem",
+                fontWeight: 500,
+                background: "#2563eb",
+                color: "#fff",
+              }}
+            >
+              Open Playbook 3
+            </button>
+          </div>
         </section>
+        
       );
     } else {
       mainContent = (
@@ -109,9 +140,6 @@ export default function Home() {
       <h2>
         Welcome, <CurrentUserName />
       </h2>
-      <p>
-        Current box: <strong>{selected}</strong>
-      </p>
 
       {mainContent}
 
