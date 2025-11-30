@@ -11,9 +11,31 @@ import Data from "./pages/Data";
 import AccountPage from "./pages/AccountPage.jsx";
 import Onboarding from "./pages/Onboarding";
 import "./index.css";
+import { UserProvider } from "./auth/UserContext.jsx";
+import Playbook2 from "./pages/Playbook2.jsx";
+
 
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
+
+  {
+    path: "/onboarding",
+    element: (
+      <AuthGate>
+        <Onboarding />
+      </AuthGate>
+    ),
+  },
+
+  {
+    path: "/account",
+    element: (
+      <AuthGate>
+        <AccountPage />
+      </AuthGate>
+    ),
+  },
+
   {
     element: (
       <AuthGate>
@@ -25,17 +47,15 @@ const router = createBrowserRouter([
       { path: "/graphs", element: <Graphs /> },
       { path: "/train", element: <Train /> },
       { path: "/data", element: <Data /> },
-      { path: "/onboarding", element: <Onboarding /> },
+      { path: "/playbook2", element: <Playbook2 /> }
     ],
   },
-
-  // Place for standalone pages
-  { path: "/account", element: <AccountPage />},
-
 ]);
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <UserProvider>
+      <RouterProvider router={router} />
+    </UserProvider> 
   </React.StrictMode>
 );

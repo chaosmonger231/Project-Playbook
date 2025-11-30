@@ -1,4 +1,4 @@
-// src/pages/AccountPage.jsx
+// app/src/pages/AccountPage.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -28,7 +28,6 @@ export default function AccountPage() {
   const [editLabel, setEditLabel] = useState("");
   const [editDraft, setEditDraft] = useState("");
 
-  // Load user + user doc, but wait for Firebase auth to initialise
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -42,6 +41,8 @@ export default function AccountPage() {
 
         if (snap.exists()) {
           const data = snap.data();
+          console.log("AccountPage loaded profile:", data);
+
           setDisplayName(data.displayName || user.displayName || "");
           setOrgName(data.orgName || "");
           setRole(data.role || "");
@@ -83,7 +84,7 @@ export default function AccountPage() {
         {
           displayName: displayName.trim(),
           orgName: orgName.trim(),
-          role: role.trim(), // not edited here, but persisted
+          role: role.trim(),
           joinOrgCode: joinOrgCode.trim(),
           department: department.trim(),
           inviteCode: inviteCode.trim(),
@@ -171,7 +172,6 @@ export default function AccountPage() {
 
         {error && <p className="error">{error}</p>}
 
-        {/* 3×2 responsive grid of tiles */}
         <div className="account-grid">
           <AccountTile
             title="Name"
@@ -183,7 +183,7 @@ export default function AccountPage() {
             title="Email"
             subtitle={email || "No email on file"}
             clickable={false}
-            center={true}
+            center
           />
 
           <AccountTile
@@ -240,7 +240,6 @@ export default function AccountPage() {
           />
         </div>
 
-        {/* Edit panel – updates local state only */}
         {editingField && (
           <div className="edit-panel">
             <h2>Edit {editLabel}</h2>

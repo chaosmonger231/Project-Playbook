@@ -12,7 +12,7 @@ export default function Shell() {
     if (location.pathname.startsWith("/graphs"))  return ["box1","box2","box3","box4"];
     if (location.pathname.startsWith("/train"))   return ["box1","box2","box3","box4"];
     if (location.pathname.startsWith("/data"))    return ["box1","box2","box3","box4"];
-    return ["box1","box2","box3","box4"]; // default for Home or anything else
+    return ["box1","box2","box3"]; // default for Home or anything else
   }, [location.pathname]);
 
   // Optional: when route changes and the current selection isn't in the new set, reset.
@@ -24,7 +24,7 @@ export default function Shell() {
     <div className="app">
       <TopNav />
       <div className="layout">
-        <Sidebar selected={selected} onSelect={setSelected} />
+        <Sidebar selected={selected} onSelect={setSelected} items={items} />
         <main className="content">
           <div className="box">
             {/* Pass the current selection down to pages */}

@@ -1,3 +1,4 @@
+// app/src/auth/userProfile.js
 import { doc, setDoc, serverTimestamp, collection, addDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
@@ -13,7 +14,7 @@ export async function createOrg({ name, type, employeeCount, createdBy }) {
     type,                        // "k12" | "local_gov" | "small_business" | "individual"
     employeeCount: employeeCount ?? null,
     createdBy,                   // uid of coordinator
-    createdAt: serverTimestamp()
+    createdAt: serverTimestamp(),
   });
 
   return docRef.id; // this is orgId
@@ -33,12 +34,19 @@ export async function upsertUserProfile(user, extraData = {}) {
       uid: user.uid,
       email: user.email ?? "",
       displayName: extraData.displayName ?? user.displayName ?? "",
-      role: extraData.role ?? "coordinator",       // default for now
+
+      // canonical fields used by AccountPage + onboarding
+      role: extraData.role ?? "coordinator", // default if not provided
       orgId: extraData.orgId ?? null,
-      organizationName: extraData.organizationName ?? null,
+      orgName: extraData.orgName ?? "",         // <-- IMPORTANT
+      department: extraData.department ?? "",   // <-- IMPORTANT
       onboardingComplete: extraData.onboardingComplete ?? false,
+
+      // you can keep this if you want a legacy / extra field, or remove it:
+      // organizationName: extraData.orgName ?? null,
+
       createdAt: serverTimestamp(),
-      lastLoginAt: serverTimestamp()
+      lastLoginAt: serverTimestamp(),
     },
     { merge: true } // so we don't wipe existing fields
   );

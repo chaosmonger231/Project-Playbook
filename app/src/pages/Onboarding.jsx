@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../auth/firebase";
 import { createOrg, upsertUserProfile } from "../auth/userProfile";
+import "./Onboarding.css";
 
 export default function Onboarding() {
   const navigate = useNavigate();
@@ -12,8 +13,10 @@ export default function Onboarding() {
   const [error, setError] = useState("");
 
   // Form state
-  const [role, setRole] = useState("coordinator"); // default for now
+  const [role, setRole] = useState(""); // default for now
+  const [name, setName] = useState("");
   const [orgName, setOrgName] = useState("");
+  const [department, setDepartment] = useState("");
   const [orgType, setOrgType] = useState("");
   const [employeeCount, setEmployeeCount] = useState("");
 
@@ -22,10 +25,16 @@ export default function Onboarding() {
     const unsub = auth.onAuthStateChanged((user) => {
       if (!user) {
         // If not logged in, send them to login
-        navigate("/login");
+        navigate("/login", { replace: true });
         return;
       }
       setCurrentUser(user);
+
+      // prefill name from auth profile if available
+      if (user.displayName) {
+        setName(user.displayName);
+      }
+
       setLoadingUser(false);
     });
 
@@ -46,6 +55,11 @@ export default function Onboarding() {
       return;
     }
 
+    if (!name.trim()) {
+      setError("Please enter your name.");
+      return;
+    }
+
     if (!orgName.trim()) {
       setError("Please enter your organization name.");
       return;
@@ -60,7 +74,6 @@ export default function Onboarding() {
 
     try {
       // For now: always create a new org doc when onboarding.
-      // Later, you can add "search existing org" behavior.
       const orgId = await createOrg({
         name: orgName.trim(),
         type: orgType,
@@ -68,15 +81,18 @@ export default function Onboarding() {
         createdBy: currentUser.uid,
       });
 
+      // IMPORTANT: just these canonical field names:
       await upsertUserProfile(currentUser, {
+        displayName: name.trim(),
         role,
         orgId,
-        organizationName: orgName.trim(),
+        orgName: orgName.trim(),
+        department: department.trim(),
         onboardingComplete: true,
       });
 
       // After successful onboarding, go to Home ("/")
-      navigate("/");
+      navigate("/", { replace: true });
     } catch (e) {
       console.error("Onboarding save failed:", e);
       setError("Something went wrong saving your info. Please try again.");
@@ -86,145 +102,162 @@ export default function Onboarding() {
   }
 
   if (loadingUser) {
-    return <p>Loading your account…</p>;
+    return (
+      <div className="onboarding-page">
+        <div className="onboarding-card">
+          <p>Loading your account…</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div style={{ maxWidth: "600px", margin: "2rem auto" }}>
-      <h2>Welcome to Project Playbook</h2>
-      <p>Please tell us a bit about your role and organization.</p>
-
-      {error && (
-        <p style={{ color: "red", marginTop: "0.5rem" }}>
-          {error}
+    <div className="onboarding-page">
+      <div className="onboarding-card">
+        <h2>Welcome to Project Playbook</h2>
+        <p className="onboarding-muted">
+          Please tell us a bit about your role and organization.
         </p>
-      )}
 
-      <form onSubmit={handleSubmit} style={{ marginTop: "1.5rem" }}>
-        {/* Role selection */}
-        <div style={{ marginBottom: "1rem" }}>
-          <h3>Role</h3>
-          <div style={{ display: "flex", gap: "1rem" }}>
-            <button
-              type="button"
-              onClick={() => setRole("coordinator")}
-              style={{
-                padding: "0.5rem 1rem",
-                borderRadius: "999px",
-                border: role === "coordinator" ? "2px solid black" : "1px solid #ccc",
-                background: role === "coordinator" ? "#ddd" : "#f9f9f9",
-                cursor: "pointer",
-              }}
-            >
-              Coordinator
-            </button>
-            <button
-              type="button"
-              onClick={() => setRole("participant")}
-              style={{
-                padding: "0.5rem 1rem",
-                borderRadius: "999px",
-                border: role === "participant" ? "2px solid black" : "1px solid #ccc",
-                background: role === "participant" ? "#ddd" : "#f9f9f9",
-                cursor: "pointer",
-              }}
-            >
-              Participant
-            </button>
+        {error && <p className="onboarding-error">{error}</p>}
+
+        <form onSubmit={handleSubmit} className="onboarding-form">
+          {/* Name */}
+          <div className="onboarding-field">
+            <h3>Name</h3>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Your name"
+            />
           </div>
-          <small style={{ display: "block", marginTop: "0.25rem" }}>
-            (Later, participants may be invited directly by coordinators.)
-          </small>
-        </div>
 
-        {/* Org name */}
-        <div style={{ marginBottom: "1rem" }}>
-          <h3>Organization Name</h3>
-          <input
-            type="text"
-            value={orgName}
-            onChange={(e) => setOrgName(e.target.value)}
-            placeholder="e.g. Evergreen Elementary School"
-            style={{ width: "100%", padding: "0.5rem" }}
-          />
-          <small style={{ display: "block", marginTop: "0.25rem" }}>
-            In the future, this can also search existing organizations.
-          </small>
-        </div>
-
-        {/* Org type */}
-        <div style={{ marginBottom: "1rem" }}>
-          <h3>Organization Type</h3>
-          <div style={{ display: "grid", gap: "0.5rem" }}>
-            <label>
-              <input
-                type="radio"
-                name="orgType"
-                value="k12"
-                checked={orgType === "k12"}
-                onChange={(e) => setOrgType(e.target.value)}
-              />{" "}
-              K–12 Education
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="orgType"
-                value="local_gov"
-                checked={orgType === "local_gov"}
-                onChange={(e) => setOrgType(e.target.value)}
-              />{" "}
-              Local Government Agency
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="orgType"
-                value="small_business"
-                checked={orgType === "small_business"}
-                onChange={(e) => setOrgType(e.target.value)}
-              />{" "}
-              Small Business / Private Entity
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="orgType"
-                value="individual"
-                checked={orgType === "individual"}
-                onChange={(e) => setOrgType(e.target.value)}
-              />{" "}
-              Individual
-            </label>
+          {/* Role selection */}
+          <div className="onboarding-field">
+            <h3>Role</h3>
+            <div className="role-buttons">
+              <button
+                type="button"
+                onClick={() => setRole("coordinator")}
+                className={
+                  role === "coordinator"
+                    ? "role-button role-button--active"
+                    : "role-button"
+                }
+              >
+                Coordinator
+              </button>
+              <button
+                type="button"
+                onClick={() => setRole("participant")}
+                className={
+                  role === "participant"
+                    ? "role-button role-button--active"
+                    : "role-button"
+                }
+              >
+                Participant
+              </button>
+            </div>
+            <small className="onboarding-help">
+              (Later, participants may be invited directly by coordinators.)
+            </small>
           </div>
-        </div>
 
-        {/* Employee count (optional) */}
-        <div style={{ marginBottom: "1.5rem" }}>
-          <h3>Approximate Employee Count (optional)</h3>
-          <input
-            type="number"
-            min="0"
-            value={employeeCount}
-            onChange={(e) => setEmployeeCount(e.target.value)}
-            placeholder="e.g. 25"
-            style={{ width: "100%", padding: "0.5rem" }}
-          />
-        </div>
+          {/* Org name */}
+          <div className="onboarding-field">
+            <h3>Organization Name</h3>
+            <input
+              type="text"
+              value={orgName}
+              onChange={(e) => setOrgName(e.target.value)}
+              placeholder="e.g. Evergreen Elementary School"
+            />
+            <small className="onboarding-help">
+              In the future, this can also search existing organizations.
+            </small>
+          </div>
 
-        <button
-          type="submit"
-          disabled={saving}
-          style={{
-            padding: "0.75rem 1.5rem",
-            borderRadius: "999px",
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          {saving ? "Saving..." : "Save and Continue"}
-        </button>
-      </form>
+          {/* Department / Team */}
+          <div className="onboarding-field">
+            <h3>Department / Team (optional)</h3>
+            <input
+              type="text"
+              value={department}
+              onChange={(e) => setDepartment(e.target.value)}
+              placeholder="e.g. IT, Operations, 5th Grade Team"
+            />
+          </div>
+
+          {/* Org type */}
+          <div className="onboarding-field">
+            <h3>Organization Type</h3>
+            <div className="onboarding-radio-group">
+              <label>
+                <input
+                  type="radio"
+                  name="orgType"
+                  value="k12"
+                  checked={orgType === "k12"}
+                  onChange={(e) => setOrgType(e.target.value)}
+                />{" "}
+                K–12 Education
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="orgType"
+                  value="local_gov"
+                  checked={orgType === "local_gov"}
+                  onChange={(e) => setOrgType(e.target.value)}
+                />{" "}
+                Local Government Agency
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="orgType"
+                  value="small_business"
+                  checked={orgType === "small_business"}
+                  onChange={(e) => setOrgType(e.target.value)}
+                />{" "}
+                Small Business / Private Entity
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="orgType"
+                  value="individual"
+                  checked={orgType === "individual"}
+                  onChange={(e) => setOrgType(e.target.value)}
+                />{" "}
+                Individual
+              </label>
+            </div>
+          </div>
+
+          {/* Employee count (optional) */}
+          <div className="onboarding-field">
+            <h3>Approximate Employee Count (optional)</h3>
+            <input
+              type="number"
+              min="0"
+              value={employeeCount}
+              onChange={(e) => setEmployeeCount(e.target.value)}
+              placeholder="e.g. 25"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={saving}
+            className="onboarding-submit"
+          >
+            {saving ? "Saving..." : "Save and Continue"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Impact Calculator</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding: 1.5rem;
+      background: #f5f5f7;
+    }
+    h1, h2 {
+      margin: 0 0 0.4rem;
+    }
+    p {
+      margin: 0 0 0.6rem;
+    }
+
+    #help-text {
+      max-width: 900px;
+      margin-bottom: 1.25rem;
+      font-size: 0.9rem;
+      color: #4b5563;
+      background: #e5e7eb;
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+    }
+
+    #impact-report {
+      margin-top: 1rem;
+    }
+
+    #impact-report table,
+    #pdf-container table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      border-radius: 0.75rem;
+      overflow: hidden;
+      font-size: 0.75rem;
+    }
+    #impact-report thead,
+    #pdf-container thead {
+      background: #111827;
+      color: #f9fafb;
+    }
+    #impact-report th, #impact-report td,
+    #pdf-container th, #pdf-container td {
+      padding: 0.35rem 0.4rem;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+      vertical-align: top;
+    }
+    #impact-report th,
+    #pdf-container th {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    #impact-report tr:last-child td,
+    #pdf-container tr:last-child td {
+      border-bottom: none;
+    }
+
+    #impact-report input[type="text"],
+    #impact-report textarea,
+    #impact-report select {
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.3rem;
+      border-radius: 0.35rem;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+    }
+
+    #impact-report textarea {
+      resize: vertical;
+      min-height: 2.2rem;
+      overflow: hidden;
+    }
+
+    #impact-report select {
+      text-align: center;
+    }
+
+    #impact-report td:nth-child(2),
+    #impact-report th:nth-child(2),
+    #pdf-container td:nth-child(2),
+    #pdf-container th:nth-child(2) {
+      max-width: 220px;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+    }
+
+    .controls {
+      margin: 1rem 0;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    button {
+      border-radius: 999px;
+      padding: 0.45rem 0.9rem;
+      border: none;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .btn-primary {
+      background: #2563eb;
+      color: #fff;
+    }
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .impact-low    { background: #dcfce7; }
+    .impact-med    { background: #fef9c3; }
+    .impact-high   { background: #fee2e2; }
+    .impact-crit   { background: #fecaca; font-weight: 600; }
+    .impact-cell {
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .input-like {
+      border-radius: 0.35rem;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      text-align: center;
+    }
+
+    #timestamp {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-bottom: 0.6rem;
+    }
+
+    #pdf-container {
+      display: none;
+      margin-top: 1rem;
+    }
+
+    #pdf-legend {
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      color: #374151;
+    }
+    #pdf-legend ul {
+      margin: 0.25rem 0 0 1rem;
+      padding: 0;
+    }
+
+    .pdf-mode #pdf-container {
+      transform: scale(0.85);
+      transform-origin: top left;
+      width: 1200px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Impact Calculator</h1>
+  <p> Impact analysis in ISO 31000 focuses on the severity of consequences to organizational objectives across operational, financial, safety, legal, and reputational areas. This calculator allows for grading of consequences and impacts for your goals. </p>
+<br>
+<section id="help-text">
+  <h2>How this calculator works</h2>
+  <p> 
+    1. For each failure point, enter a description and optional notes.<br>
+    2. Choose an impact score (1–5) for each category: Operational, Financial, Safety,
+       Legal/Regulatory, and Reputational.<br>
+    3. The calculator sums the category scores to produce an <strong>Overall Impact Score</strong> (1–25).<br>
+    4. The Overall Impact Score is mapped to an <strong>Impact Level</strong> (Low, Moderate, High, Critical).<br>
+    5. Click <strong>Download PDF</strong> to export a report with your entries, overall scores, highest impact area, and impact levels.
+  </p>
+<p> Examples of impact sheets are seen below.</p>
+
+<p> <a href="Playbook 2 - Impact Sheet\examples\Business.pdf" target="_blank" download>Business (PDF)</a> </p>
+<p> <a href="Playbook 2 - Impact Sheet\examples\CityGovernment.pdf" target="_blank" download>Government (PDF)</a> </p>
+<p> <a href="Playbook 2 - Impact Sheet\examples\School.pdf" target="_blank" download>School (PDF)</a> </p>
+</section>
+
+<div class="controls">
+  <button class="btn-primary" onclick="addRow()">+ Add Row</button>
+  <button class="btn-secondary" onclick="exportCSV()">⬇ Download CSV</button>
+  <button class="btn-secondary" onclick="downloadPDF()">📄 Download PDF</button>
+</div>
+
+<div id="impact-report">
+  <h2>Impact Matrix Report</h2>
+  <p id="timestamp"></p>
+
+  <table id="impactTable">
+    <thead>
+      <tr>
+        <th>Failure Point</th>
+        <th>Notes</th>
+        <th>Op Impact</th>
+        <th>Fin Impact</th>
+        <th>Safety Impact</th>
+        <th>Legal/Reg Impact</th>
+        <th>Reput. Impact</th>
+        <th>Overall Impact Score</th>
+        <th>Impact Level</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- rows go here -->
+    </tbody>
+  </table>
+</div>
+
+<div id="pdf-container"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+  function updateTimestamp() {
+    var ts = new Date().toLocaleString();
+    document.getElementById('timestamp').textContent =
+      "Generated: " + ts;
+  }
+
+  function autoResizeTextarea(el) {
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = (el.scrollHeight || 40) + 'px';
+  }
+
+  function createSelect() {
+    var sel = document.createElement('select');
+    var empty = document.createElement('option');
+    empty.value = "";
+    empty.textContent = "-";
+    sel.appendChild(empty);
+    for (var i = 1; i <= 5; i++) {
+      var opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = i;
+      sel.appendChild(opt);
+    }
+    sel.addEventListener('change', recalcAll);
+    return sel;
+  }
+
+  function addRow(prefill) {
+    prefill = prefill || {};
+
+    var tbody = document.querySelector('#impactTable tbody');
+    var tr = document.createElement('tr');
+
+    // Failure point
+    var tdFP = document.createElement('td');
+    var fpInput = document.createElement('input');
+    fpInput.type = "text";
+    fpInput.value = prefill.failurePoint || "";
+    fpInput.oninput = recalcAll;
+    tdFP.appendChild(fpInput);
+    tr.appendChild(tdFP);
+
+    // Notes
+    var tdNotes = document.createElement('td');
+    var notes = document.createElement('textarea');
+    notes.value = prefill.notes || "";
+    notes.oninput = function () {
+      autoResizeTextarea(notes);
+      recalcAll();
+    };
+    autoResizeTextarea(notes);
+    tdNotes.appendChild(notes);
+    tr.appendChild(tdNotes);
+
+    // Impact selects (op, fin, saf, leg, rep)
+    var keys = ['op', 'fin', 'saf', 'leg', 'rep'];
+    for (var k = 0; k < keys.length; k++) {
+      var tdImp = document.createElement('td');
+      var sel = createSelect();
+      if (prefill[keys[k]]) {
+        sel.value = prefill[keys[k]];
+      }
+      tdImp.appendChild(sel);
+      tr.appendChild(tdImp);
+    }
+
+    // Overall score cell
+    var tdOverall = document.createElement('td');
+    tdOverall.className = 'impact-cell';
+    tr.appendChild(tdOverall);
+
+    // Impact level cell
+    var tdLevel = document.createElement('td');
+    tdLevel.className = 'impact-cell';
+    tr.appendChild(tdLevel);
+
+    // Delete button
+    var tdDel = document.createElement('td');
+    var btn = document.createElement('button');
+    btn.textContent = '✖';
+    btn.style.background = "#fee2e2";
+    btn.style.border = "1px solid #fca5a5";
+    btn.style.borderRadius = "6px";
+    btn.style.cursor = "pointer";
+    btn.style.padding = "0.25rem 0.45rem";
+    btn.style.fontSize = "0.8rem";
+    btn.style.lineHeight = "1";
+    btn.onclick = function () {
+      tr.parentNode.removeChild(tr);
+      recalcAll();
+    };
+    tdDel.appendChild(btn);
+    tr.appendChild(tdDel);
+
+    tbody.appendChild(tr);
+    recalcAll();
+  }
+
+  function recalcAll() {
+    var tbody = document.querySelector('#impactTable tbody');
+    var rows = tbody.querySelectorAll('tr');
+
+    for (var r = 0; r < rows.length; r++) {
+      var row = rows[r];
+      var cells = row.getElementsByTagName('td');
+      if (cells.length < 9) continue;
+
+      var opImpact  = parseInt((cells[2].querySelector('select') || {}).value || 0, 10);
+      var finImpact = parseInt((cells[3].querySelector('select') || {}).value || 0, 10);
+      var safImpact = parseInt((cells[4].querySelector('select') || {}).value || 0, 10);
+      var legImpact = parseInt((cells[5].querySelector('select') || {}).value || 0, 10);
+      var repImpact = parseInt((cells[6].querySelector('select') || {}).value || 0, 10);
+
+      var impacts = [opImpact, finImpact, safImpact, legImpact, repImpact];
+      var overall = 0;
+      for (var i = 0; i < impacts.length; i++) {
+        overall += impacts[i];
+      }
+
+      var tdOverall = cells[7];
+      var tdLevel   = cells[8];
+
+      tdOverall.textContent = overall || "";
+
+      tdLevel.classList.remove('impact-low','impact-med','impact-high','impact-crit');
+
+      if (!overall) {
+        tdLevel.textContent = "";
+        continue;
+      }
+
+      var level = "";
+      if (overall <= 5) {
+        level = "Low";
+        tdLevel.classList.add('impact-low');
+      } else if (overall <= 12) {
+        level = "Moderate";
+        tdLevel.classList.add('impact-med');
+      } else if (overall <= 19) {
+        level = "High";
+        tdLevel.classList.add('impact-high');
+      } else {
+        level = "Critical";
+        tdLevel.classList.add('impact-crit');
+      }
+      tdLevel.textContent = level;
+    }
+
+    updateTimestamp();
+  }
+
+  function exportCSV() {
+    var table = document.getElementById('impactTable');
+    var rows = table.querySelectorAll('tr');
+    var csv = [];
+
+    for (var r = 0; r < rows.length; r++) {
+      var row = rows[r];
+      var cols = row.querySelectorAll('th,td');
+      var rowData = [];
+      for (var c = 0; c < cols.length; c++) {
+        // skip Delete column
+        if (c === cols.length - 1) continue;
+
+        var cell = cols[c];
+        var input = cell.querySelector('input, textarea, select');
+        var text = "";
+        if (input) {
+          text = input.value;
+        } else {
+          text = cell.textContent.trim();
+        }
+        if (text.indexOf('"') !== -1 || text.indexOf(',') !== -1 || text.indexOf('\n') !== -1) {
+          text = '"' + text.replace(/"/g, '""') + '"';
+        }
+        rowData.push(text);
+      }
+      csv.push(rowData.join(','));
+    }
+
+    var blob = new Blob([csv.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'impact_matrix_export.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function buildPdfTable() {
+    var sourceRows = document.querySelectorAll('#impactTable tbody tr');
+    var pdfContainer = document.getElementById('pdf-container');
+    pdfContainer.innerHTML = '';
+
+    var h2 = document.createElement('h2');
+    h2.textContent = 'Impact Matrix Report';
+    pdfContainer.appendChild(h2);
+
+    var ts = document.createElement('p');
+    ts.textContent = document.getElementById('timestamp').textContent;
+    pdfContainer.appendChild(ts);
+
+    var table = document.createElement('table');
+    var thead = document.createElement('thead');
+    var headRow = document.createElement('tr');
+
+    var headers = [
+      'Failure Point',
+      'Notes',
+      'Overall Impact Score',
+      'Highest Impact Area',
+      'Impact Level'
+    ];
+    for (var i = 0; i < headers.length; i++) {
+      var th = document.createElement('th');
+      th.textContent = headers[i];
+      headRow.appendChild(th);
+    }
+    thead.appendChild(headRow);
+    table.appendChild(thead);
+
+    var tbody = document.createElement('tbody');
+
+    for (var r = 0; r < sourceRows.length; r++) {
+      var row = sourceRows[r];
+      var cells = row.getElementsByTagName('td');
+      if (cells.length < 9) continue;
+
+      var fpInput = cells[0].querySelector('input');
+      var fp = fpInput ? fpInput.value : '';
+      var notesArea = cells[1].querySelector('textarea');
+      var notes = notesArea ? notesArea.value : '';
+
+      var opImpact  = parseInt((cells[2].querySelector('select') || {}).value || 0, 10);
+      var finImpact = parseInt((cells[3].querySelector('select') || {}).value || 0, 10);
+      var safImpact = parseInt((cells[4].querySelector('select') || {}).value || 0, 10);
+      var legImpact = parseInt((cells[5].querySelector('select') || {}).value || 0, 10);
+      var repImpact = parseInt((cells[6].querySelector('select') || {}).value || 0, 10);
+
+      var impacts = [opImpact, finImpact, safImpact, legImpact, repImpact];
+      var labels  = ['Operational','Financial','Safety','Legal and Regulatory','Reputational'];
+
+      var overall = 0;
+      for (var j = 0; j < impacts.length; j++) {
+        overall += impacts[j];
+      }
+
+      // skip completely empty rows
+      var hasData = fp || notes || overall > 0;
+      if (!hasData) continue;
+
+      // Highest impact area(s)
+      var maxVal = 0;
+      var maxAreas = [];
+      for (var j2 = 0; j2 < impacts.length; j2++) {
+        var v = impacts[j2];
+        if (v > maxVal) {
+          maxVal = v;
+          maxAreas = [labels[j2]];
+        } else if (v === maxVal && v > 0) {
+          maxAreas.push(labels[j2]);
+        }
+      }
+      var highestArea = maxAreas.join(', ');
+
+      // Impact level
+      var level = '';
+      var levelClass = '';
+      if (overall > 0) {
+        if (overall <= 5)      { level = 'Low';      levelClass = 'impact-low'; }
+        else if (overall <= 12){ level = 'Moderate'; levelClass = 'impact-med'; }
+        else if (overall <= 19){ level = 'High';     levelClass = 'impact-high'; }
+        else                   { level = 'Critical'; levelClass = 'impact-crit'; }
+      }
+
+      var tr = document.createElement('tr');
+      var values = [fp, notes, overall || '', highestArea, level];
+
+      for (var c = 0; c < values.length; c++) {
+        var td = document.createElement('td');
+        td.textContent = values[c];
+
+        if (c === 2) { // overall impact score
+          td.classList.add('input-like');
+          td.classList.add('impact-cell');
+        }
+        if (c === 4 && levelClass) { // impact level
+          td.classList.add(levelClass);
+          td.classList.add('impact-cell');
+        }
+
+        tr.appendChild(td);
+      }
+
+      tbody.appendChild(tr);
+    }
+
+    table.appendChild(tbody);
+    pdfContainer.appendChild(table);
+
+    var legend = document.createElement('div');
+    legend.id = 'pdf-legend';
+    legend.innerHTML =
+      '<strong>Legend</strong><br>' +
+      '<em>Overall Impact Score</em> = sum of Operational, Financial, Safety, Legal and Regulatory, and Reputational impact ratings (each 1–5, total 1–25).<br>' +
+      '<em>Highest Impact Area</em> = impact category (or categories) with the highest rating on that row.<br>' +
+      '<em>Impact Levels</em>:' +
+      '<ul>' +
+      '<li>1–5: Low</li>' +
+      '<li>6–12: Moderate</li>' +
+      '<li>13–19: High</li>' +
+      '<li>20–25: Critical</li>' +
+      '</ul>';
+    pdfContainer.appendChild(legend);
+  }
+
+  function downloadPDF() {
+    var textareas = document.querySelectorAll('#impact-report textarea');
+    for (var i = 0; i < textareas.length; i++) {
+      autoResizeTextarea(textareas[i]);
+    }
+
+    buildPdfTable();
+
+    var element = document.getElementById('pdf-container');
+    element.style.display = 'block';
+    document.body.classList.add('pdf-mode');
+
+    var opt = {
+      margin: 10,
+      filename: 'impact_matrix.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+    };
+
+    html2pdf().set(opt).from(element).save()
+      .then(function () {
+        document.body.classList.remove('pdf-mode');
+        element.style.display = 'none';
+      })
+      .catch(function () {
+        document.body.classList.remove('pdf-mode');
+        element.style.display = 'none';
+      });
+  }
+
+  /* Seed example rows and timestamp */
+  addRow({
+    failurePoint: "Badge scanner",
+    notes: "Door security compromised.",
+    op: 4, fin: 4, saf: 3, leg: 4, rep: 4
+  });
+  addRow({
+    failurePoint: "Point-of-Sale (POS) Outage",
+    notes: "Retail locations unable to clear transactions.",
+    op: 4, fin: 5, saf: 2, leg: 4, rep: 5
+  });
+  updateTimestamp();
+</script>
+
+</body>
+</html>
