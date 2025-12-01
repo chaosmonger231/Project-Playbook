@@ -50,7 +50,7 @@ export default function Train() {
 
           {/* Video Summary */}
           <ModuleVideo
-            videoId="pcSv22DTDUI"
+            videoId="JlQovysQBn0"
             title="Test Video"
           />
 
@@ -91,7 +91,7 @@ export default function Train() {
 
           {/* Video Summary */}
           <ModuleVideo
-            videoId="pcSv22DTDUI"
+            videoId="XIlF2qkav5c"
             title="Test Video"
           />
 
@@ -126,7 +126,7 @@ export default function Train() {
 
           {/* Video Summary */}
           <ModuleVideo
-            videoId="pcSv22DTDUI"
+            videoId="-KL9APUjj3E"
             title="Test Video"
           />
 
@@ -161,7 +161,7 @@ export default function Train() {
 
           {/* Video Summary */}
           <ModuleVideo
-            videoId="pcSv22DTDUI"
+            videoId="laR7kRUIydA"
             title="Test Video"
           />
 

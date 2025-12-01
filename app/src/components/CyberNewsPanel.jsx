@@ -76,7 +76,13 @@ const demoNews = [
 export default function CyberNewsPanel() {
   return (
     <aside className="news-panel">
-      <h3 className="news-title">Cybersecurity News</h3>
+      <h3 className="news-title"
+      style={{
+        borderBottom: "2px solid #f97316",
+        paddingBottom: "4px",
+        marginBottom: "8px",
+        }}
+      >Cybersecurity News</h3>
       <ul className="news-list">
         {demoNews.map((item) => (
           <li key={item.id} className="news-item">

@@ -38,111 +38,67 @@ export default function Home() {
         </section>
       );
     } else if (selected === "box3") {
+      const playbooks = [
+        {
+          id: 1,
+          label: "Playbook 1",
+          path: "/playbook1",
+          icon: "/images/playbookImage1.png",
+        },
+        {
+          id: 2,
+          label: "Impact Calculator Playbook",
+          path: "/playbook2",
+          icon: "/images/playbookImage2.png",
+        },
+        {
+          id: 3,
+          label: "Detection and Response Playbook",
+          path: "/playbook3",
+          icon: "/images/playbookImage3.png",
+        },
+        {
+          id: 4,
+          label: "Playbook 4",
+          path: "/playbook4",
+          icon: "/images/playbookImage1.png",
+        },
+        {
+          id: 5,
+          label: "Playbook 5",
+          path: "/playbook5",
+          icon: "/images/playbookImage2.png",
+        },
+      ];
+
+      function openPlaybook(path) {
+        navigate(path);
+      }
+      
       mainContent = (
         <section>
           <h3>Playbooks</h3>
           <p>Use these tools to plan, prioritize, and track your organization's cybersecurity
             improvements.
           </p>
-
-          <div
-            style={{
-              marginTop: "0.75rem",
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.5rem",
-              maxWidth: "260px",
-            }}
-          >
-            {/* New button for Playbook 3 goes right under Playbook 2 */}
-            <button
-              type="button"
-              onClick={() => navigate("/playbook1")}
-              style={{
-                padding: "0.45rem 0.9rem",
-                borderRadius: "999px",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "0.9rem",
-                fontWeight: 500,
-                background: "#2563eb",
-                color: "#fff",
-              }}
-            >
-              Playbook 1
-            </button>
-
-            <button
-              type="button"
-              onClick={() => navigate("/playbook2")}
-              style={{
-                padding: "0.45rem 0.9rem",
-                borderRadius: "999px",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "0.9rem",
-                fontWeight: 500,
-                background: "#2563eb",
-                color: "#fff",
-              }}
-            >
-              Playbook 2
-            </button>
-
-            {/* New button for Playbook 3 goes right under Playbook 2 */}
-            <button
-              type="button"
-              onClick={() => navigate("/playbook3")}
-              style={{
-                padding: "0.45rem 0.9rem",
-                borderRadius: "999px",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "0.9rem",
-                fontWeight: 500,
-                background: "#2563eb",
-                color: "#fff",
-              }}
-            >
-              Playbook 3
-            </button>
-
-            {/* New button for Playbook 3 goes right under Playbook 2 */}
-            <button
-              type="button"
-              onClick={() => navigate("/playbook4")}
-              style={{
-                padding: "0.45rem 0.9rem",
-                borderRadius: "999px",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "0.9rem",
-                fontWeight: 500,
-                background: "#2563eb",
-                color: "#fff",
-              }}
-            >
-              Playbook 4
-            </button>
-
-            {/* New button for Playbook 3 goes right under Playbook 2 */}
-            <button
-              type="button"
-              onClick={() => navigate("/playbook5")}
-              style={{
-                padding: "0.45rem 0.9rem",
-                borderRadius: "999px",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "0.9rem",
-                fontWeight: 500,
-                background: "#2563eb",
-                color: "#fff",
-              }}
-            >
-              Playbook 5
-            </button>
+          <div className="playbook-grid">
+            {playbooks.map((pb) => (
+              <button
+                key={pb.id}
+                type="button"
+                className="playbook-card"
+                onClick={() => openPlaybook(pb.path)}
+              >
+                <img
+                  src={pb.icon}        // 👈 uses the icon from your playbooks array
+                  alt={pb.label}
+                  className="playbook-icon"
+                />
+                <span className="playbook-label">{pb.label}</span>
+              </button>
+            ))}
           </div>
+          
         </section>
         
       );
