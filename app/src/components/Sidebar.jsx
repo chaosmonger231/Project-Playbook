@@ -11,20 +11,34 @@ export default function Sidebar({
   const { role } = useUser();
 
   const isHome = location.pathname === "/";
+  const isLessons = location.pathname === "/train";
 
   function getLabel(id) {
+    // ---------- HOME TAB ----------
     if (isHome) {
-      // HOME TAB ONLY
       if (role === "coordinator") {
-        // Coordinator labels on Home
         if (id === "box1") return "Overview";
         if (id === "box2") return "Actions & Invites";
         if (id === "box3") return "Playbook";
       } else {
-        // Participant (or no role) labels on Home
         if (id === "box1") return "Overview";
         if (id === "box2") return "My Training";
         if (id === "box3") return "My Results";
+      }
+    }
+
+    // ---------- LESSONS / TRAIN TAB ----------
+    if (isLessons) {
+      if (role === "coordinator") {
+        if (id === "box1") return "Phishing & Email Safety";
+        if (id === "box2") return "Passwords & MFA";
+        if (id === "box3") return "Ransomware & Backups";
+        if (id === "box4") return "Protecting Sensitive Data";
+      } else {
+        if (id === "box1") return "Module 1 Phishing & Email Safety";
+        if (id === "box2") return "Module 2 Passwords & MFA";
+        if (id === "box3") return "Module 3 Ransomware & Backups";
+        if (id === "box4") return "Module 4 Protecting Sensitive Data";
       }
     }
 

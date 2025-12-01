@@ -54,6 +54,24 @@ export default function Home() {
               maxWidth: "260px",
             }}
           >
+            {/* New button for Playbook 3 goes right under Playbook 2 */}
+            <button
+              type="button"
+              onClick={() => navigate("/playbook1")}
+              style={{
+                padding: "0.45rem 0.9rem",
+                borderRadius: "999px",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "0.9rem",
+                fontWeight: 500,
+                background: "#2563eb",
+                color: "#fff",
+              }}
+            >
+              Playbook 1
+            </button>
+
             <button
               type="button"
               onClick={() => navigate("/playbook2")}
@@ -68,10 +86,10 @@ export default function Home() {
                 color: "#fff",
               }}
             >
-              Open Playbook 2
+              Playbook 2
             </button>
 
-            {/* 🔽 New button for Playbook 3 goes right under Playbook 2 */}
+            {/* New button for Playbook 3 goes right under Playbook 2 */}
             <button
               type="button"
               onClick={() => navigate("/playbook3")}
@@ -86,7 +104,43 @@ export default function Home() {
                 color: "#fff",
               }}
             >
-              Open Playbook 3
+              Playbook 3
+            </button>
+
+            {/* New button for Playbook 3 goes right under Playbook 2 */}
+            <button
+              type="button"
+              onClick={() => navigate("/playbook4")}
+              style={{
+                padding: "0.45rem 0.9rem",
+                borderRadius: "999px",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "0.9rem",
+                fontWeight: 500,
+                background: "#2563eb",
+                color: "#fff",
+              }}
+            >
+              Playbook 4
+            </button>
+
+            {/* New button for Playbook 3 goes right under Playbook 2 */}
+            <button
+              type="button"
+              onClick={() => navigate("/playbook5")}
+              style={{
+                padding: "0.45rem 0.9rem",
+                borderRadius: "999px",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "0.9rem",
+                fontWeight: 500,
+                background: "#2563eb",
+                color: "#fff",
+              }}
+            >
+              Playbook 5
             </button>
           </div>
         </section>
