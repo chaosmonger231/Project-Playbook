@@ -23,7 +23,7 @@ export default function SetPasswordModal({ onClose }) {
     try {
       const cred = EmailAuthProvider.credential(user.email, password);
       await linkWithCredential(user, cred);
-      alert("✅ Password linked successfully! You can now log in with email/password.");
+      alert(" Password linked successfully! You can now log in with email/password.");
       onClose(); // hide modal
     } catch (e) {
       console.error("Link failed:", e);
