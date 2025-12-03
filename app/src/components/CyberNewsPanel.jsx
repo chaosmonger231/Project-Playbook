@@ -1,3 +1,4 @@
+// this file is temporary. Will modify once we can figure out how to get real news headlines from websites.
 import React from "react";
 
 const demoNews = [
