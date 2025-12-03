@@ -13,7 +13,7 @@ export default function Onboarding() {
   const [error, setError] = useState("");
 
   // Form state
-  const [role, setRole] = useState(""); // default for now
+  const [role, setRole] = useState(""); // default
   const [name, setName] = useState("");
   const [orgName, setOrgName] = useState("");
   const [department, setDepartment] = useState("");

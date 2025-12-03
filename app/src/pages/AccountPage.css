@@ -5,7 +5,7 @@
   justify-content: center;
   align-items: flex-start;
   padding: 2rem 1.5rem;            /* side padding on small screens */
-  background: #1d4ed8;             /* your blue background */
+  background: #1d4ed8;           
 }
 
 @media (min-width: 1024px) {

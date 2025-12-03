@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "./firebase"; // make sure this path matches your setup
+import { auth, db } from "./firebase"; 
 
 export default function AuthGate({ children }) {
   const [loading, setLoading] = useState(true);

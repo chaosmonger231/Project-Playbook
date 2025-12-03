@@ -1,4 +1,3 @@
-// src/components/ModuleVideo.jsx
 export default function ModuleVideo({
   videoId,
   title = "Module overview video",
@@ -17,7 +16,7 @@ export default function ModuleVideo({
       <div
         style={{
           position: "relative",
-          paddingBottom: "56.25%", // 16:9
+          paddingBottom: "56.25%", 
           height: 0,
           overflow: "hidden",
           borderRadius: "10px",

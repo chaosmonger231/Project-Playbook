@@ -85,11 +85,11 @@ body {
   flex: 1;
   border-radius: 10px;
   padding: 12px 14px;
-  background: #0f172a;              /* dark card to contrast white .box */
+  background: #0f172a;              
   border: 1px solid #1e293b;
   max-height: 800px;
   overflow-y: auto;
-  color: #e5e7eb;                   /* light text */
+  color: #e5e7eb;                   
 }
 
 .news-title {

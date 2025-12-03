@@ -13,11 +13,11 @@ const MODULE_LABELS = {
 };
 
 export default function Train() {
-  const { selected } = useOutletContext(); // "box1", "box2", ...
-  const { role, loading, orgName } = useUser(); // assuming orgName later, fallback below
+  const { selected } = useOutletContext(); 
+  const { role, loading, orgName } = useUser(); 
 
   const [moduleAssignments, setModuleAssignments] = useState({
-    box1: true,   // demo: phishing already active
+    box1: true,   
     box2: false,
     box3: false,
     box4: false,

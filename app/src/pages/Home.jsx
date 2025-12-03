@@ -3,7 +3,7 @@ import { useUser } from "../auth/UserContext";
 import CurrentUserName from "../components/CurrentUserName";
 import CyberNewsPanel from "../components/CyberNewsPanel";
 
-// Following imports for testing Firestore connection. Comment it out when done.
+// This is for testing Firestore connection. Keep it under comment unless when testing.
 // import { db } from "../auth/firebase";
 // import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 

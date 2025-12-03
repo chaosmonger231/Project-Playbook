@@ -51,7 +51,7 @@ export function UserProvider({ children }) {
   );
 }
 
-// Hook you will use in other components
+// Hook we will use in other components
 export function useUser() {
   return useContext(UserContext);
 }

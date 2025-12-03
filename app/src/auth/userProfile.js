@@ -1,4 +1,3 @@
-// app/src/auth/userProfile.js
 import { doc, setDoc, serverTimestamp, collection, addDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
@@ -38,16 +37,13 @@ export async function upsertUserProfile(user, extraData = {}) {
       // canonical fields used by AccountPage + onboarding
       role: extraData.role ?? "coordinator", // default if not provided
       orgId: extraData.orgId ?? null,
-      orgName: extraData.orgName ?? "",         // <-- IMPORTANT
-      department: extraData.department ?? "",   // <-- IMPORTANT
+      orgName: extraData.orgName ?? "",         
+      department: extraData.department ?? "",   
       onboardingComplete: extraData.onboardingComplete ?? false,
-
-      // you can keep this if you want a legacy / extra field, or remove it:
-      // organizationName: extraData.orgName ?? null,
 
       createdAt: serverTimestamp(),
       lastLoginAt: serverTimestamp(),
     },
-    { merge: true } // so we don't wipe existing fields
+    { merge: true } 
   );
 }
