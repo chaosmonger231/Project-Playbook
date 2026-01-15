@@ -8,3 +8,10 @@
   * Log-in is not done nore cybersecure.
   * Learning_Page needs structure
 
+## December 1, 2025 ##
+  * Landing page finish
+  * Working on the backend
+  * Log-in could be more secure by switching on MFA on the Firebase Authentication console (doing this AFTER testing is done.)
+
+  Note:
+  * Integrate AWS components between now and end of December

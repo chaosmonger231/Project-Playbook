@@ -56,6 +56,10 @@ Command:
 
 # GitHub Workflow
 
+Check status
+
+  git status
+
 Stage changes — purpose: prepare files for commit
 Command:
 
@@ -71,7 +75,8 @@ Command:
 
   git push origin main
 
-NOTE:  Pushing to GitHub does NOT deploy to production. Meaning the firebase site is not updated.
+NOTE:  It used to be that Pushing to GitHub does NOT deploy to production. Meaning the firebase site is not updated.
+NOTE2: However, it is no longer the case. https://projectplaybookauth-3c020.web.app/
 
 
 # Deployment (Firebase Hosting)
