@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import TopNav from "./TopNav";
 import Sidebar from "./Sidebar";
+import Footer from "./Footer";
 
 export default function Shell() {
 
@@ -31,7 +32,9 @@ export default function Shell() {
             <Outlet context={{ selected, items }} />
           </div>
         </main>
+        {/* place to put more "boxes" inside home */}
       </div>
+      <Footer />
     </div>
   );
 }

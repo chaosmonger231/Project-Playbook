@@ -10,7 +10,13 @@ export default function TopNav() {
 
       <HamburgerMenu />
 
-      <div className="brand">Project Playbook</div>
+      <div className="brand">
+        <img
+          src="/images/projectplayboooklogov2.png"
+          alt="Logo"
+          style={{ height: "49px", width: "130px" }}
+        />
+      </div>
 
 
       <nav className="links">

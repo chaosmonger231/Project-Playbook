@@ -12,6 +12,26 @@ export default function Home() {
   const { role, loading } = useUser();
   const navigate = useNavigate();
 
+    // --- TEMP TEST: API Gateway -> Lambda -> S3 signed URL ---
+  async function testSignedUrl() {
+    const apiBase = "https://e71s0lsvsd.execute-api.us-east-1.amazonaws.com";
+    const key = "Images/meme2.jpg"; // change to whatever file you want
+
+    try {
+      const res = await fetch(`${apiBase}/signed-url?key=${encodeURIComponent(key)}`);
+      const data = await res.json();
+      console.log("SIGNED URL:", data.url);
+
+      // Optional: open the image in a new tab
+      window.open(data.url, "_blank", "noopener,noreferrer");
+    } catch (err) {
+      console.error("Signed URL test failed:", err);
+    }
+  }
+
+
+//TEST BOTTOM LINE//
+
   if (loading) {
     return <p>Loading…</p>;
   }
@@ -23,12 +43,16 @@ export default function Home() {
     if (selected === "box1") {
       mainContent = (
         <div className="home-layout">
+          <CyberNewsPanel />
           <section className="home-main">
             <h3>Overview</h3>
             <p>Overview content goes here.</p>
+          
           </section>
-          <CyberNewsPanel />
+          
         </div>
+      
+        
       );
     } else if (selected === "box2") {
       mainContent = (
@@ -155,6 +179,7 @@ export default function Home() {
 
       {/* Test Button below – comment out when done */}
       {/* <button onClick={testFirestore}>Test Firestore</button> */}
+      <button onClick={testSignedUrl}>Test S3 Signed URL</button>
     </>
   );
 }

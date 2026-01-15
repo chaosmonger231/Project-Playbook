@@ -4,7 +4,26 @@ html, body, #root { height: 100%; }
 body {
   margin: 0;
   font-family: system-ui, Arial, sans-serif;
-  background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+  
+  background: #e0edff;
+  /* background: linear-gradient(135deg, #dbeafe, #fee2b3); */
+  /*
+    #3b82f6 original blue
+    #FFC0CB pink
+  	#C1133D red
+    #001C5A blue
+    #000000 black
+    #FDAE44 sunflower orange
+    #ffffff white
+    #e0edff very light blue
+    #dbeafe light blue
+  */
+
+  /*
+    #1e3a8a blue darker
+    #fef3c7 pale warm yellow/gold
+    #fee2b3 light warm gold
+  */
 }
 
 /* ---- App frame ---- */
