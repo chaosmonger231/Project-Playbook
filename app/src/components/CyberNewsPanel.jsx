@@ -1,101 +1,105 @@
-// this file is temporary. Will modify once we can figure out how to get real news headlines from websites.
-import React from "react";
-
-const demoNews = [
-  {
-    id: 1,
-    title: "Ransomware attack disrupts regional hospital network",
-    source: "CyberWire",
-    date: "Nov 2025",
-    link: "#",
-  },
-  {
-    id: 2,
-    title: "Phishing campaign targets local small businesses with fake invoices",
-    source: "KrebsOnSecurity",
-    date: "Nov 2025",
-    link: "#",
-  },
-  {
-    id: 3,
-    title: "School district strengthens cybersecurity after data breach",
-    source: "Local News",
-    date: "Oct 2025",
-    link: "#",
-  },
-  {
-    id: 4,
-    title: "City government hit by business email compromise, payroll briefly disrupted",
-    source: "GovTech Daily",
-    date: "Oct 2025",
-    link: "#",
-  },
-  {
-    id: 5,
-    title: "New report shows 60% of ransomware victims are organizations under 250 employees",
-    source: "VeriSecure Research",
-    date: "Sep 2025",
-    link: "#",
-  },
-  {
-    id: 6,
-    title: "IT manager stops wire transfer fraud after spotting unusual login location",
-    source: "Security Weekly",
-    date: "Sep 2025",
-    link: "#",
-  },
-  {
-    id: 7,
-    title: "K–12 district rolls out mandatory phishing awareness training for staff",
-    source: "EdTech News",
-    date: "Aug 2025",
-    link: "#",
-  },
-  {
-    id: 8,
-    title: "Local nonprofit recovers from cyberattack using offline backups",
-    source: "Community Chronicle",
-    date: "Aug 2025",
-    link: "#",
-  },
-  {
-    id: 9,
-    title: "New state guidelines encourage small businesses to adopt basic cyber hygiene controls",
-    source: "State Cyber Office",
-    date: "Jul 2025",
-    link: "#",
-  },
-  {
-    id: 10,
-    title: "Multi-factor authentication rollout blocks attempted account takeover at regional bank",
-    source: "Infosec Journal",
-    date: "Jul 2025",
-    link: "#",
-  },
-];
+// CyberNewsPanel.jsx
+import React, { useEffect, useState } from "react";
+import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
+import { db } from "../firebase"; // <-- CHANGE THIS PATH to wherever your firebase config file lives
 
 export default function CyberNewsPanel() {
+  const [news, setNews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadNews() {
+      setLoading(true);
+      setErr("");
+
+      try {
+        const q = query(
+          collection(db, "cyberNews"),
+          orderBy("publishedAt", "desc"),
+          limit(10)
+        );
+
+        const snap = await getDocs(q);
+        const items = snap.docs.map((d) => ({
+          id: d.id,
+          ...d.data(),
+        }));
+
+        if (!cancelled) setNews(items);
+      } catch (e) {
+        console.error(e);
+        if (!cancelled) setErr("Unable to load cyber news right now.");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    loadNews();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <aside className="news-panel">
-      <h3 className="news-title"
-      style={{
-        borderBottom: "2px solid #f97316",
-        paddingBottom: "4px",
-        marginBottom: "8px",
+      <h3
+        className="news-title"
+        style={{
+          borderBottom: "2px solid #f97316",
+          paddingBottom: "4px",
+          marginBottom: "8px",
         }}
-      >Cybersecurity News</h3>
-      <ul className="news-list">
-        {demoNews.map((item) => (
-          <li key={item.id} className="news-item">
-            <div className="news-item-headline">{item.title}</div>
-            <div className="news-item-meta">
-              <span>{item.source}</span>
-              <span>•</span>
-              <span>{item.date}</span>
-            </div>
-          </li>
-        ))}
-      </ul>
+      >
+        Cybersecurity News
+      </h3>
+
+      {loading && <div style={{ opacity: 0.8 }}>Loading…</div>}
+
+      {!loading && err && (
+        <div style={{ color: "#f97316", fontSize: "0.9rem" }}>{err}</div>
+      )}
+
+      {!loading && !err && (
+        <ul className="news-list">
+          {news.map((item) => {
+            const dateLabel = item.publishedAt
+              ? new Date(item.publishedAt).toLocaleDateString()
+              : "—";
+
+            return (
+              <li key={item.id} className="news-item">
+                <div className="news-item-headline">
+                  {item.link ? (
+                    <a
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        color: "inherit",
+                        textDecoration: "none",
+                      }}
+                      title="Open article"
+                    >
+                      {item.title}
+                    </a>
+                  ) : (
+                    item.title
+                  )}
+                </div>
+
+                <div className="news-item-meta">
+                  <span>{item.source || "Unknown"}</span>
+                  <span>•</span>
+                  <span>{dateLabel}</span>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </aside>
   );
 }
