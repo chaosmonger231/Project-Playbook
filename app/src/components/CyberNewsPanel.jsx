@@ -1,7 +1,6 @@
-// CyberNewsPanel.jsx
 import React, { useEffect, useState } from "react";
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
-import { db } from "../firebase"; // <-- CHANGE THIS PATH to wherever your firebase config file lives
+import { db } from "../auth/firebase"; 
 
 export default function CyberNewsPanel() {
   const [news, setNews] = useState([]);
