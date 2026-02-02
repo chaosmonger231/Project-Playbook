@@ -1,0 +1,105 @@
+{
+  "topic": "phishing",
+  "title": "Phishing & Email Safety",
+  "pages": [
+    {
+      "type": "welcome",
+      "title": "Welcome to Phishing & Email Safety",
+      "subtitle": "Learn how phishing works and how to spot it before damage happens.",
+      "video": {
+        "videoId": "VIDEO_ID_WELCOME",
+        "caption": "Introduction to phishing (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "What is phishing?",
+      "text": "Phishing is a **social engineering attack** where someone pretends to be a trusted source to trick you into clicking a link, opening an attachment, or sharing sensitive information.\n\nThese messages are designed to look legitimate and often target people through email, text messages, or fake websites.\n\nThe goal is usually to steal passwords, deliver malware, or gain access to internal systems.",
+      "image": {
+        "src": "IMAGE_URL_PHISHING_EXAMPLE",
+        "alt": "Example of a phishing email (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Did you know?",
+      "bullets": [
+        {
+          "title": "Phishing emails can look almost identical to real messages",
+          "text": "Attackers often copy logos, tone, formatting, and even email signatures to appear legitimate."
+        },
+        {
+          "title": "Some phishing attacks use look-alike domains",
+          "text": "For example, micr0soft.com instead of microsoft.com — a difference that’s easy to miss."
+        },
+        {
+          "title": "Business Email Compromise (BEC) is common",
+          "text": "Attackers impersonate a boss or vendor to request money, wire transfers, or gift cards."
+        },
+        {
+          "title": "Urgency is a major red flag",
+          "text": "Messages like \"act now\" or \"final notice\" are designed to pressure you into mistakes."
+        }
+      ],
+      "image": {
+        "src": "IMAGE_URL_DID_YOU_KNOW",
+        "alt": "Did you know graphic (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Common phishing red flags",
+      "text": "Most phishing attempts include warning signs if you know what to look for.\n\nBe cautious of:\n\n• Urgent or threatening language\n• Requests for passwords or MFA codes\n• Unexpected attachments or links\n• Sender addresses that don’t quite match\n• Messages that pressure you to act quickly\n\nWhen in doubt, pause and verify before taking action.",
+      "image": {
+        "src": "IMAGE_URL_REDFLAGS",
+        "alt": "Common phishing red flags (replace later)"
+      }
+    },
+
+    {
+      "type": "video",
+      "title": "Real-world phishing example",
+      "video": {
+        "videoId": "VIDEO_ID_REAL_WORLD",
+        "caption": "Breakdown of a realistic phishing attempt (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "What to do if you spot phishing",
+      "text": "If you believe a message is phishing:\n\n1) **Do not click** links or open attachments\n2) **Do not reply** to the message\n3) **Report it** using your organization’s reporting process\n4) **Delete the email** after reporting\n\nReporting helps protect not just you, but everyone in your organization.",
+      "image": {
+        "src": "IMAGE_URL_REPORTING_FLOW",
+        "alt": "Phishing reporting process (replace later)"
+      }
+    },
+
+    {
+      "type": "quizWelcome",
+      "title": "Ready for the quiz?",
+      "subtitle": "This short quiz will test your ability to recognize phishing attempts.",
+      "quizModulePath": "/learningModule/phishing.json",
+      "startButtonText": "Start Quiz"
+    },
+
+    {
+      "type": "quiz",
+      "quizModulePath": "/learningModule/phishing.json"
+    },
+
+    {
+      "type": "results",
+      "title": "Quiz Results",
+      "subtitle": "Here’s how you did.",
+      "showReview": true,
+      "buttons": {
+        "restartQuizText": "Restart Quiz",
+        "backToHomeText": "Back to Home"
+      }
+    }
+  ]
+}

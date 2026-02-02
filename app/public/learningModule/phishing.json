@@ -1,0 +1,31 @@
+{
+  "moduleId": "phishing",
+  "title": "Phishing & Email Safety",
+  "description": "Learn how to identify and avoid phishing attacks.",
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "prompt": "Which of the following is the strongest sign that an email is a phishing attempt?",
+      "choices": [
+        { "id": 1, "text": "The email is from a coworker." },
+        { "id": 2, "text": "The message creates urgency and asks you to click a link." },
+        { "id": 3, "text": "The email has a company logo." },
+        { "id": 4, "text": "The email is written formally." }
+      ],
+      "correctId": 2,
+      "explanation": "Phishing emails often create urgency to pressure users into clicking without thinking."
+    },
+    {
+      "id": "q2",
+      "type": "true_false",
+      "prompt": "It is safe to click a link in an email if it looks professional.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 2,
+      "explanation": "Even professional-looking emails can be malicious. Always verify the sender and the link."
+    }
+  ]
+}

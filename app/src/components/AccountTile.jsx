@@ -13,7 +13,7 @@ export default function AccountTile({
       type={clickable ? "button" : undefined}
       className={`account-tile ${
         clickable ? "account-tile--clickable" : "account-tile--static"
-      } ${center ? "account-tile--center" : ""}`}   // <-- use boolean
+      } ${center ? "account-tile--center" : ""}`}  
       onClick={clickable ? onClick : undefined}
     >
       <div className="account-tile-title">{title}</div>

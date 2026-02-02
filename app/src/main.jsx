@@ -17,7 +17,7 @@ import Playbook2 from "./pages/Playbook2.jsx";
 import Playbook3 from "./pages/Playbook3.jsx";
 import Playbook4 from "./pages/Playbook4.jsx";
 import Playbook5 from "./pages/Playbook5.jsx";
-
+import LearningModuleContent from "./pages/LearningModuleContent";
 
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
@@ -40,6 +40,17 @@ const router = createBrowserRouter([
     ),
   },
 
+  // 🔹 LEARNING ROUTE (authenticated, NO sidebar)
+  {
+    path: "/learning/:topic",
+    element: (
+      <AuthGate>
+        <LearningModuleContent />
+      </AuthGate>
+    ),
+  },
+
+  // 🔹 APP ROUTES (WITH sidebar)
   {
     element: (
       <AuthGate>
@@ -64,6 +75,6 @@ createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <UserProvider>
       <RouterProvider router={router} />
-    </UserProvider> 
+    </UserProvider>
   </React.StrictMode>
 );
