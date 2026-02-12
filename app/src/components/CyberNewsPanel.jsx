@@ -77,8 +77,9 @@ export default function CyberNewsPanel() {
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
-                        color: "inherit",
+                        color: "#f97316",
                         textDecoration: "none",
+                        fontWeight: 700,
                       }}
                       title="Open article"
                     >

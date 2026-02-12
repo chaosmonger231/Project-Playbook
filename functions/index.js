@@ -33,10 +33,13 @@ const FEEDS = [
   { name: "CyberWire", url: "https://thecyberwire.com/feeds/rss.xml" },
   { name: "KrebsOnSecurity", url: "https://krebsonsecurity.com/feed/" },
   { name: "CISA Advisories", url: "https://www.cisa.gov/cybersecurity-advisories/all.xml" },
+  { name: "BleepingComputer", url: "https://www.bleepingcomputer.com/feed/" },
+  { name: "The Hacker News", url: "https://feeds.feedburner.com/TheHackersNews" },
+  { name: "NIST News", url: "https://www.nist.gov/news-events/news/rss.xml" }
 ];
 
 /** How many items per feed to ingest each run (balances sources) */
-const PER_FEED_LIMIT = 3;
+const PER_FEED_LIMIT = 2;
 
 /** Cooldown: function will skip if it ran within the last 7 days */
 const COOLDOWN_DAYS = 7;

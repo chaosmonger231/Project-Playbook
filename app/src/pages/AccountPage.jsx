@@ -1,31 +1,65 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../auth/firebase";
+import { regenerateOrgJoinCode } from "../auth/userProfile";
 import AccountTile from "../components/AccountTile";
 import "./AccountPage.css";
+
+function Modal({ title, value, setValue, onCancel, onSave, saving, type = "text" }) {
+  return (
+    <div className="modal-backdrop" onClick={onCancel}>
+      <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+        <h2>{title}</h2>
+        <input
+          className="modal-input"
+          type={type}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          autoFocus
+        />
+        <div className="modal-actions">
+          <button className="btn" onClick={onCancel} disabled={saving}>
+            Cancel
+          </button>
+          <button className="btn primary" onClick={onSave} disabled={saving}>
+            {saving ? "Saving…" : "Save"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function AccountPage() {
   const navigate = useNavigate();
   const goHome = () => navigate("/", { replace: true });
 
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
   const [displayName, setDisplayName] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(""); // auth email display
   const [orgName, setOrgName] = useState("");
   const [role, setRole] = useState("");
-  const [joinOrgCode, setJoinOrgCode] = useState("");
   const [department, setDepartment] = useState("");
-  const [inviteCode, setInviteCode] = useState("");
 
-  // which field is currently open in the edit panel
-  const [editingField, setEditingField] = useState(null);
-  const [editLabel, setEditLabel] = useState("");
-  const [editDraft, setEditDraft] = useState("");
+  const [orgId, setOrgId] = useState("");
+  const [orgJoinCode, setOrgJoinCode] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalField, setModalField] = useState(""); // "name" | "email" | "orgName" | "department"
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalValue, setModalValue] = useState("");
+  const [modalType, setModalType] = useState("text");
+
+  const normalizedRole = (role || "").toLowerCase();
+  const isCoordinator = normalizedRole === "coordinator" || normalizedRole === "manager";
+  const isParticipant = normalizedRole === "participant";
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
@@ -35,19 +69,31 @@ export default function AccountPage() {
       }
 
       try {
-        const ref = doc(db, "users", user.uid);
-        const snap = await getDoc(ref);
+        setError("");
 
-        if (snap.exists()) {
-          const data = snap.data();
-          console.log("AccountPage loaded profile:", data);
+        // Load user profile
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+          const data = userSnap.data();
 
           setDisplayName(data.displayName || user.displayName || "");
           setOrgName(data.orgName || "");
           setRole(data.role || "");
-          setJoinOrgCode(data.joinOrgCode || "");
           setDepartment(data.department || "");
-          setInviteCode(data.inviteCode || "");
+
+          const foundOrgId = data.orgId || "";
+          setOrgId(foundOrgId);
+
+          // Load joinCode from org doc (source of truth)
+          if (foundOrgId) {
+            const orgRef = doc(db, "orgs", foundOrgId);
+            const orgSnap = await getDoc(orgRef);
+            setOrgJoinCode(orgSnap.exists() ? (orgSnap.data().joinCode || "") : "");
+          } else {
+            setOrgJoinCode("");
+          }
         } else {
           setDisplayName(user.displayName || "");
         }
@@ -64,41 +110,110 @@ export default function AccountPage() {
     return () => unsub();
   }, [navigate]);
 
-  const normalizedRole = (role || "").toLowerCase();
-  const isCoordinator =
-    normalizedRole === "coordinator" || normalizedRole === "manager";
-  const hasOrg = !!orgName.trim();
+  const openModal = (field) => {
+    setError("");
+    setCopied(false);
 
-  const handleSaveToFirestore = async () => {
+    setModalField(field);
+    setModalOpen(true);
+
+    if (field === "name") {
+      setModalTitle("Edit Name");
+      setModalValue(displayName);
+      setModalType("text");
+    } else if (field === "orgName") {
+      setModalTitle("Edit Organization Name");
+      setModalValue(orgName);
+      setModalType("text");
+    } else if (field === "department") {
+      setModalTitle("Edit Department / Team");
+      setModalValue(department);
+      setModalType("text");
+    }
+  };
+
+  const closeModal = () => {
+    if (busy) return;
+    setModalOpen(false);
+    setModalField("");
+    setModalTitle("");
+    setModalValue("");
+  };
+
+  const saveModal = async () => {
     const user = auth.currentUser;
     if (!user) return;
 
-    setSaving(true);
+    setBusy(true);
     setError("");
 
     try {
-      const ref = doc(db, "users", user.uid);
+      const trimmed = modalValue.trim();
+
+      // Update local UI state
+      if (modalField === "name") setDisplayName(trimmed);
+      if (modalField === "orgName") setOrgName(trimmed);
+      if (modalField === "department") setDepartment(trimmed);
+
+      // Persist to Firestore profile
+      const userRef = doc(db, "users", user.uid);
       await setDoc(
-        ref,
+        userRef,
         {
-          displayName: displayName.trim(),
-          orgName: orgName.trim(),
-          role: role.trim(),
-          joinOrgCode: joinOrgCode.trim(),
-          department: department.trim(),
-          inviteCode: inviteCode.trim(),
+          displayName: modalField === "name" ? trimmed : displayName.trim(),
+          orgName: modalField === "orgName" ? trimmed : orgName.trim(),
+          department: modalField === "department" ? trimmed : department.trim(),
         },
         { merge: true }
       );
 
-      setEditingField(null);
-      goHome();
+      closeModal();
+    } catch (e) {
+      const msg =
+        e?.message === "EMAIL_UPDATE_REQUIRES_RELOGIN"
+          ? "Email change requires re-login. Sign out and sign back in, then try again."
+          : e?.message === "EMAIL_REQUIRED"
+          ? "Please enter an email."
+          : "Failed to save changes.";
+      setError(msg);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const copyOrgJoinCode = async () => {
+    if (!orgJoinCode) return;
+    try {
+      await navigator.clipboard.writeText(orgJoinCode);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1200);
+    } catch {}
+  };
+
+  const regenJoinCode = async () => {
+    if (!orgId) return;
+    setBusy(true);
+    setError("");
+
+    try {
+      const newCode = await regenerateOrgJoinCode(orgId);
+      setOrgJoinCode(newCode);
     } catch (e) {
       console.error(e);
-      setError("Failed to save changes.");
+      setError("Failed to generate a new join code.");
     } finally {
-      setSaving(false);
+      setBusy(false);
     }
+  };
+
+  const joinCodeSubtitle = useMemo(() => {
+    if (!orgId) return "No organization linked.";
+    if (!orgJoinCode) return "No join code yet. Click Regenerate.";
+    return `Join code: ${orgJoinCode} (${copied ? "copied!" : "click to copy"})`;
+  }, [orgId, orgJoinCode, copied]);
+
+  const handleRoleClick = () => {
+    alert("Role changes are managed by the organization.");
   };
 
   if (loading) {
@@ -111,71 +226,19 @@ export default function AccountPage() {
     );
   }
 
-  // local edit helpers (edit panel only updates local state)
-  const openEditor = (fieldKey, label, currentValue) => {
-    setEditingField(fieldKey);
-    setEditLabel(label);
-    setEditDraft(currentValue || "");
-  };
-
-  const closeEditor = () => {
-    setEditingField(null);
-    setEditLabel("");
-    setEditDraft("");
-  };
-
-  const applyEditor = () => {
-    switch (editingField) {
-      case "name":
-        setDisplayName(editDraft);
-        break;
-      case "org":
-        setOrgName(editDraft);
-        break;
-      case "joinOrgCode":
-        setJoinOrgCode(editDraft);
-        break;
-      case "department":
-        setDepartment(editDraft);
-        break;
-      case "inviteCode":
-        setInviteCode(editDraft);
-        break;
-      default:
-        break;
-    }
-    closeEditor();
-  };
-
-  const handleRoleClick = () => {
-    alert(
-      "To change roles, please contact a site administrator or your organization manager."
-    );
-  };
-
-  const generateInviteCode = () => {
-    if (!inviteCode) {
-      const code = Math.random().toString(36).slice(2, 8).toUpperCase();
-      setInviteCode(code);
-    }
-    openEditor("inviteCode", "Invite Code", inviteCode || "");
-  };
-
   return (
     <div className="account-page">
       <div className="account-card">
         <h1>Account</h1>
-        <p className="muted">
-          View and update your account information. More settings coming soon.
-        </p>
+        <p className="muted">View and update your account information.</p>
 
         {error && <p className="error">{error}</p>}
 
         <div className="account-grid">
           <AccountTile
             title="Name"
-            subtitle={displayName || "Tap to add your name"}
-            onClick={() => openEditor("name", "Name", displayName)}
+            subtitle={displayName || "Tap to set your name"}
+            onClick={() => openModal("name")}
           />
 
           <AccountTile
@@ -187,102 +250,105 @@ export default function AccountPage() {
 
           <AccountTile
             title="Organization"
-            subtitle={orgName || "Tap to add an organization"}
-            onClick={() => openEditor("org", "Organization", orgName)}
+            subtitle={orgName || "Organization not set"}
+            onClick={isCoordinator ? () => openModal("orgName") : undefined}
+            clickable={isCoordinator}
+            center={!isCoordinator}
           />
 
           <AccountTile
             title="Role"
-            subtitle={role || "Role not set (contact administrator)"}
+            subtitle={role || "Role not set"}
             onClick={handleRoleClick}
           />
 
-          {!isCoordinator && (
-            <AccountTile
-              title="Join Organization (invite code)"
-              subtitle={
-                joinOrgCode || "Tap to enter an invite code from your manager"
-              }
-              onClick={() =>
-                openEditor(
-                  "joinOrgCode",
-                  "Join Organization (invite code)",
-                  joinOrgCode
-                )
-              }
-            />
-          )}
-
+          {/* Coordinator-only join code + regen */}
           {isCoordinator && (
             <AccountTile
-              title="Create Invite Code"
-              subtitle={
-                hasOrg
-                  ? inviteCode
-                    ? `Invite code: ${inviteCode}`
-                    : "Tap to generate an invite code for your organization"
-                  : "Add an organization before creating an invite code"
-              }
-              onClick={hasOrg ? generateInviteCode : undefined}
-              clickable={hasOrg}
+              title="Organization Join Code"
+              subtitle={joinCodeSubtitle}
+              onClick={orgJoinCode ? copyOrgJoinCode : undefined}
+              clickable={!!orgJoinCode}
             />
           )}
 
           <AccountTile
             title="Department / Team"
-            subtitle={
-              department || "Tap to add your department or team (optional)"
-            }
-            onClick={() =>
-              openEditor("department", "Department / Team", department)
-            }
+            subtitle={department || "Tap to add department/team (optional)"}
+            onClick={() => openModal("department")}
           />
         </div>
 
-        {editingField && (
-          <div className="edit-panel">
-            <h2>Edit {editLabel}</h2>
-            <input
-              type="text"
-              className="edit-input"
-              value={editDraft}
-              onChange={(e) => setEditDraft(e.target.value)}
-            />
-            <div className="row edit-buttons">
-              <button
-                type="button"
-                className="btn primary"
-                onClick={applyEditor}
-              >
-                Save
+        {/* Coordinator: regen button + video */}
+        {isCoordinator && (
+          <>
+            <div style={{ marginTop: 16, display: "flex", gap: 12 }}>
+              <button className="btn" onClick={regenJoinCode} disabled={busy || !orgId}>
+                {busy ? "Working…" : "Regenerate Join Code"}
               </button>
-              <button
-                type="button"
-                className="btn"
-                onClick={closeEditor}
-              >
-                Cancel
+              <button className="btn primary" onClick={goHome} disabled={busy}>
+                Done
               </button>
             </div>
-            <p className="edit-hint">
-              Changes here update this page only. To save them to your account,
-              use the main Save button below.
-            </p>
+
+            <div style={{ marginTop: 40, textAlign: "center" }}>
+              <h2 style={{ marginBottom: 16 }}>How to invite others</h2>
+
+              <div
+                style={{
+                  position: "relative",
+                  paddingBottom: "56.25%",
+                  height: 0,
+                  overflow: "hidden",
+                  maxWidth: "800px",
+                  margin: "0 auto",
+                  borderRadius: 12,
+                }}
+              >
+                <iframe
+                  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                  title="How to invite others"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: 12,
+                  }}
+                />
+              </div>
+
+              <p className="muted" style={{ marginTop: 12 }}>
+                Share your organization join code with participants. They enter it during onboarding.
+              </p>
+            </div>
+          </>
+        )}
+
+        {/* Participant: no video */}
+        {isParticipant && (
+          <div style={{ marginTop: 16 }}>
+            <button className="btn primary" onClick={goHome} disabled={busy}>
+              Done
+            </button>
           </div>
         )}
 
-        <div className="row buttons-row">
-          <button
-            className="btn primary"
-            onClick={handleSaveToFirestore}
-            disabled={saving}
-          >
-            {saving ? "Saving…" : "Save"}
-          </button>
-          <button className="btn" onClick={goHome} disabled={saving}>
-            Cancel
-          </button>
-        </div>
+        {modalOpen && (
+          <Modal
+            title={modalTitle}
+            value={modalValue}
+            setValue={setModalValue}
+            onCancel={closeModal}
+            onSave={saveModal}
+            saving={busy}
+            type={modalType}
+          />
+        )}
       </div>
     </div>
   );
