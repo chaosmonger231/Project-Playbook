@@ -2,35 +2,29 @@ import { useOutletContext, useNavigate } from "react-router-dom";
 import { useUser } from "../auth/UserContext";
 import CurrentUserName from "../components/CurrentUserName";
 import CyberNewsPanel from "../components/CyberNewsPanel";
-
-// This is for testing Firestore connection. Keep it under comment unless when testing.
-// import { db } from "../auth/firebase";
-// import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import OrgStatusBanner from "../components/OrgStatusBanner";
 
 export default function Home() {
   const { selected } = useOutletContext();
   const { role, loading } = useUser();
   const navigate = useNavigate();
 
-    // --- TEMP TEST: API Gateway -> Lambda -> S3 signed URL ---
+  // --- TEMP TEST: API Gateway -> Lambda -> S3 signed URL ---
   async function testSignedUrl() {
     const apiBase = "https://e71s0lsvsd.execute-api.us-east-1.amazonaws.com";
-    const key = "Images/meme2.jpg"; // change to whatever file you want
+    const key = "Images/meme2.jpg";
 
     try {
-      const res = await fetch(`${apiBase}/signed-url?key=${encodeURIComponent(key)}`);
+      const res = await fetch(
+        `${apiBase}/signed-url?key=${encodeURIComponent(key)}`
+      );
       const data = await res.json();
       console.log("SIGNED URL:", data.url);
-
-      // Optional: open the image in a new tab
       window.open(data.url, "_blank", "noopener,noreferrer");
     } catch (err) {
       console.error("Signed URL test failed:", err);
     }
   }
-
-
-//TEST BOTTOM LINE//
 
   if (loading) {
     return <p>Loading…</p>;
@@ -38,8 +32,10 @@ export default function Home() {
 
   let mainContent = null;
 
+  // =========================
+  // COORDINATOR VIEW
+  // =========================
   if (role === "coordinator") {
-    // COORDINATOR HOME
     if (selected === "box1") {
       mainContent = (
         <div className="home-layout">
@@ -47,12 +43,8 @@ export default function Home() {
           <section className="home-main">
             <h3>Overview</h3>
             <p>Overview content goes here.</p>
-          
           </section>
-          
         </div>
-      
-        
       );
     } else if (selected === "box2") {
       mainContent = (
@@ -98,13 +90,15 @@ export default function Home() {
       function openPlaybook(path) {
         navigate(path);
       }
-      
+
       mainContent = (
         <section>
           <h3>Playbooks</h3>
-          <p>Use these tools to plan, prioritize, and track your organization's cybersecurity
-            improvements.
+          <p>
+            Use these tools to plan, prioritize, and track your organization's
+            cybersecurity improvements.
           </p>
+
           <div className="playbook-grid">
             {playbooks.map((pb) => (
               <button
@@ -114,7 +108,7 @@ export default function Home() {
                 onClick={() => openPlaybook(pb.path)}
               >
                 <img
-                  src={pb.icon}        // 👈 uses the icon from your playbooks array
+                  src={pb.icon}
                   alt={pb.label}
                   className="playbook-icon"
                 />
@@ -122,26 +116,31 @@ export default function Home() {
               </button>
             ))}
           </div>
-          
         </section>
-        
       );
     } else {
       mainContent = (
         <section>
           <h3>Coordinator Home</h3>
-          <p>Select Overview, Actions & Invites, or Playbook from the sidebar.</p>
+          <p>
+            Select Overview, Actions & Invites, or Playbook from the sidebar.
+          </p>
         </section>
       );
     }
-  } else {
-    // PARTICIPANT HOME
+  }
+
+  // =========================
+  // PARTICIPANT VIEW
+  // =========================
+  else {
     if (selected === "box1") {
       mainContent = (
         <section>
           <h3>Your Training Overview</h3>
           <p>
-            Here you’ll see assigned modules, due dates, and your recent results.
+            Here you’ll see assigned modules, due dates, and your recent
+            results.
           </p>
         </section>
       );
@@ -169,17 +168,23 @@ export default function Home() {
     }
   }
 
+  // =========================
+  // FINAL RENDER
+  // =========================
   return (
-    <>
+    <div className="home-container">
       <h2>
         Welcome, <CurrentUserName />
       </h2>
 
+      {/* 🔔 Full-width Org Banner */}
+      <OrgStatusBanner />
+
+      {/* 📦 Dynamic Page Content */}
       {mainContent}
 
-      {/* Test Button below – comment out when done */}
-      {/* <button onClick={testFirestore}>Test Firestore</button> */}
+      {/* Temporary Test Button */}
       <button onClick={testSignedUrl}>Test S3 Signed URL</button>
-    </>
+    </div>
   );
 }

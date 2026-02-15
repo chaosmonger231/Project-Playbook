@@ -111,7 +111,7 @@ export default function Onboarding() {
 
         const created = await createOrg({
           name: orgName.trim(),
-          orgType, 
+          orgType,
           employeeRange: employeeRange || null,
           createdBy: currentUser.uid,
         });
@@ -119,11 +119,12 @@ export default function Onboarding() {
         orgId = created.orgId;
         resolvedJoinCode = created.joinCode;
 
-        setCreatedJoinCode(created.joinCode); 
-
         resolvedOrgName = orgName.trim();
         resolvedOrgType = orgType;
         resolvedEmployeeRange = employeeRange || "";
+
+        // optional: show it briefly on the page before redirect
+        setCreatedJoinCode(created.joinCode);
       }
 
       if (role === "participant") {
@@ -154,12 +155,8 @@ export default function Onboarding() {
         onboardingVersion: 2,
       });
 
-      
-      if (role === "participant") {
-        navigate("/", { replace: true });
-      }
-      // coordinators stay on page to see join code
-
+      // ✅ go Home for BOTH roles once everything is saved
+      navigate("/", { replace: true });
     } catch (err) {
       console.error("Onboarding save failed:", err);
 

@@ -40,8 +40,10 @@ export default function AccountPage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
+  const [uid, setUid] = useState(""); // ✅ added
+
   const [displayName, setDisplayName] = useState("");
-  const [email, setEmail] = useState(""); // auth email display
+  const [email, setEmail] = useState("");
   const [orgName, setOrgName] = useState("");
   const [role, setRole] = useState("");
   const [department, setDepartment] = useState("");
@@ -52,7 +54,7 @@ export default function AccountPage() {
 
   // Modal state
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalField, setModalField] = useState(""); // "name" | "email" | "orgName" | "department"
+  const [modalField, setModalField] = useState("");
   const [modalTitle, setModalTitle] = useState("");
   const [modalValue, setModalValue] = useState("");
   const [modalType, setModalType] = useState("text");
@@ -67,6 +69,8 @@ export default function AccountPage() {
         navigate("/login", { replace: true });
         return;
       }
+
+      setUid(user.uid); // ✅ added
 
       try {
         setError("");
@@ -150,12 +154,10 @@ export default function AccountPage() {
     try {
       const trimmed = modalValue.trim();
 
-      // Update local UI state
       if (modalField === "name") setDisplayName(trimmed);
       if (modalField === "orgName") setOrgName(trimmed);
       if (modalField === "department") setDepartment(trimmed);
 
-      // Persist to Firestore profile
       const userRef = doc(db, "users", user.uid);
       await setDoc(
         userRef,
@@ -169,13 +171,7 @@ export default function AccountPage() {
 
       closeModal();
     } catch (e) {
-      const msg =
-        e?.message === "EMAIL_UPDATE_REQUIRES_RELOGIN"
-          ? "Email change requires re-login. Sign out and sign back in, then try again."
-          : e?.message === "EMAIL_REQUIRED"
-          ? "Please enter an email."
-          : "Failed to save changes.";
-      setError(msg);
+      setError("Failed to save changes.");
     } finally {
       setBusy(false);
     }
@@ -196,7 +192,10 @@ export default function AccountPage() {
     setError("");
 
     try {
-      const newCode = await regenerateOrgJoinCode(orgId);
+      const newCode = await regenerateOrgJoinCode({
+        orgId,
+        createdBy: uid, // ✅ FIX
+      });
       setOrgJoinCode(newCode);
     } catch (e) {
       console.error(e);
@@ -241,12 +240,7 @@ export default function AccountPage() {
             onClick={() => openModal("name")}
           />
 
-          <AccountTile
-            title="Email"
-            subtitle={email || "No email on file"}
-            clickable={false}
-            center
-          />
+          <AccountTile title="Email" subtitle={email || "No email on file"} clickable={false} center />
 
           <AccountTile
             title="Organization"
@@ -256,13 +250,8 @@ export default function AccountPage() {
             center={!isCoordinator}
           />
 
-          <AccountTile
-            title="Role"
-            subtitle={role || "Role not set"}
-            onClick={handleRoleClick}
-          />
+          <AccountTile title="Role" subtitle={role || "Role not set"} onClick={handleRoleClick} />
 
-          {/* Coordinator-only join code + regen */}
           {isCoordinator && (
             <AccountTile
               title="Organization Join Code"
@@ -279,7 +268,6 @@ export default function AccountPage() {
           />
         </div>
 
-        {/* Coordinator: regen button + video */}
         {isCoordinator && (
           <>
             <div style={{ marginTop: 16, display: "flex", gap: 12 }}>
@@ -329,7 +317,6 @@ export default function AccountPage() {
           </>
         )}
 
-        {/* Participant: no video */}
         {isParticipant && (
           <div style={{ marginTop: 16 }}>
             <button className="btn primary" onClick={goHome} disabled={busy}>

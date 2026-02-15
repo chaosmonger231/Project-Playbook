@@ -1,178 +1,134 @@
+// src/auth/userProfile.js
+import { db } from "./firebase";
 import {
   doc,
+  getDoc,
   setDoc,
+  updateDoc,
   serverTimestamp,
   collection,
-  addDoc,
-  getDocs,
-  getDoc,
-  query,
-  where,
-  limit,
-  updateDoc,
 } from "firebase/firestore";
-import { db } from "./firebase";
 
-/**
- * Generate a short join code (no confusing characters like 0/O/1/I).
- */
-function generateJoinCode(length = 6) {
+function makeJoinCode(len = 6) {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   let out = "";
-  for (let i = 0; i < length; i++) {
-    out += chars[Math.floor(Math.random() * chars.length)];
-  }
+  for (let i = 0; i < len; i++) out += chars[Math.floor(Math.random() * chars.length)];
   return out;
 }
 
 /**
- * Create a new organization document.
- * Returns { orgId, joinCode }.
+ * Create joinCodes/{CODE} and set orgs/{orgId}.joinCode = CODE
  */
-export async function createOrg({
-  name,
-  type,
-  employeeCount,
-  employeeRange,
-  createdBy,
-}) {
-  const orgsCol = collection(db, "orgs");
+export async function regenerateOrgJoinCode({ orgId, createdBy }) {
+  if (!orgId) throw new Error("ORG_ID_REQUIRED");
+  if (!createdBy) throw new Error("CREATED_BY_REQUIRED");
 
-  // Try a few times to avoid rare joinCode collisions
-  for (let attempt = 0; attempt < 6; attempt++) {
-    const joinCode = generateJoinCode(6);
+  let newCode = makeJoinCode(6);
 
-    // Check if joinCode is already used
-    const q = query(orgsCol, where("joinCode", "==", joinCode), limit(1));
-    const existing = await getDocs(q);
-    if (!existing.empty) continue;
-
-    const docRef = await addDoc(orgsCol, {
-      name: (name || "").trim(),
-      type, // "education" | "local_gov" | "small_business" (your keys)
-      joinCode, // <-- org-level source of truth
-      employeeCount: employeeCount ?? null, // optional legacy
-      employeeRange: employeeRange ?? null, // recommended
-      createdBy,
-      createdAt: serverTimestamp(),
-      joinCodeUpdatedAt: serverTimestamp(),
-    });
-
-    return { orgId: docRef.id, joinCode };
+  // ensure unique
+  for (let i = 0; i < 8; i++) {
+    const existsSnap = await getDoc(doc(db, "joinCodes", newCode));
+    if (!existsSnap.exists()) break;
+    newCode = makeJoinCode(6);
   }
 
-  throw new Error("FAILED_TO_GENERATE_CODE");
+  await setDoc(doc(db, "joinCodes", newCode), {
+    orgId,
+    active: true,
+    createdAt: serverTimestamp(),
+    createdBy,
+  });
+
+  await updateDoc(doc(db, "orgs", orgId), {
+    joinCode: newCode,
+    joinCodeUpdatedAt: serverTimestamp(),
+  });
+
+  return newCode;
 }
 
 /**
- * Participant: join an organization by joinCode.
- * Returns org info needed to attach user.
+ * Create an org doc and generate its initial join code.
+ * NOTE: This matches your Onboarding.jsx call signature.
  */
-export async function joinOrgByCode(code) {
-  const normalized = String(code || "").trim().toUpperCase();
-  if (!normalized) {
-    const err = new Error("INVITE_CODE_REQUIRED");
-    err.code = "INVITE_CODE_REQUIRED";
-    throw err;
-  }
+export async function createOrg({ name, orgType, employeeRange = null, createdBy }) {
+  if (!name?.trim()) throw new Error("ORG_NAME_REQUIRED");
+  if (!orgType) throw new Error("ORG_TYPE_REQUIRED");
+  if (!createdBy) throw new Error("CREATED_BY_REQUIRED");
 
-  const orgsCol = collection(db, "orgs");
-  const q = query(orgsCol, where("joinCode", "==", normalized), limit(1));
-  const snap = await getDocs(q);
+  const orgRef = doc(collection(db, "orgs"));
+  const orgId = orgRef.id;
 
-  if (snap.empty) {
+  await setDoc(orgRef, {
+    name: name.trim(),
+    type: orgType,
+    employeeRange: employeeRange || null,
+    createdAt: serverTimestamp(),
+    createdBy,
+  });
+
+  const joinCode = await regenerateOrgJoinCode({ orgId, createdBy });
+  return { orgId, joinCode };
+}
+
+/**
+ * Validate invite code by reading joinCodes/{CODE}.
+ * Returns org info (if available) so onboarding can write it into the user profile.
+ */
+export async function joinOrgByCode(inviteCodeRaw) {
+  const code = (inviteCodeRaw || "").trim().toUpperCase();
+  if (!code) throw new Error("INVITE_CODE_REQUIRED");
+
+  const codeSnap = await getDoc(doc(db, "joinCodes", code));
+  if (!codeSnap.exists()) {
+    // your onboarding maps ORG_NOT_FOUND -> "not recognized"
     const err = new Error("ORG_NOT_FOUND");
     err.code = "ORG_NOT_FOUND";
     throw err;
   }
 
-  const orgDoc = snap.docs[0];
-  const org = orgDoc.data();
+  const codeData = codeSnap.data();
+  if (codeData.active === false) {
+    const err = new Error("INVITE_CODE_INACTIVE");
+    err.code = "INVITE_CODE_INACTIVE";
+    throw err;
+  }
+
+  const orgId = codeData.orgId;
+  if (!orgId) throw new Error("INVITE_CODE_MISSING_ORG");
+
+  const orgSnap = await getDoc(doc(db, "orgs", orgId));
+  const orgData = orgSnap.exists() ? orgSnap.data() : null;
 
   return {
-    orgId: orgDoc.id,
-    orgName: org.name || "",
-    orgType: org.type || "",
-    employeeCount: org.employeeCount ?? null,
-    employeeRange: org.employeeRange ?? "",
-    joinCode: org.joinCode || normalized,
+    orgId,
+    orgName: orgData?.name || "",
+    orgType: orgData?.type || "",
+    employeeRange: orgData?.employeeRange || "",
+    joinCode: orgData?.joinCode || code, // org doc should have it
   };
 }
 
 /**
- * Coordinator: regenerate org joinCode (replaces the old one).
- * Returns the new joinCode.
+ * Upsert the logged-in user's profile under users/{uid}.
+ * This matches your Onboarding.jsx usage exactly.
  */
-export async function regenerateOrgJoinCode(orgId) {
-  if (!orgId) {
-    const err = new Error("ORG_ID_REQUIRED");
-    err.code = "ORG_ID_REQUIRED";
-    throw err;
-  }
+export async function upsertUserProfile(currentUser, profileData) {
+  if (!currentUser?.uid) throw new Error("USER_REQUIRED");
 
-  const orgRef = doc(db, "orgs", orgId);
-  const orgSnap = await getDoc(orgRef);
-  if (!orgSnap.exists()) {
-    const err = new Error("ORG_NOT_FOUND");
-    err.code = "ORG_NOT_FOUND";
-    throw err;
-  }
-
-  const orgsCol = collection(db, "orgs");
-
-  for (let attempt = 0; attempt < 6; attempt++) {
-    const newCode = generateJoinCode(6);
-
-    // Ensure uniqueness
-    const q = query(orgsCol, where("joinCode", "==", newCode), limit(1));
-    const existing = await getDocs(q);
-    if (!existing.empty) continue;
-
-    await updateDoc(orgRef, {
-      joinCode: newCode,
-      joinCodeUpdatedAt: serverTimestamp(),
-    });
-
-    return newCode;
-  }
-
-  throw new Error("FAILED_TO_GENERATE_CODE");
-}
-
-/**
- * Create or update a user profile document in "users/{uid}".
- */
-export async function upsertUserProfile(user, extraData = {}) {
-  if (!user) return;
-
-  const ref = doc(db, "users", user.uid);
+  const userRef = doc(db, "users", currentUser.uid);
 
   await setDoc(
-    ref,
+    userRef,
     {
-      uid: user.uid,
-      email: user.email ?? "",
-      displayName: extraData.displayName ?? user.displayName ?? "",
-
-      // Canonical fields
-      role: extraData.role ?? "participant",
-      orgId: extraData.orgId ?? null,
-      orgName: extraData.orgName ?? "",
-      department: extraData.department ?? "",
-      onboardingComplete: extraData.onboardingComplete ?? false,
-      onboardingVersion: extraData.onboardingVersion ?? 2,
-
-      // Targeting fields (optional)
-      orgType: extraData.orgType ?? "",
-      employeeCount: extraData.employeeCount ?? null,
-      employeeRange: extraData.employeeRange ?? "",
-
-      // Convenience (not source of truth, but helpful to show in UI)
-      joinCode: extraData.joinCode ?? "",
-
-      createdAt: serverTimestamp(),
-      lastLoginAt: serverTimestamp(),
+      ...profileData,
+      uid: currentUser.uid,
+      email: currentUser.email || profileData.email || "",
+      updatedAt: serverTimestamp(),
+      createdAt: serverTimestamp(), // harmless due to merge; keeps first write if you prefer
     },
     { merge: true }
   );
+
+  return true;
 }

@@ -43,6 +43,7 @@ export function UserProvider({ children }) {
         firebaseUser,
         profile,
         role: profile?.role || null,
+        orgId: profile?.orgId || null,
         loading,
       }}
     >
