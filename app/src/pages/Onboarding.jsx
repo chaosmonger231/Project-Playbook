@@ -134,10 +134,10 @@ export default function Onboarding() {
         const joined = await joinOrgByCode(code);
 
         orgId = joined.orgId;
-        resolvedOrgName = joined.orgName || "";
-        resolvedOrgType = joined.orgType || "";
-        resolvedEmployeeRange = joined.employeeRange || "";
-        resolvedJoinCode = joined.joinCode || code.trim().toUpperCase();
+        resolvedOrgName = "";
+        resolvedOrgType = "";
+        resolvedEmployeeRange = "";
+        resolvedJoinCode = joined.joinCode;
       }
 
       if (!orgId) throw new Error("ORG_RESOLUTION_FAILED");
