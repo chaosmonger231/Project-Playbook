@@ -1,11 +1,11 @@
-import { useOutletContext, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useUser } from "../auth/UserContext";
 import CurrentUserName from "../components/CurrentUserName";
 import CyberNewsPanel from "../components/CyberNewsPanel";
 import OrgStatusBanner from "../components/OrgStatusBanner";
+import ContentPanel from "../components/ContentPanel";
 
 export default function Home() {
-  const { selected } = useOutletContext();
   const { role, loading } = useUser();
   const navigate = useNavigate();
 
@@ -15,9 +15,7 @@ export default function Home() {
     const key = "Images/meme2.jpg";
 
     try {
-      const res = await fetch(
-        `${apiBase}/signed-url?key=${encodeURIComponent(key)}`
-      );
+      const res = await fetch(`${apiBase}/signed-url?key=${encodeURIComponent(key)}`);
       const data = await res.json();
       console.log("SIGNED URL:", data.url);
       window.open(data.url, "_blank", "noopener,noreferrer");
@@ -26,165 +24,101 @@ export default function Home() {
     }
   }
 
-  if (loading) {
-    return <p>Loading…</p>;
-  }
+  if (loading) return <p>Loading…</p>;
 
-  let mainContent = null;
+  const isCoordinator = role === "coordinator";
 
-  // =========================
-  // COORDINATOR VIEW
-  // =========================
-  if (role === "coordinator") {
-    if (selected === "box1") {
-      mainContent = (
-        <div className="home-layout">
-          <CyberNewsPanel />
-          <section className="home-main">
-            <h3>Overview</h3>
-            <p>Overview content goes here.</p>
-          </section>
-        </div>
-      );
-    } else if (selected === "box2") {
-      mainContent = (
-        <section>
-          <h3>Actions & Invites</h3>
-          <p>Actions & invites content goes here.</p>
-        </section>
-      );
-    } else if (selected === "box3") {
-      const playbooks = [
-        {
-          id: 1,
-          label: "Playbook 1",
-          path: "/playbook1",
-          icon: "/images/playbookImage1.png",
-        },
-        {
-          id: 2,
-          label: "Impact Calculator Playbook",
-          path: "/playbook2",
-          icon: "/images/playbookImage2.png",
-        },
-        {
-          id: 3,
-          label: "Detection and Response Playbook",
-          path: "/playbook3",
-          icon: "/images/playbookImage3.png",
-        },
-        {
-          id: 4,
-          label: "Playbook 4",
-          path: "/playbook4",
-          icon: "/images/playbookImage1.png",
-        },
-        {
-          id: 5,
-          label: "Playbook 5",
-          path: "/playbook5",
-          icon: "/images/playbookImage2.png",
-        },
-      ];
-
-      function openPlaybook(path) {
-        navigate(path);
-      }
-
-      mainContent = (
-        <section>
-          <h3>Playbooks</h3>
-          <p>
-            Use these tools to plan, prioritize, and track your organization's
-            cybersecurity improvements.
-          </p>
-
-          <div className="playbook-grid">
-            {playbooks.map((pb) => (
-              <button
-                key={pb.id}
-                type="button"
-                className="playbook-card"
-                onClick={() => openPlaybook(pb.path)}
-              >
-                <img
-                  src={pb.icon}
-                  alt={pb.label}
-                  className="playbook-icon"
-                />
-                <span className="playbook-label">{pb.label}</span>
-              </button>
-            ))}
-          </div>
-        </section>
-      );
-    } else {
-      mainContent = (
-        <section>
-          <h3>Coordinator Home</h3>
-          <p>
-            Select Overview, Actions & Invites, or Playbook from the sidebar.
-          </p>
-        </section>
-      );
-    }
-  }
-
-  // =========================
-  // PARTICIPANT VIEW
-  // =========================
-  else {
-    if (selected === "box1") {
-      mainContent = (
-        <section>
-          <h3>Your Training Overview</h3>
-          <p>
-            Here you’ll see assigned modules, due dates, and your recent
-            results.
-          </p>
-        </section>
-      );
-    } else if (selected === "box2") {
-      mainContent = (
-        <section>
-          <h3>My Training</h3>
-          <p>Here you’ll see the modules assigned to you.</p>
-        </section>
-      );
-    } else if (selected === "box3") {
-      mainContent = (
-        <section>
-          <h3>My Results</h3>
-          <p>Here you’ll see your quiz scores and completion history.</p>
-        </section>
-      );
-    } else {
-      mainContent = (
-        <section>
-          <h3>Welcome</h3>
-          <p>Use the sidebar to view your training or results.</p>
-        </section>
-      );
-    }
-  }
-
-  // =========================
-  // FINAL RENDER
-  // =========================
   return (
     <div className="home-container">
       <h2>
         Welcome, <CurrentUserName />
       </h2>
 
-      {/* 🔔 Full-width Org Banner */}
+      {/* 🔔 Org Banner */}
       <OrgStatusBanner />
 
-      {/* 📦 Dynamic Page Content */}
-      {mainContent}
+      {/* Main Layout */}
+      <div className="home-layout">
 
-      {/* Temporary Test Button */}
-      <button onClick={testSignedUrl}>Test S3 Signed URL</button>
+        {/* Left Column: News */}
+        <aside className="home-left">
+          <CyberNewsPanel />
+        </aside>
+
+        {/* Right Column */}
+        <section className="home-right">
+
+          {/* Reusable Content Panel */}
+          <ContentPanel>
+            <div className="home-cards">
+
+              {/* Playbooks */}
+              <button
+                type="button"
+                className="action-card action-card--blue"
+                onClick={() => navigate("/playbooks")}
+              >
+                <div className="action-card__head">
+                  <div className="action-card__title">Playbooks</div>
+                </div>
+                <div className="action-card__divider" />
+                <div className="action-card__body">
+                  Manage playbooks, set participant visibility, and track organization completion.
+                </div>
+              </button>
+
+              {/* Team Management */}
+              <button
+                type="button"
+                className="action-card action-card--green"
+                onClick={() => navigate("/organization")}
+              >
+                <div className="action-card__head">
+                  <div className="action-card__title">Team Management</div>
+                </div>
+                <div className="action-card__divider" />
+                <div className="action-card__body">
+                  Invite members, manage roles, and view participation across your organization.
+                </div>
+              </button>
+
+              {/* Incident Response */}
+              <button
+                type="button"
+                className="action-card action-card--red"
+                onClick={() => navigate("/incident")}
+              >
+                <div className="action-card__head">
+                  <div className="action-card__title">Incident Response</div>
+                </div>
+                <div className="action-card__divider" />
+                <div className="action-card__body">
+                  Edit emergency contacts and response guidance for your organization.
+                </div>
+              </button>
+
+            </div>
+          </ContentPanel>
+
+          {/* Optional participant-only tasks strip */}
+          {!isCoordinator && (
+            <div className="home-tasks">
+              <div className="home-tasks-title">Your Tasks</div>
+              <div className="home-tasks-sub">
+                (Coming soon) Assigned modules and due dates will appear here.
+              </div>
+            </div>
+          )}
+
+          {/* Temporary Test Button */}
+          <div style={{ marginTop: 16 }}>
+            <button type="button" onClick={testSignedUrl}>
+              Test S3 Signed URL
+            </button>
+          </div>
+
+        </section>
+      </div>
     </div>
   );
 }

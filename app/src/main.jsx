@@ -1,27 +1,34 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import AuthGate from "./auth/AuthGate";
-import Login from "./pages/Login";
-import Shell from "./components/Shell";
-import Home from "./pages/Home";
-import Graphs from "./pages/Graphs";
-import Train from "./pages/Train";
-import Data from "./pages/Data";
-import AccountPage from "./pages/AccountPage.jsx";
-import Onboarding from "./pages/Onboarding";
+
 import "./index.css";
 import { UserProvider } from "./auth/UserContext.jsx";
+
+import AuthGate from "./auth/AuthGate";
+import Shell from "./components/Shell";
+
+import Login from "./pages/Login";
+import Onboarding from "./pages/Onboarding";
+import AccountPage from "./pages/AccountPage.jsx";
+
+import Home from "./pages/Home";
+import Train from "./pages/Train";
+import Playbooks from "./pages/Playbooks.jsx";
+
 import Playbook1 from "./pages/Playbook1.jsx";
 import Playbook2 from "./pages/Playbook2.jsx";
 import Playbook3 from "./pages/Playbook3.jsx";
 import Playbook4 from "./pages/Playbook4.jsx";
 import Playbook5 from "./pages/Playbook5.jsx";
+
 import LearningModuleContent from "./pages/LearningModuleContent";
 
 const router = createBrowserRouter([
+  // Public route
   { path: "/login", element: <Login /> },
 
+  // Auth routes WITHOUT Shell
   {
     path: "/onboarding",
     element: (
@@ -30,7 +37,6 @@ const router = createBrowserRouter([
       </AuthGate>
     ),
   },
-
   {
     path: "/account",
     element: (
@@ -39,8 +45,6 @@ const router = createBrowserRouter([
       </AuthGate>
     ),
   },
-
-  // 🔹 LEARNING ROUTE (authenticated, NO sidebar)
   {
     path: "/learning/:topic",
     element: (
@@ -50,7 +54,7 @@ const router = createBrowserRouter([
     ),
   },
 
-  // 🔹 APP ROUTES (WITH sidebar)
+  // App routes WITH Shell
   {
     element: (
       <AuthGate>
@@ -59,9 +63,12 @@ const router = createBrowserRouter([
     ),
     children: [
       { path: "/", element: <Home /> },
-      { path: "/graphs", element: <Graphs /> },
       { path: "/train", element: <Train /> },
-      { path: "/data", element: <Data /> },
+
+      // ✅ Playbooks hub
+      { path: "/playbooks", element: <Playbooks /> },
+
+      // Playbook detail pages
       { path: "/playbook1", element: <Playbook1 /> },
       { path: "/playbook2", element: <Playbook2 /> },
       { path: "/playbook3", element: <Playbook3 /> },

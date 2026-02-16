@@ -21,9 +21,7 @@ export default function TopNav() {
 
       <nav className="links">
         <NavLink to="/" end className={({isActive}) => isActive ? "active" : ""}>Home</NavLink>
-        <NavLink to="/graphs" className={({isActive}) => isActive ? "active" : ""}>Graphs</NavLink>
         <NavLink to="/train"  className={({isActive}) => isActive ? "active" : ""}>Lessons</NavLink>
-        <NavLink to="/data"   className={({isActive}) => isActive ? "active" : ""}>Data</NavLink>
       </nav>
            
       <div className="actions">

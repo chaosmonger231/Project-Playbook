@@ -1,293 +1,148 @@
-import React, { useState } from "react";
-import { useOutletContext, useNavigate } from "react-router-dom";
+import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useUser } from "../auth/UserContext";
 import CurrentUserName from "../components/CurrentUserName";
 import ModuleVideo from "../components/ModuleVideo";
 import LearningButton from "../components/LearningButton";
+import Sidebar from "../components/Sidebar";
+import ContentPanel from "../components/ContentPanel";
 
-// Map box1–box4 to module names
-const MODULE_LABELS = {
-  box1: "Module 1 – Phishing & Email Safety",
-  box2: "Module 2 – Passwords & MFA",
-  box3: "Module 3 – Ransomware & Backups",
-  box4: "Module 4 – Protecting Student / Customer Data",
-};
-
-// Map box keys to /learning/:topic routes
-const MODULE_ROUTE_MAP = {
-  box1: "phishing",
-  box2: "passwords",
-  box3: "ransomware",
-  box4: "data-protection",
-};
+/**
+ * Train owns its nav + state.
+ * id must match /learning/:topic
+ */
+const MODULES = [
+  {
+    id: "phishing",
+    label: "Phishing & Email Safety",
+    fullTitle: "Module 1 – Phishing & Email Safety",
+    videoId: "JlQovysQBn0",
+    coordinator: {
+      desc:
+        "Teach staff how to spot phishing emails, suspicious links, and fake login pages. This module focuses on real-world examples that small organizations see every day.",
+      bullets: [
+        "Recognizing common phishing red flags",
+        "What to do when a suspicious email is received",
+        "How to report phishing in your environment",
+      ],
+    },
+    participant: {
+      desc:
+        "Learn how to recognize and report phishing emails and suspicious links before they cause damage.",
+      bullets: [
+        "Spotting fake senders and urgent language",
+        "Checking links before clicking",
+        "How to report phishing in your organization",
+      ],
+    },
+  },
+  {
+    id: "passwords",
+    label: "Passwords & MFA",
+    fullTitle: "Module 2 – Passwords & MFA",
+    videoId: "XIlF2qkav5c",
+    coordinator: {
+      desc:
+        "This module covers strong passwords, passphrases, and multi-factor authentication (MFA).",
+      bullets: [
+        "Creating strong, memorable passwords",
+        "Why re-using passwords is risky",
+        "How MFA protects accounts from compromise",
+      ],
+    },
+    participant: {
+      desc:
+        "This module walks through creating strong passwords and using multi-factor authentication to protect your accounts.",
+      bullets: [],
+    },
+  },
+  {
+    id: "ransomware",
+    label: "Ransomware & Backups",
+    fullTitle: "Module 3 – Ransomware & Backups",
+    videoId: "-KL9APUjj3E",
+    coordinator: {
+      desc:
+        "Introduces ransomware basics and why backups and early reporting are critical.",
+      bullets: [
+        "How ransomware works in simple terms",
+        "Why reporting a suspicious alert early matters",
+        "How backups can reduce impact",
+      ],
+    },
+    participant: {
+      desc:
+        "Understand what ransomware is, what it looks like in real life, and what you should do if something doesn’t look right.",
+      bullets: [],
+    },
+  },
+  {
+    id: "data-protection",
+    label: "Protecting Sensitive Data",
+    fullTitle: "Module 4 – Protecting Sensitive Data",
+    videoId: "laR7kRUIydA",
+    coordinator: {
+      desc:
+        "Focuses on handling sensitive data properly (student records, customer information, HR data, etc.).",
+      bullets: [
+        "What counts as sensitive or regulated data",
+        "Safe handling and sharing basics",
+        "What to do if data is sent to the wrong person",
+      ],
+    },
+    participant: {
+      desc:
+        "Learn the basics of handling sensitive information (like student or customer data) safely.",
+      bullets: [],
+    },
+  },
+];
 
 export default function Train() {
-  const { selected } = useOutletContext();
   const { role, loading, orgName } = useUser();
   const navigate = useNavigate();
 
-  const [moduleAssignments, setModuleAssignments] = useState({
-    box1: true,
-    box2: false,
-    box3: false,
-    box4: false,
+  const isCoordinator = role === "coordinator";
+  const orgLabel = orgName || "your organization";
+
+  // Sidebar items (labels are owned by Train, not Sidebar)
+  const sidebarItems = useMemo(
+    () => MODULES.map((m) => ({ id: m.id, label: m.label })),
+    []
+  );
+
+  const [selectedId, setSelectedId] = useState(MODULES[0].id);
+
+  // Demo org-wide activation toggles (future: persist to Firestore)
+  const [moduleAssignments, setModuleAssignments] = useState(() => {
+    const init = {};
+    MODULES.forEach((m, idx) => {
+      init[m.id] = idx === 0;
+    });
+    return init;
   });
 
   if (loading) return <p>Loading…</p>;
 
-  const moduleLabel = MODULE_LABELS[selected] || "Lesson";
-  const orgLabel = orgName || "your organization";
+  const selectedModule = MODULES.find((m) => m.id === selectedId) || MODULES[0];
+  const isAssigned = moduleAssignments[selectedId] ?? false;
 
-  const goToPlayer = (moduleKey) => {
-    const topic = MODULE_ROUTE_MAP[moduleKey];
-    if (!topic) {
-      console.warn("Unknown moduleKey:", moduleKey);
-      return;
-    }
-    navigate(`/learning/${topic}`);
+  const toggleAssigned = () => {
+    setModuleAssignments((prev) => ({
+      ...prev,
+      [selectedId]: !isAssigned,
+    }));
   };
 
-  const ButtonRow = ({ moduleKey }) => (
-    <div style={{ display: "flex", justifyContent: "center", marginTop: "1.5rem" }}>
-      {/* key forces remount so the CSS entrance animation replays when switching boxes */}
-      <LearningButton
-        key={selected}
-        label="Start Learning"
-        onClick={() => goToPlayer(moduleKey)}
-      />
-    </div>
-  );
+  const goToPlayer = () => navigate(`/learning/${selectedId}`);
 
-  let mainContent = null;
+  const bullets = isCoordinator
+    ? selectedModule.coordinator.bullets
+    : selectedModule.participant.bullets;
 
-  // =============== COORDINATOR VIEW ===============
-  if (role === "coordinator") {
-    const isAssigned = moduleAssignments[selected] ?? false;
-
-    const toggleAssigned = () => {
-      setModuleAssignments((prev) => ({
-        ...prev,
-        [selected]: !isAssigned,
-      }));
-    };
-
-    if (selected === "box1") {
-      mainContent = (
-        <section>
-          <h3>{moduleLabel}</h3>
-
-          <ModuleVideo videoId="JlQovysQBn0" title="Test Video" />
-
-          <p>
-            Teach staff how to spot phishing emails, suspicious links, and fake login
-            pages. This module focuses on real-world examples that small organizations
-            see every day.
-          </p>
-
-          <ul style={{ marginTop: "10px" }}>
-            <li>Recognizing common phishing red flags</li>
-            <li>What to do when a suspicious email is received</li>
-            <li>How to report phishing in your environment</li>
-          </ul>
-
-          <ButtonRow moduleKey="box1" />
-
-          <div style={{ marginTop: "14px" }}>
-            <label style={{ fontSize: "0.9rem" }}>
-              <input
-                type="checkbox"
-                checked={isAssigned}
-                onChange={toggleAssigned}
-                style={{ marginRight: "6px" }}
-              />
-              Make this module active for {orgLabel} (demo toggle)
-            </label>
-
-            <p style={{ fontSize: "0.85rem", color: "#6b7280", marginTop: "4px" }}>
-              In a future version, this toggle will assign the module to all participants
-              in this organization using the org ID.
-            </p>
-          </div>
-        </section>
-      );
-    } else if (selected === "box2") {
-      const isOn = moduleAssignments[selected] ?? false;
-
-      mainContent = (
-        <section>
-          <h3>{moduleLabel}</h3>
-
-          <ModuleVideo videoId="XIlF2qkav5c" title="Test Video" />
-
-          <p>
-            This module covers strong passwords, passphrases, and multi-factor
-            authentication (MFA).
-          </p>
-
-          <ul style={{ marginTop: "10px" }}>
-            <li>Creating strong, memorable passwords</li>
-            <li>Why re-using passwords is risky</li>
-            <li>How MFA protects accounts from compromise</li>
-          </ul>
-
-          <ButtonRow moduleKey="box2" />
-
-          <div style={{ marginTop: "14px" }}>
-            <label style={{ fontSize: "0.9rem" }}>
-              <input
-                type="checkbox"
-                checked={isOn}
-                onChange={toggleAssigned}
-                style={{ marginRight: "6px" }}
-              />
-              Make this module active for {orgLabel}
-            </label>
-          </div>
-        </section>
-      );
-    } else if (selected === "box3") {
-      const isOn = moduleAssignments[selected] ?? false;
-
-      mainContent = (
-        <section>
-          <h3>{moduleLabel}</h3>
-
-          <ModuleVideo videoId="-KL9APUjj3E" title="Test Video" />
-
-          <p>
-            Introduces ransomware basics and why backups and early reporting are critical.
-          </p>
-
-          <ul style={{ marginTop: "10px" }}>
-            <li>How ransomware works in simple terms</li>
-            <li>Why reporting a suspicious alert early matters</li>
-            <li>How backups can reduce impact</li>
-          </ul>
-
-          <ButtonRow moduleKey="box3" />
-
-          <div style={{ marginTop: "14px" }}>
-            <label style={{ fontSize: "0.9rem" }}>
-              <input
-                type="checkbox"
-                checked={isOn}
-                onChange={toggleAssigned}
-                style={{ marginRight: "6px" }}
-              />
-              Make this module active for {orgLabel}
-            </label>
-          </div>
-        </section>
-      );
-    } else if (selected === "box4") {
-      const isOn = moduleAssignments[selected] ?? false;
-
-      mainContent = (
-        <section>
-          <h3>{moduleLabel}</h3>
-
-          <ModuleVideo videoId="laR7kRUIydA" title="Test Video" />
-
-          <p>
-            Focuses on handling sensitive data properly (student records, customer
-            information, HR data, etc.).
-          </p>
-
-          <ul style={{ marginTop: "10px" }}>
-            <li>What counts as sensitive or regulated data</li>
-            <li>Safe handling and sharing basics</li>
-            <li>What to do if data is sent to the wrong person</li>
-          </ul>
-
-          <ButtonRow moduleKey="box4" />
-
-          <div style={{ marginTop: "14px" }}>
-            <label style={{ fontSize: "0.9rem" }}>
-              <input
-                type="checkbox"
-                checked={isOn}
-                onChange={toggleAssigned}
-                style={{ marginRight: "6px" }}
-              />
-              Make this module active for {orgLabel}
-            </label>
-          </div>
-        </section>
-      );
-    } else {
-      mainContent = (
-        <section>
-          <h3>Learning Modules</h3>
-          <p>Select a module on the left to configure it.</p>
-        </section>
-      );
-    }
-  }
-
-  // =============== PARTICIPANT VIEW ===============
-  else {
-    if (selected === "box1") {
-      mainContent = (
-        <section>
-          <h3>{MODULE_LABELS.box1}</h3>
-          <p>
-            Learn how to recognize and report phishing emails and suspicious links before
-            they cause damage.
-          </p>
-          <ul style={{ marginTop: "10px" }}>
-            <li>Spotting fake senders and urgent language</li>
-            <li>Checking links before clicking</li>
-            <li>How to report phishing in your organization</li>
-          </ul>
-
-          <ButtonRow moduleKey="box1" />
-        </section>
-      );
-    } else if (selected === "box2") {
-      mainContent = (
-        <section>
-          <h3>{MODULE_LABELS.box2}</h3>
-          <p>
-            This module walks through creating strong passwords and using multi-factor
-            authentication to protect your accounts.
-          </p>
-
-          <ButtonRow moduleKey="box2" />
-        </section>
-      );
-    } else if (selected === "box3") {
-      mainContent = (
-        <section>
-          <h3>{MODULE_LABELS.box3}</h3>
-          <p>
-            Understand what ransomware is, what it looks like in real life, and what you
-            should do if something doesn&apos;t look right.
-          </p>
-
-          <ButtonRow moduleKey="box3" />
-        </section>
-      );
-    } else if (selected === "box4") {
-      mainContent = (
-        <section>
-          <h3>{MODULE_LABELS.box4}</h3>
-          <p>
-            Learn the basics of handling sensitive information (like student or customer
-            data) safely.
-          </p>
-
-          <ButtonRow moduleKey="box4" />
-        </section>
-      );
-    } else {
-      mainContent = (
-        <section>
-          <h3>Learning Modules</h3>
-          <p>Select a module on the left to view its details.</p>
-        </section>
-      );
-    }
-  }
+  const desc = isCoordinator
+    ? selectedModule.coordinator.desc
+    : selectedModule.participant.desc;
 
   return (
     <>
@@ -296,7 +151,55 @@ export default function Train() {
         {orgLabel === "your organization" ? <CurrentUserName /> : orgLabel}
       </h2>
 
-      {mainContent}
+      <div className="train-layout">
+        <Sidebar
+          selected={selectedId}
+          onSelect={setSelectedId}
+          items={sidebarItems}
+          variant="tight"
+        />
+
+        <ContentPanel>
+          <h3>{selectedModule.fullTitle}</h3>
+
+          {isCoordinator && (
+            <ModuleVideo videoId={selectedModule.videoId} title="Test Video" />
+          )}
+
+          <p>{desc}</p>
+
+          {bullets.length > 0 && (
+            <ul style={{ marginTop: 10 }}>
+              {bullets.map((b) => (
+                <li key={b}>{b}</li>
+              ))}
+            </ul>
+          )}
+
+          <div style={{ display: "flex", justifyContent: "center", marginTop: "1.5rem" }}>
+            <LearningButton key={selectedId} label="Start Learning" onClick={goToPlayer} />
+          </div>
+
+          {isCoordinator && (
+            <div style={{ marginTop: 14 }}>
+              <label style={{ fontSize: "0.9rem" }}>
+                <input
+                  type="checkbox"
+                  checked={isAssigned}
+                  onChange={toggleAssigned}
+                  style={{ marginRight: 6 }}
+                />
+                Make this module active for {orgLabel} (demo toggle)
+              </label>
+
+              <p style={{ fontSize: "0.85rem", color: "#6b7280", marginTop: 4 }}>
+                In a future version, this toggle will assign the module to all participants
+                in this organization using the org ID.
+              </p>
+            </div>
+          )}
+        </ContentPanel>
+      </div>
     </>
   );
 }

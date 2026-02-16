@@ -1,6 +1,10 @@
-/* Left rail */
-.sidenav {
-  width: 200px;
+/* ============================================================
+   Sidebar (Reusable)
+   - Only affects pages that render <Sidebar />
+   ============================================================ */
+
+.app-sidenav {
+  width: 240px;
   padding: 12px;
   background: rgba(255,255,255,0.2);
   backdrop-filter: blur(6px);
@@ -8,11 +12,13 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  /* make sure it stretches */
-  min-height: 100%;
+  border-radius: 14px;
 }
 
-/* Rectangular buttons */
+/* Optional variants */
+.app-sidenav--tight { width: 210px; }
+.app-sidenav--wide  { width: 280px; }
+
 .sidebtn {
   display: block;
   width: 100%;
@@ -27,5 +33,30 @@
   transition: transform .05s ease, background .2s ease, box-shadow .2s ease;
 }
 
-.sidebtn:hover { background: #ffffff; box-shadow: 0 4px 14px rgba(0,0,0,.12); }
-.sidebtn.active { background: #3b82f6; color: #fff; border-color: transparent; }
+.sidebtn:hover {
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(0,0,0,.12);
+}
+
+.sidebtn.active {
+  background: #3b82f6;
+  color: #fff;
+  border-color: transparent;
+}
+
+/* Mobile: sidebar becomes horizontal row */
+@media (max-width: 900px) {
+  .app-sidenav {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    border-right: none;
+    border-radius: 14px;
+  }
+
+  .sidebtn {
+    white-space: nowrap;
+    width: auto;
+    min-width: 180px;
+  }
+}

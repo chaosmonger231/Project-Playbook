@@ -1,114 +1,42 @@
 /* ---- Global reset / layout ---- */
 * { box-sizing: border-box; }
 html, body, #root { height: 100%; }
+
 body {
   margin: 0;
   font-family: system-ui, Arial, sans-serif;
-  
   background: #e0edff;
-  /* background: linear-gradient(135deg, #dbeafe, #fee2b3); */
-  /*
-    #3b82f6 original blue
-    #FFC0CB pink
-  	#C1133D red
-    #001C5A blue
-    #000000 black
-    #FDAE44 sunflower orange
-    #ffffff white
-    #e0edff very light blue
-    #dbeafe light blue
-  */
-
-  /*
-    #1e3a8a blue darker
-    #fef3c7 pale warm yellow/gold
-    #fee2b3 light warm gold
-  */
 }
 
 /* ---- App frame ---- */
 .app {
   min-height: 100%;
   display: flex;
-  flex-direction: column;     /* TopNav on top, then layout row */
-}
-
-/* Row with sidebar (left) + content (right) */
-.layout {
-  flex: 1;
-  display: flex;
-  min-height: 0;              /* prevents overflow issues */
-}
-
-/* Sidebar (button styles live in Sidebar.css) */
-.sidenav {
-  width: 200px;
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(6px);
-  border-right: 1px solid rgba(255, 255, 255, 0.25);
-  display: flex;
   flex-direction: column;
-  gap: 10px;
-  min-height: 100%;
 }
 
-/* Main content area */
+/* ---- Main content area (minimal Shell) ---- */
 .content {
   flex: 1;
   padding: 16px;
-  display: flex;
-}
-
-/* White card for page content */
-.box {
-  flex: 1;
-  background: #fff;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 6px 20px rgba(0,0,0,.15);
-  min-height: 300px;
-}
-
-/* All h3 headings inside the white content box */
-.box h3 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0 0 8px;
-  padding-bottom: 4px;
-  border-bottom: 2px solid #111827; /* black line */
-}
-
-/* Optional: inner width constraint if you want */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 2000px;
   width: 100%;
+  margin: 0 auto;
+  display: block;
 }
 
-/* ---- Home + Cybersecurity News layout ---- */
+/* ============================================================
+   CYBER NEWS PANEL
+   ============================================================ */
 
-.home-layout {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-}
-
-/* Left side: the normal Overview content */
-.home-main {
-  flex: 2;
-}
-
-/* Right side: the news panel */
 .news-panel {
-  flex: 1;
   border-radius: 10px;
-  padding: 12px 14px;
-  background: #0f172a;              
+  padding: 10px 12px;
+  background: #0f172a;
   border: 1px solid #1e293b;
-  max-height: 800px;
+  max-height: 420px;     /* capped */
   overflow-y: auto;
-  color: #e5e7eb;                   
+  color: #e5e7eb;
 }
 
 .news-title {
@@ -132,50 +60,262 @@ body {
 }
 
 .news-item-headline {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 500;
 }
 
 .news-item-meta {
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   opacity: 0.8;
   display: flex;
   gap: 4px;
   margin-top: 2px;
 }
 
-.playbook-grid {
-  margin-top: 16px;
+/* ============================================================
+   HOME LAYOUT
+   ============================================================ */
+
+.home-layout {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3 per row */
-  gap: 20px 32px; /* row gap, column gap */
-  max-width: 600px;
+  grid-template-columns: 360px 1fr;
+  gap: 16px;
+  align-items: start;
+  margin-top: 12px;
 }
 
-.playbook-card {
-  border: none;
-  background: transparent;
-  padding: 0;
-  cursor: pointer;
+.home-right {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 16px;
 }
 
-.playbook-icon {
+/* ============================================================
+   REUSABLE CONTENT PANEL (WHITE CONTAINER)
+   ============================================================ */
+
+.content-panel {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.08);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================
+   CARD GRID
+   ============================================================ */
+
+.home-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+
+/* ============================================================
+   ACTION CARD (REUSABLE)
+   ============================================================ */
+
+.action-card {
+  width: 100%;
+  text-align: left;
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 14px;
+  padding: 18px 18px 16px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,.08);
+
+  display: flex;
+  flex-direction: column;
+
+  min-height: 260px;   /* not too short */
+  max-height: 360px;   /* prevents skyscrapers */
+
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.action-card:hover {
+  transform: translateY(-1px);
+  transition: transform 0.12s ease-out;
+}
+
+.action-card:focus {
+  outline: none;
+}
+
+.action-card:focus-visible {
+  outline: 3px solid rgba(59,130,246,.35);
+  outline-offset: 2px;
+}
+
+.action-card__title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.action-card__divider {
+  margin: 12px 0 12px;
+  height: 2px;
+  width: 100%;
+  border-radius: 2px;
+}
+
+.action-card__body {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  line-height: 1.4;
+  flex: 1;
+  overflow: auto;  /* scroll inside card if needed */
+}
+
+/* ============================================================
+   CARD ACCENT COLORS
+   ============================================================ */
+
+.action-card--blue {
+  border-left: 6px solid #2563eb;
+}
+.action-card--blue .action-card__divider {
+  background: #2563eb;
+}
+
+.action-card--green {
+  border-left: 6px solid #16a34a;
+}
+.action-card--green .action-card__divider {
+  background: #16a34a;
+}
+
+.action-card--red {
+  border-left: 6px solid #dc2626;
+}
+.action-card--red .action-card__divider {
+  background: #dc2626;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1100px) {
+  .home-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .home-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Match the right white panel height to the Cyber News panel */
+.home-right .content-panel {
+  height: 420px;       /* same as .news-panel max-height */
+  overflow: hidden;    /* keeps panel clean */
+}
+
+/* Let the grid fill the panel */
+.home-right .content-panel .home-cards {
+  height: 100%;
+}
+
+/* Let cards stretch to panel height */
+.home-right .home-cards > .action-card {
+  height: 100%;
+  max-height: none;    /* allow stretching */
+  min-height: 0;       /* let grid control height */
+}
+
+.train-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 16px;
+  align-items: start;
+  margin-top: 12px;
+}
+
+/* =========================
+   Playbooks Hub Page
+   ========================= */
+
+.playbooks-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.playbooks-title {
+  margin: 0;
+}
+
+.playbooks-sub {
+  margin: 6px 0 0;
+  opacity: 0.8;
+}
+
+.playbooks-back {
+  border: 1px solid rgba(0,0,0,0.12);
+  background: rgba(255,255,255,0.7);
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.playbooks-back:hover {
+  background: #ffffff;
+}
+
+.playbooks-grid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  max-width: 900px;
+}
+
+.playbooks-iconcard {
+  border: 1px solid rgba(0,0,0,0.10);
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 16px;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 6px 16px rgba(0,0,0,.08);
+}
+
+.playbooks-iconcard:hover {
+  transform: translateY(-1px);
+  transition: transform 0.12s ease-out;
+}
+
+.playbooks-icon {
   width: 96px;
   height: auto;
-  display: block;
+  display: inline-block;
 }
 
-.playbook-label {
-  margin-top: 8px;
+.playbooks-label {
+  margin-top: 10px;
+  font-weight: 800;
   font-size: 0.95rem;
-  font-weight: 500;
-  text-align: center;
 }
 
-.playbook-card:hover .playbook-icon {
-  transform: translateY(-2px);
-  transition: transform 0.15s ease-out;
+@media (max-width: 1100px) {
+  .playbooks-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .playbooks-grid {
+    grid-template-columns: 1fr;
+  }
 }
