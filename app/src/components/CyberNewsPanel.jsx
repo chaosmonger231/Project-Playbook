@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
-import { db } from "../auth/firebase"; 
+import { db } from "../auth/firebase";
+import { useUser } from "../auth/UserContext";
 
 export default function CyberNewsPanel() {
+  // Rename context loading to authLoading locally
+  const { firebaseUser, loading: authLoading } = useUser();
+
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
@@ -11,6 +15,18 @@ export default function CyberNewsPanel() {
     let cancelled = false;
 
     async function loadNews() {
+      // Wait until auth/profile finishes initializing
+      if (authLoading) return;
+
+      // If not signed in, don't query Firestore
+      if (!firebaseUser) {
+        if (!cancelled) {
+          setLoading(false);
+          setNews([]);
+        }
+        return;
+      }
+
       setLoading(true);
       setErr("");
 
@@ -37,10 +53,11 @@ export default function CyberNewsPanel() {
     }
 
     loadNews();
+
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [authLoading, firebaseUser]);
 
   return (
     <aside className="news-panel">
@@ -55,13 +72,19 @@ export default function CyberNewsPanel() {
         Cybersecurity News
       </h3>
 
-      {loading && <div style={{ opacity: 0.8 }}>Loading…</div>}
+      {(authLoading || loading) && <div style={{ opacity: 0.8 }}>Loading…</div>}
 
-      {!loading && err && (
+      {!authLoading && !firebaseUser && (
+        <div style={{ opacity: 0.8, fontSize: "0.9rem" }}>
+          Sign in to view cyber news.
+        </div>
+      )}
+
+      {!authLoading && firebaseUser && !loading && err && (
         <div style={{ color: "#f97316", fontSize: "0.9rem" }}>{err}</div>
       )}
 
-      {!loading && !err && (
+      {!authLoading && firebaseUser && !loading && !err && (
         <ul className="news-list">
           {news.map((item) => {
             const dateLabel = item.publishedAt
@@ -81,7 +104,6 @@ export default function CyberNewsPanel() {
                         textDecoration: "none",
                         fontWeight: 700,
                       }}
-                      title="Open article"
                     >
                       {item.title}
                     </a>
