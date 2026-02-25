@@ -1,31 +1,898 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Page Under Construction</title>
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Deployment & Detection Rules Reference</title>
+  <meta name="description" content="Suricata + Wazuh deployment overview and ransomware detection rules." />
   <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      margin: 0;
-      padding: 24px;
-      background: #0f172a;
-      color: #f9fafb;
+    :root{
+      --bg: #0b0f14;
+      --panel: #111824;
+      --panel2:#0f1620;
+      --text:#e7eef7;
+      --muted:#a8b3c3;
+      --border:#223043;
+      --accent:#6ee7ff;
+      --accent2:#7cffa6;
+      --danger:#ff6e6e;
+      --shadow: 0 8px 30px rgba(0,0,0,.35);
+      --radius: 14px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
     }
-    h1 {
-      margin-top: 0;
-      margin-bottom: 8px;
-      font-size: 1.6rem;
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: var(--sans);
+      background: radial-gradient(1200px 700px at 15% 10%, rgba(110,231,255,.12), transparent 55%),
+                  radial-gradient(900px 600px at 80% 20%, rgba(124,255,166,.10), transparent 50%),
+                  var(--bg);
+      color: var(--text);
+      line-height:1.55;
     }
-    p {
+
+    a{color:var(--accent); text-decoration: none}
+    a:hover{text-decoration: underline}
+    code, pre{font-family: var(--mono)}
+    .skip-link{
+      position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden;
+    }
+    .skip-link:focus{
+      left:16px; top:16px; width:auto; height:auto;
+      padding:10px 12px; background:var(--panel); border:1px solid var(--border);
+      border-radius:10px; z-index:9999; box-shadow: var(--shadow);
+    }
+
+    header{
+      position: sticky; top:0; z-index: 50;
+      backdrop-filter: blur(10px);
+      background: rgba(11,15,20,.78);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner{
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+    }
+    .brand{
+      display:flex; flex-direction:column; gap:2px;
+    }
+    .brand h1{
+      font-size: 16px; margin:0; letter-spacing:.2px; font-weight: 700;
+    }
+    .brand p{
+      margin:0; font-size: 12px; color: var(--muted);
+    }
+    .header-actions{
+      display:flex; gap:10px; align-items:center; flex-wrap: wrap;
+    }
+    .pill{
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(17,24,36,.8), rgba(15,22,32,.65));
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+    }
+    .pill kbd{
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.25);
+    }
+    .btn{
+      border:1px solid var(--border);
+      background: rgba(17,24,36,.85);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-size: 12px;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+    }
+    .btn:hover{border-color: rgba(110,231,255,.55)}
+    .btn:focus{outline: 3px solid rgba(110,231,255,.35); outline-offset:2px}
+
+    main{
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 22px 12px 70px;
+      display:grid;
+      grid-template-columns: 1200px minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    main > * {
+      min-width: 0;
+    }
+
+    /* Make the content column explicitly shrinkable */
+    section.card.content {
+      min-width: 0;
+    }
+
+    aside.card.toc {
+      min-width: 0;
+      position: sticky;
+      top: 88px;   /* adjust depending on header height */
+      align-self: start;
+    }
+
+    @media (max-width: 980px){
+      main{grid-template-columns: 1fr}
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(17,24,36,.85), rgba(15,22,32,.70));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .card .card-h{
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .card .card-h h2{
+      margin:0;
+      font-size: 13px;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .card .card-b{padding: 14px}
+
+    .toc ol{
       margin: 0;
-      font-size: 0.95rem;
-      opacity: 0.9;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .toc a{
+      display:inline-block;
+      padding: 4px 0;
+    }
+
+    .content h2{
+      margin: 0 0 6px;
+      font-size: 20px;
+    }
+    .content .lede{
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    details{
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(15,22,32,.55);
+      margin: 14px 0;
+      overflow:hidden;
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      padding: 14px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      font-weight: 650;
+    }
+    summary::-webkit-details-marker{display:none}
+    summary .meta{
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 12px;
+    }
+    details[open] summary{
+      border-bottom: 1px solid var(--border);
+      background: rgba(17,24,36,.45);
+    }
+    .section{
+      padding: 14px;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    @media (max-width: 900px){
+      .grid-2{grid-template-columns: 1fr}
+    }
+
+    .note{
+      border-left: 3px solid var(--accent2);
+      padding: 10px 12px;
+      background: rgba(124,255,166,.08);
+      border-radius: 12px;
+      color: var(--text);
+      margin: 10px 0 0;
+      font-size: 13px;
+    }
+    .warn{
+      border-left: 3px solid var(--danger);
+      background: rgba(255,110,110,.08);
+    }
+
+    .kv{
+      display:grid;
+      grid-template-columns: 160px 1fr;
+      gap: 8px 12px;
+      margin: 10px 0 0;
+      font-size: 13px;
+    }
+    .kv div:nth-child(odd){color: var(--muted)}
+    @media (max-width: 520px){
+      .kv{grid-template-columns: 1fr}
+    }
+
+    .codewrap{
+      margin-top: 10px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow:hidden;
+      background: rgba(0,0,0,.25);
+    }
+    .codebar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 10px 10px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(17,24,36,.5);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .codebar .tag{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+    }
+    .copy{
+      border: 1px solid var(--border);
+      background: rgba(17,24,36,.75);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 10px;
+      cursor:pointer;
+      font-size: 12px;
+    }
+    .copy:hover{border-color: rgba(110,231,255,.55)}
+    pre{
+      margin:0;
+      padding: 12px 12px 14px;
+      overflow:auto;
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: #eaf2ff;
+      white-space: pre;
+    }
+
+    .rulelist{
+      display:grid;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .rule{
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(15,22,32,.45);
+      padding: 12px;
+    }
+    .rule h4{
+      margin: 0 0 4px;
+      font-size: 14px;
+    }
+    .rule p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .chips{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .chip{
+      border: 1px solid var(--border);
+      background: rgba(17,24,36,.55);
+      color: var(--muted);
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+    }
+
+    footer{
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 12px;
     }
   </style>
 </head>
+
 <body>
-  <h1>Page Under Construction</h1>
-  <p>This playbook is not ready yet. Please check back soon.</p>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <h1>Deployment & Detection Rules Reference</h1>
+        <p>Suricata + Wazuh — ransomware-oriented examples</p>
+      </div>
+      <div class="header-actions">
+        <div class="pill" title="Keyboard shortcut: press / to search section titles">
+          Quick find <kbd>/</kbd>
+        </div>
+        <button class="btn" id="expandAll" type="button" aria-label="Expand all sections">Expand all</button>
+        <button class="btn" id="collapseAll" type="button" aria-label="Collapse all sections">Collapse all</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- TOC -->
+     <!--
+    <aside class="card toc" aria-label="Table of contents">
+      <div class="card-h">
+        <h2>Contents</h2>
+        <button class="btn" id="copyLink" type="button" aria-label="Copy page URL">Copy link</button>
+      </div>
+      <div class="card-b">
+        <nav>
+          <ol id="tocList" aria-label="Table of contents list"></ol>
+        </nav>
+        <div class="note" style="margin-top:12px">
+          Tip: Use <strong>Tab</strong> to reach “Copy” buttons on code blocks, then press <strong>Enter</strong>.
+        </div>
+      </div>
+    </aside>
+    -->
+
+    <!-- CONTENT -->
+    <section class="card content" aria-label="Document content">
+      <div class="card-b">
+        <h2 id="overview">General Overview</h2>
+        <p class="lede">
+          This playbook is a simple guide to help an organization spot early warning signs of ransomware. It
+          explains how to set up two security tools and includes ready made detection rules that look for common
+          ransomware behavior, like unusual internet lookups, suspicious file activity, attempts to delete backups,
+          and efforts to erase computer logs. The goal is to make it easier to catch an attack early and respond
+          faster, even for teams with limited time or resources.
+        </p>
+
+        <details open data-section>
+          <summary>
+            <span id="deployment">Deployment</span>
+            <span class="meta">Suricata + Wazuh</span>
+          </summary>
+          <div class="section">
+            <div class="grid-2">
+              <div>
+                <h3 id="suricata-deployment" style="margin:0 0 6px">Suricata Deployment</h3>
+                <div class="kv" role="list">
+                  <div role="listitem">Option 1</div><div>.rules text file (Snort/Suricata syntax)</div>
+                  <div role="listitem">Option 2</div><div>YAML file with rules embedded</div>
+                  <div role="listitem">Automation</div><div>PowerShell command + <code>suricata-update</code> + service restart</div>
+                </div>
+
+                <div class="note">
+                  Replace placeholders like <code>&lt;our-name&gt;</code> with your actual domain/host.
+                </div>
+
+                <div class="codewrap" data-copy>
+                  <div class="codebar">
+                    <span class="tag">Example commands (Linux)</span>
+                    <button class="copy" type="button">Copy</button>
+                  </div>
+                  <pre><code>sudo suricata-update add-source projectplaybook https://&lt;our-name&gt;/rules.tar.gz
+sudo suricata-update
+sudo systemctl restart suricata</code></pre>
+                </div>
+              </div>
+
+              <div>
+                <h3 id="wazuh-deployment" style="margin:0 0 6px">Wazuh Deployment</h3>
+                <div class="kv" role="list">
+                  <div role="listitem">Rules/Decoders</div><div>XML files (custom rules, decoders)</div>
+                  <div role="listitem">Active Response</div><div>Bash/PowerShell scripts (kill process, delete file, etc.)</div>
+                </div>
+
+                <div class="codewrap" data-copy>
+                  <div class="codebar">
+                    <span class="tag">Example commands (Linux)</span>
+                    <button class="copy" type="button">Copy</button>
+                  </div>
+                  <pre><code>sudo curl -L https://&lt;our-name&gt;.com/playbook/local_rules.xml \
+-o /var/ossec/etc/shared/&lt;group&gt;/local_rules.xml
+sudo systemctl restart wazuh-manager</code></pre>
+                </div>
+
+                <div class="note warn" style="margin-top:12px">
+                  Make sure your Wazuh deployment model matches the path you’re writing to:
+                  <strong>manager</strong>, <strong>agent shared config</strong>, or <strong>local agent</strong>.
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details data-section>
+          <summary>
+            <span id="rules">Rules</span>
+            <span class="meta">Suricata + Wazuh</span>
+          </summary>
+          <div class="section">
+            <details open data-section>
+              <summary>
+                <span id="suricata-rules">Suricata Rules</span>
+                <span class="meta">Snort/Suricata syntax</span>
+              </summary>
+              <div class="section">
+                <div class="rulelist">
+
+                  <div class="rule" id="rule-wannacry-dns">
+                    <h4>WannaCry killswitch DNS lookup</h4>
+                    <p>Detects DNS queries for the classic WannaCry killswitch domain.</p>
+                    <div class="chips">
+                      <span class="chip">dns</span><span class="chip">ransomware</span><span class="chip">sid:2000001</span>
+                    </div>
+                    <div class="codewrap" data-copy>
+                      <div class="codebar"><span class="tag">suricata.rules</span><button class="copy" type="button">Copy</button></div>
+                      <pre><code>alert dns $HOME_NET any -&gt; any 53 (
+  msg:"Ransomware – Possible WannaCry killswitch DNS lookup";
+  dns_query;
+  content:"iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea";
+  sid:2000001; rev:1;
+)</code></pre>
+                    </div>
+                  </div>
+
+                  <div class="rule" id="rule-wannacry-http">
+                    <h4>WannaCry killswitch HTTP Host header</h4>
+                    <p>Detects HTTP requests containing the killswitch domain in headers.</p>
+                    <div class="chips">
+                      <span class="chip">http</span><span class="chip">ransomware</span><span class="chip">sid:2000002</span>
+                    </div>
+                    <div class="codewrap" data-copy>
+                      <div class="codebar"><span class="tag">suricata.rules</span><button class="copy" type="button">Copy</button></div>
+                      <pre><code>alert http $HOME_NET any -&gt; $EXTERNAL_NET any (
+  msg:"Ransomware – WannaCry killswitch HTTP request";
+  flow:established,to_server;
+  content:"iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea"; http_header;
+  content:"Host"; http_header;
+  sid:2000002; rev:1;
+)</code></pre>
+                    </div>
+                  </div>
+
+                  <div class="rule" id="rule-wannalocker-dns">
+                    <h4>Android WannaLocker DNS lookup</h4>
+                    <p>Detects DNS query for a domain associated with WannaLocker.</p>
+                    <div class="chips">
+                      <span class="chip">dns</span><span class="chip">mobile</span><span class="chip">sid:2000003</span>
+                    </div>
+                    <div class="codewrap" data-copy>
+                      <div class="codebar"><span class="tag">suricata.rules</span><button class="copy" type="button">Copy</button></div>
+                      <pre><code>alert dns $HOME_NET any -&gt; any 53 (
+  msg:"Ransomware – Android WannaLocker DNS lookup";
+  dns_query;
+  content:"biaozhunshijian.51240.com";
+  sid:2000003; rev:1;
+)</code></pre>
+                    </div>
+                  </div>
+
+                  <div class="rule" id="rule-ja3">
+                    <h4>JA3 TLS fingerprint associated with ransomware</h4>
+                    <p>Detects a specific JA3 hash (example) associated with suspicious TLS clients.</p>
+                    <div class="chips">
+                      <span class="chip">tls</span><span class="chip">ja3</span><span class="chip">sid:2000004</span>
+                    </div>
+                    <div class="codewrap" data-copy>
+                      <div class="codebar"><span class="tag">suricata.rules</span><button class="copy" type="button">Copy</button></div>
+                      <pre><code>alert tls $HOME_NET any -&gt; $EXTERNAL_NET any (
+  msg:"Ransomware – TLS JA3 fingerprint from SSLBL";
+  ja3_hash; content:"2d8794cb7b52b777bee2695e79c15760";
+  sid:2000004; rev:1;
+)</code></pre>
+                    </div>
+                  </div>
+
+                  <div class="rule" id="rule-smb-note">
+                    <h4>LockBit ransom note over SMB filenames (AI-assisted)</h4>
+                    <p>Flags SMB filenames matching common ransom note names.</p>
+                    <div class="chips">
+                      <span class="chip">smb</span><span class="chip">filename</span><span class="chip">sid:2000005</span>
+                    </div>
+                    <div class="codewrap" data-copy>
+                      <div class="codebar"><span class="tag">suricata.rules</span><button class="copy" type="button">Copy</button></div>
+                      <pre><code>alert smb any any -&gt; any any (
+  msg:"Ransomware – ransom note over SMB";
+  smb.filename; content:"Restore-My-Files.txt"; nocase;
+  sid:2000005; rev:1;
+)</code></pre>
+                    </div>
+                  </div>
+
+                  <div class="rule" id="rule-smb-ext">
+                    <h4>Ransomware extension over SMB (AI-assisted)</h4>
+                    <p>Detects SMB filenames ending in suspicious “encrypted” extensions.</p>
+                    <div class="chips">
+                      <span class="chip">smb</span><span class="chip">pcre</span><span class="chip">sid:2000006</span>
+                    </div>
+                    <div class="codewrap" data-copy>
+                      <div class="codebar"><span class="tag">suricata.rules</span><button class="copy" type="button">Copy</button></div>
+                      <pre><code>alert smb any any -&gt; any any (
+  msg:"Ransomware – encrypted extension over SMB";
+  smb.filename; pcre:"\\.(lockbit|funksec|encrypted)$";
+  sid:2000006; rev:1;
+)</code></pre>
+                    </div>
+                  </div>
+
+                  <div class="rule" id="rule-lockbit-onion">
+                    <h4>LockBit onion ransom gate in HTTP Host header</h4>
+                    <p>Detects requests using a known onion host in HTTP headers.</p>
+                    <div class="chips">
+                      <span class="chip">http</span><span class="chip">onion</span><span class="chip">sid:2000007</span>
+                    </div>
+                    <div class="codewrap" data-copy>
+                      <div class="codebar"><span class="tag">suricata.rules</span><button class="copy" type="button">Copy</button></div>
+                      <pre><code>alert http $HOME_NET any -&gt; $EXTERNAL_NET any (
+  msg:"Ransomware – LockBit ransom gate onion host";
+  flow:established,to_server;
+  content:"lockbitkodidilol.onion"; http_header; nocase;
+  sid:2000007; rev:1;
+)</code></pre>
+                    </div>
+                  </div>
+
+                  <div class="rule" id="rule-smb-write">
+                    <h4>High-volume SMB encryption behavior (heuristic, AI-assisted)</h4>
+                    <p>Basic SMB “write” indicator — useful as a candidate for rate/correlation logic.</p>
+                    <div class="chips">
+                      <span class="chip">smb</span><span class="chip">heuristic</span><span class="chip">sid:2000008</span>
+                    </div>
+                    <div class="codewrap" data-copy>
+                      <div class="codebar"><span class="tag">suricata.rules</span><button class="copy" type="button">Copy</button></div>
+                      <pre><code>alert smb any any -&gt; any any (
+  msg:"Possible ransomware – SMB file write (candidate for rate correlation)";
+  smb.command; content:"write"; nocase;
+  sid:2000008; rev:1;
+)</code></pre>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="note" style="margin-top:12px">
+                  Practical tip: put your custom SIDs in a dedicated range (like <code>2000000+</code>) to avoid collisions.
+                </div>
+              </div>
+            </details>
+
+            <details data-section>
+              <summary>
+                <span id="wazuh-rules">Wazuh Rules</span>
+                <span class="meta">Custom rules (XML)</span>
+              </summary>
+              <div class="section">
+                <div class="rulelist">
+
+                  <div class="rule" id="wz-vss">
+                    <h4>VSS shadow copies deletion</h4>
+                    <p>Detects vssadmin shadow deletion commands (common ransomware behavior).</p>
+                    <div class="chips">
+                      <span class="chip">Sysmon</span><span class="chip">T1490</span><span class="chip">id:100600</span>
+                    </div>
+                    <div class="codewrap" data-copy>
+                      <div class="codebar"><span class="tag">local_rules.xml</span><button class="copy" type="button">Copy</button></div>
+                      <pre><code>&lt;rule id="100600" level="12"&gt;
+  &lt;if_sid&gt;61603&lt;/if_sid&gt; &lt;!-- Sysmon process creation --&gt;
+  &lt;field name="win.eventdata.CommandLine" type="pcre2"&gt;(?i)vssadmin\.exe.*delete\s+shadows.*\/all.*\/quiet&lt;/field&gt;
+  &lt;description&gt;Possible ransomware: Volume Shadow Copies deleted&lt;/description&gt;
+  &lt;mitre&gt;&lt;id&gt;T1490&lt;/id&gt;&lt;/mitre&gt;
+&lt;/rule&gt;</code></pre>
+                    </div>
+                  </div>
+
+                  <div class="rule" id="wz-bcdedit">
+                    <h4>BCDedit tampering</h4>
+                    <p>Detects boot configuration tampering that can hinder recovery.</p>
+                    <div class="chips">
+                      <span class="chip">Sysmon</span><span class="chip">T1490</span><span class="chip">id:100601</span>
+                    </div>
+                    <div class="codewrap" data-copy>
+                      <div class="codebar"><span class="tag">local_rules.xml</span><button class="copy" type="button">Copy</button></div>
+                      <pre><code>&lt;rule id="100601" level="10"&gt;
+  &lt;if_sid&gt;61603&lt;/if_sid&gt;
+  &lt;field name="win.eventdata.CommandLine" type="pcre2"&gt;
+    (?i)bcdedit\.exe.*(recoveryenabled\s+No|bootstatuspolicy\s+ignoreallfailures)
+  &lt;/field&gt;
+  &lt;description&gt;Possible ransomware: boot configuration tampering via bcdedit&lt;/description&gt;
+  &lt;mitre&gt;&lt;id&gt;T1490&lt;/id&gt;&lt;/mitre&gt;
+&lt;/rule&gt;</code></pre>
+                    </div>
+                  </div>
+
+                  <div class="rule" id="wz-wevtutil">
+                    <h4>Event log clearing</h4>
+                    <p>Detects suspicious log clearing via wevtutil.</p>
+                    <div class="chips">
+                      <span class="chip">Sysmon</span><span class="chip">T1070</span><span class="chip">id:100602</span>
+                    </div>
+                    <div class="codewrap" data-copy>
+                      <div class="codebar"><span class="tag">local_rules.xml</span><button class="copy" type="button">Copy</button></div>
+                      <pre><code>&lt;rule id="100602" level="10"&gt;
+  &lt;if_sid&gt;61603&lt;/if_sid&gt;
+  &lt;field name="win.eventdata.CommandLine" type="pcre2"&gt;
+    (?i)wevtutil\.exe\s+cl\s+(security|system|application)
+  &lt;/field&gt;
+  &lt;description&gt;Suspicious log clearing via wevtutil&lt;/description&gt;
+  &lt;mitre&gt;&lt;id&gt;T1070&lt;/id&gt;&lt;/mitre&gt;
+&lt;/rule&gt;</code></pre>
+                    </div>
+                  </div>
+
+                  <div class="rule" id="wz-taskkill">
+                    <h4>Aggressive taskkill service/process killing</h4>
+                    <p>Detects forced process termination patterns often used by ransomware.</p>
+                    <div class="chips">
+                      <span class="chip">Sysmon</span><span class="chip">T1489</span><span class="chip">id:100603</span>
+                    </div>
+                    <div class="codewrap" data-copy>
+                      <div class="codebar"><span class="tag">local_rules.xml</span><button class="copy" type="button">Copy</button></div>
+                      <pre><code>&lt;rule id="100603" level="10"&gt;
+  &lt;if_sid&gt;61603&lt;/if_sid&gt;
+  &lt;field name="win.eventdata.CommandLine" type="pcre2"&gt;
+    (?i)taskkill\.exe\s+/F\s+/IM\s+
+  &lt;/field&gt;
+  &lt;description&gt;Potential ransomware: forced process termination via taskkill&lt;/description&gt;
+  &lt;mitre&gt;&lt;id&gt;T1489&lt;/id&gt;&lt;/mitre&gt;
+&lt;/rule&gt;</code></pre>
+                    </div>
+                  </div>
+
+                  <div class="rule" id="wz-wbadmin">
+                    <h4>WBADMIN backup deletion</h4>
+                    <p>Detects attempts to delete backup catalog/system state.</p>
+                    <div class="chips">
+                      <span class="chip">Sysmon</span><span class="chip">T1490</span><span class="chip">id:100604</span>
+                    </div>
+                    <div class="codewrap" data-copy>
+                      <div class="codebar"><span class="tag">local_rules.xml</span><button class="copy" type="button">Copy</button></div>
+                      <pre><code>&lt;rule id="100604" level="12"&gt;
+  &lt;if_sid&gt;61603&lt;/if_sid&gt;
+  &lt;field name="win.eventdata.CommandLine" type="pcre2"&gt;
+    (?i)wbadmin\.exe.*(DELETE\s+SYSTEMSTATEBACKUP|delete\s+catalog)
+  &lt;/field&gt;
+  &lt;description&gt;Possible ransomware: wbadmin backup deletion&lt;/description&gt;
+  &lt;mitre&gt;&lt;id&gt;T1490&lt;/id&gt;&lt;/mitre&gt;
+&lt;/rule&gt;</code></pre>
+                    </div>
+                  </div>
+
+                  <div class="rule" id="wz-ransomnote">
+                    <h4>Ransom note file names in user directories</h4>
+                    <p>Detects common ransom note filenames created in Desktop/Documents/Downloads.</p>
+                    <div class="chips">
+                      <span class="chip">FIM</span><span class="chip">T1486</span><span class="chip">id:100605</span>
+                    </div>
+                    <div class="codewrap" data-copy>
+                      <div class="codebar"><span class="tag">local_rules.xml</span><button class="copy" type="button">Copy</button></div>
+                      <pre><code>&lt;rule id="100605" level="12"&gt;
+  &lt;if_sid&gt;554&lt;/if_sid&gt; &lt;!-- file added / Syscheck create --&gt;
+  &lt;field name="file" type="pcre2"&gt;
+    (?i)C:\\Users\\.+\\(Desktop|Documents|Downloads).*(Restore-My-Files\.txt|README\.txt)
+  &lt;/field&gt;
+  &lt;description&gt;Possible ransomware: ransom note file created in user profile&lt;/description&gt;
+  &lt;mitre&gt;&lt;id&gt;T1486&lt;/id&gt;&lt;/mitre&gt;
+&lt;/rule&gt;</code></pre>
+                    </div>
+                  </div>
+
+                  <div class="rule" id="wz-ext">
+                    <h4>Suspicious ransomware extension creation (.lockbit, .funksec, .encrypted)</h4>
+                    <p>Detects file creation/modification with suspicious extensions.</p>
+                    <div class="chips">
+                      <span class="chip">FIM</span><span class="chip">T1486</span><span class="chip">id:100606</span>
+                    </div>
+                    <div class="codewrap" data-copy>
+                      <div class="codebar"><span class="tag">local_rules.xml</span><button class="copy" type="button">Copy</button></div>
+                      <pre><code>&lt;rule id="100606" level="12"&gt;
+  &lt;if_sid&gt;554&lt;/if_sid&gt;
+  &lt;field name="file" type="pcre2"&gt;
+    (?i)\.(lockbit|funksec|encrypted)$
+  &lt;/field&gt;
+  &lt;description&gt;Possible ransomware: encrypted file extension detected&lt;/description&gt;
+  &lt;mitre&gt;&lt;id&gt;T1486&lt;/id&gt;&lt;/mitre&gt;
+&lt;/rule&gt;</code></pre>
+                    </div>
+                  </div>
+
+                  <div class="rule" id="wz-yara">
+                    <h4>Mass file modifications in Downloads (YARA / FIM integration)</h4>
+                    <p>Example rule that matches Wazuh YARA scan output in monitored paths.</p>
+                    <div class="chips">
+                      <span class="chip">YARA</span><span class="chip">T1204</span><span class="chip">T1486</span><span class="chip">id:100607</span>
+                    </div>
+                    <div class="codewrap" data-copy>
+                      <div class="codebar"><span class="tag">local_rules.xml</span><button class="copy" type="button">Copy</button></div>
+                      <pre><code>&lt;rule id="100607" level="12"&gt;
+  &lt;if_sid&gt;111113&lt;/if_sid&gt; &lt;!-- base YARA decoder rule from Wazuh example --&gt;
+  &lt;match type="pcre2"&gt;wazuh-yara: INFO - Scan result:&lt;/match&gt;
+  &lt;description&gt;YARA positive on file in monitored directory – possible ransomware&lt;/description&gt;
+  &lt;mitre&gt;&lt;id&gt;T1204&lt;/id&gt;&lt;id&gt;T1486&lt;/id&gt;&lt;/mitre&gt;
+&lt;/rule&gt;</code></pre>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="note" style="margin-top:12px">
+                  If you want, I can also restructure these into a “drop-in” <code>local_rules.xml</code> wrapper
+                  (including <code>&lt;group&gt;</code> tags) so it’s copy/paste ready.
+                </div>
+              </div>
+            </details>
+          </div>
+        </details>
+
+        <details data-section>
+          <summary>
+            <span id="sources">Sources & Attribution</span>
+            <span class="meta">References</span>
+          </summary>
+          <div class="section">
+            <div class="codewrap" data-copy>
+              <div class="codebar">
+                <span class="tag">Reference URLs</span>
+                <button class="copy" type="button">Copy</button>
+              </div>
+              <pre><code>https://alican-kiraz1.medium.com/destroy-the-ransomware-threat-part-1-1-detection-and-prevention-6785aa7e1154
+https://wazuh.com/blog/detecting-and-responding-to-funklocker-ransomware-with-wazuh/</code></pre>
+            </div>
+
+            <div class="note" style="margin-top:12px">
+              Detection rules <strong>13, 14, and 16</strong> were drafted with assistance from an AI model
+              (ChatGPT; OpenAI, 2025).
+            </div>
+          </div>
+        </details>
+
+        <footer>
+          <p style="margin:14px 0 0">
+            Last updated: <span id="lastUpdated"></span>
+          </p>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ---- Build TOC automatically from IDs on top-level headings/summary spans
+    (function buildTOC(){
+      const toc = document.getElementById('tocList');
+      const targets = [
+        '#overview',
+        '#deployment',
+        '#suricata-deployment',
+        '#wazuh-deployment',
+        '#rules',
+        '#suricata-rules',
+        '#wazuh-rules',
+        '#sources'
+      ].map(sel => document.querySelector(sel)).filter(Boolean);
+
+      targets.forEach(el => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#' + el.id;
+        a.textContent = el.textContent.trim();
+        a.addEventListener('click', () => {
+          // Open the nearest <details> parents so the target is visible.
+          let p = el.parentElement;
+          while (p) {
+            if (p.tagName === 'DETAILS') p.open = true;
+            p = p.parentElement;
+          }
+        });
+        li.appendChild(a);
+        toc.appendChild(li);
+      });
+    })();
+
+    // ---- Copy buttons for code blocks
+    (function enableCopy(){
+      function setCopied(btn){
+        const old = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.disabled = true;
+        setTimeout(() => { btn.textContent = old; btn.disabled = false; }, 900);
+      }
+
+      document.querySelectorAll('[data-copy]').forEach(wrap => {
+        const btn = wrap.querySelector('.copy');
+        const code = wrap.querySelector('pre code');
+        if(!btn || !code) return;
+
+        btn.addEventListener('click', async () => {
+          const text = code.textContent;
+          try{
+            await navigator.clipboard.writeText(text);
+            setCopied(btn);
+          }catch(e){
+            // Fallback
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            ta.remove();
+            setCopied(btn);
+          }
+        });
+      });
+
+      document.getElementById('copyLink').addEventListener('click', async () => {
+        try{
+          await navigator.clipboard.writeText(location.href);
+        }catch(e){}
+      });
+    })();
+
+    // ---- Expand/Collapse all sections
+    (function expandCollapse(){
+      const allDetails = () => Array.from(document.querySelectorAll('details[data-section]'));
+
+      document.getElementById('expandAll').addEventListener('click', () => {
+        allDetails().forEach(d => d.open = true);
+      });
+      document.getElementById('collapseAll').addEventListener('click', () => {
+        allDetails().forEach(d => d.open = false);
+        // Keep top-most overview visible-ish by opening the first detail if desired:
+        // const first = document.querySelector('details[data-section]');
+        // if (first) first.open = true;
+      });
+    })();
+
+    // ---- Quick find: press "/" to focus the browser find UI hint (we just highlight the pill)
+    (function quickFind(){
+      document.addEventListener('keydown', (e) => {
+        if (e.key === '/' && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)){
+          e.preventDefault();
+          // Open all sections so browser find has visible targets
+          document.querySelectorAll('details[data-section]').forEach(d => d.open = true);
+          // Trigger native find in most browsers: can't programmatically open it,
+          // so we just scroll to the top and let the user press Ctrl/Cmd+F.
+          window.scrollTo({top: 0, behavior:'smooth'});
+        }
+      });
+    })();
+
+    // ---- Timestamp
+    document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+  </script>
 </body>
 </html>

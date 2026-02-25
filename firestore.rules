@@ -1,18 +1,142 @@
-rules_version='2'
-
+rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function isSelf(uid) { return signedIn() && request.auth.uid == uid; }
+
+    // Safe: only call exists/get when signed in
+    function userPath() {
+      return /databases/$(database)/documents/users/$(request.auth.uid);
+    }
+
+    function hasUserDoc() {
+      return signedIn() && exists(userPath());
+    }
+
+    function userData() {
+      return hasUserDoc() ? get(userPath()).data : null;
+    }
+
+    function orgId() {
+      return hasUserDoc() ? userData().orgId : null;
+    }
+
+    function role() {
+      return hasUserDoc() ? userData().role : null;
+    }
+
+    function isCoordinator() {
+      return role() == "coordinator";
+    }
+
+    // Default deny
     match /{document=**} {
-      // This rule allows anyone with your database reference to view, edit,
-      // and delete all data in your database. It is useful for getting
-      // started, but it is configured to expire after 30 days because it
-      // leaves your app open to attackers. At that time, all client
-      // requests to your database will be denied.
-      //
-      // Make sure to write security rules for your app before that time, or
-      // else all client requests to your database will be denied until you
-      // update your rules.
-      allow read, write: if request.time < timestamp.date(2025, 11, 19);
+      allow read, write: if false;
+    }
+
+    // USERS
+    match /users/{uid} {
+      allow read: if isSelf(uid);
+
+      // Create your own profile doc (first-time onboarding)
+      allow create: if isSelf(uid)
+        && request.resource.data.uid == uid
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.orgId is string
+        && request.resource.data.orgId.size() > 0
+        && request.resource.data.role in ["coordinator", "participant"];
+
+      // Update your own profile, but orgId/role become LOCKED after first set
+      allow update: if isSelf(uid)
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.email == resource.data.email
+        // orgId locked
+        && request.resource.data.orgId == resource.data.orgId
+        // role locked
+        && request.resource.data.role == resource.data.role;
+
+      allow delete: if false;
+    }
+
+    // JOIN CODES (doc id = join code)
+    match /joinCodes/{code} {
+      // Anyone signed-in can read a code doc to join (no org access needed)
+      allow read: if signedIn();
+
+      // Create allowed if you are the org creator at bootstrap OR a coordinator in that org later
+      allow create: if signedIn()
+        && request.resource.data.orgId is string
+        && request.resource.data.orgId.size() > 0
+        && (
+          // bootstrap: creator writes joinCodes during org creation
+          request.resource.data.createdBy == request.auth.uid
+          ||
+          // later: coordinator in org manages codes
+          (isCoordinator() && orgId() == request.resource.data.orgId)
+        );
+
+      // Only coordinators in that org can change/delete existing codes
+      allow update, delete: if signedIn()
+        && isCoordinator()
+        && orgId() == resource.data.orgId;
+    }
+
+    // ORGS
+    match /orgs/{org} {
+      // Read: only members (after onboarding)
+      allow read: if signedIn() && orgId() == org;
+
+      // Create org: just require signed-in and createdBy matches.
+      // (Works before the user doc exists.)
+      allow create: if signedIn()
+        && request.resource.data.createdBy == request.auth.uid;
+
+      // Update/delete: only coordinators in that org (after onboarding)
+      allow update, delete: if signedIn()
+        && isCoordinator()
+        && orgId() == org;
+
+      match /private/{docId} {
+        allow read, write: if signedIn()
+          && isCoordinator()
+          && orgId() == org;
+      }
+
+      match /playbooks/{playbookId} {
+        // Coordinators can read all
+        allow read: if signedIn() && isCoordinator() && orgId() == org;
+
+        // Participants: only active + visible
+        allow read: if signedIn() && orgId() == org
+          && resource.data.isActive == true
+          && resource.data.visibleToParticipants == true;
+
+        allow create, update, delete: if signedIn()
+          && isCoordinator()
+          && orgId() == org;
+      }
+
+      match /settings/{docId} {
+        allow read: if signedIn() && orgId() == org;
+        allow create, update, delete: if signedIn()
+          && isCoordinator()
+          && orgId() == org;
+      }
+    }
+
+    match /cyberNews/{docId} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    match /meta/{docId} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    match /_connectionTest/{docId} {
+      allow read, write: if signedIn();
     }
   }
 }

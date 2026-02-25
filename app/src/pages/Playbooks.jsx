@@ -10,7 +10,7 @@ export default function Playbooks() {
     { id: "pb1", title: "Playbook 1", path: "/playbook1", icon: "/images/playbookImage1.png" },
     { id: "pb2", title: "Impact Calculator Playbook", path: "/playbook2", icon: "/images/playbookImage2.png" },
     { id: "pb3", title: "Detection & Response Playbook", path: "/playbook3", icon: "/images/playbookImage3.png" },
-    { id: "pb4", title: "Playbook 4", path: "/playbook4", icon: "/images/playbookImage1.png" },
+    { id: "pb4", title: "Wazuh & Suricata", path: "/playbook4", icon: "/images/playbookImage1.png" },
     { id: "pb5", title: "Playbook 5", path: "/playbook5", icon: "/images/playbookImage2.png" },
   ];
 
