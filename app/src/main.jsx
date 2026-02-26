@@ -16,7 +16,7 @@ import Home from "./pages/Home";
 import Train from "./pages/Train";
 import Playbooks from "./pages/Playbooks.jsx";
 
-import Playbook1 from "./pages/Playbook1.jsx";
+import SecurityReadiness from "./pages/SecurityReadiness.jsx";
 import Playbook2 from "./pages/Playbook2.jsx";
 import Playbook3 from "./pages/Playbook3.jsx";
 import Playbook4 from "./pages/Playbook4.jsx";
@@ -69,7 +69,7 @@ const router = createBrowserRouter([
       { path: "/playbooks", element: <Playbooks /> },
 
       // Playbook detail pages
-      { path: "/playbook1", element: <Playbook1 /> },
+      { path: "/securityreadiness", element: <SecurityReadiness /> },
       { path: "/playbook2", element: <Playbook2 /> },
       { path: "/playbook3", element: <Playbook3 /> },
       { path: "/playbook4", element: <Playbook4 /> },

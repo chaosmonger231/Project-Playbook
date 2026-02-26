@@ -7,7 +7,7 @@ export default function Playbooks() {
 
   // You can swap these icons with your real assets
   const playbooks = [
-    { id: "pb1", title: "Playbook 1", path: "/playbook1", icon: "/images/playbookImage1.png" },
+    { id: "pb1", title: "Security Readiness (Ohio HB96)", path: "/securityreadiness", icon: "/images/playbookImage1.png" },
     { id: "pb2", title: "Impact Calculator Playbook", path: "/playbook2", icon: "/images/playbookImage2.png" },
     { id: "pb3", title: "Detection & Response Playbook", path: "/playbook3", icon: "/images/playbookImage3.png" },
     { id: "pb4", title: "Wazuh & Suricata", path: "/playbook4", icon: "/images/playbookImage1.png" },
