@@ -1,0 +1,21 @@
+{
+  "description": "Module Registry (table of contents) for Project Playbook learning lessons. This file defines what learning modules exist, how they are grouped (category), who can access them (allowedOrgTypes), and which local content JSON to load (contentKey). The app uses this to render the Lessons UI and enforce access rules.",
+  "modules": [
+    {
+      "moduleId": "general_phishing",
+      "title": "Phishing Basics",
+      "synopsis": "Learn how to spot phishing emails, fake logins, and suspicious links.",
+      "category": "general",
+      "allowedOrgTypes": ["all"],
+      "contentKey": "phishing"
+    },
+    {
+      "moduleId": "education_student_privacy",
+      "title": "Keeping Student Health and Personal Info Safe",
+      "synopsis": "Handle student data safely and avoid FERPA violations (AI tools, sharing, devices).",
+      "category": "education",
+      "allowedOrgTypes": ["education"],
+      "contentKey": "education_student_privacy"
+    }
+  ]
+}

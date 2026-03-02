@@ -13,8 +13,9 @@ import Onboarding from "./pages/Onboarding";
 import AccountPage from "./pages/AccountPage.jsx";
 
 import Home from "./pages/Home";
-import Train from "./pages/Train";
+import Lessons from "./pages/Lessons.jsx";
 import Playbooks from "./pages/Playbooks.jsx";
+import TeamManagament from "./pages/TeamManagement.jsx";
 
 import SecurityReadiness from "./pages/SecurityReadiness.jsx";
 import Playbook2 from "./pages/Playbook2.jsx";
@@ -46,7 +47,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/learning/:topic",
+    path: "/learning/:moduleId",
     element: (
       <AuthGate>
         <LearningModuleContent />
@@ -63,10 +64,11 @@ const router = createBrowserRouter([
     ),
     children: [
       { path: "/", element: <Home /> },
-      { path: "/train", element: <Train /> },
+      { path: "/lessons", element: <Lessons /> },
 
       // ✅ Playbooks hub
       { path: "/playbooks", element: <Playbooks /> },
+      { path: "/organization", element: <TeamManagament/>},
 
       // Playbook detail pages
       { path: "/securityreadiness", element: <SecurityReadiness /> },

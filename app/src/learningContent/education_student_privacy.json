@@ -1,0 +1,71 @@
+{
+  "moduleId": "education",
+  "title": "Keeping Student Health and Personal Info Safe",
+  "description": "Learn how to follow health privacy guidelines (FERPA) and protect student privacy.",
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "prompt": "A teacher receives an email from a parent that includes a doctor's note describing a student's medical condition and required classroom accommodations. Unsure how to handle the situation, the teacher copies the email (including the student's name and medical details) into an online AI tool or public teacher forum to ask for advice. What is the biggest problem with this action?",
+      "choices": [
+        { "id": 1, "text": "The teacher may receive too many opinions" },
+        { "id": 2, "text": "The AI tool might give incorrect advice" },
+        { "id": 3, "text": "The teacher disclosed confidential student information to an external third party without authorization" },
+        { "id": 4, "text": "Other teachers might disagree with the approach" }
+      ],
+      "correctId": 3,
+      "explanation": "Student records and health information are protected under FERPA. Copying identifiable student information into external AI tools or public forums shares data with unauthorized third parties and may constitute a serious confidentiality breach."
+    },
+    {
+      "id": "q2",
+      "type": "mcq",
+      "prompt": "After realizing that identifiable student information was pasted into an online AI tool or public forum, what should the teacher do first?",
+      "choices": [
+        { "id": 1, "text": "Delete the post and take no further action" },
+        { "id": 2, "text": "Ignore it since the intention was to help the student" },
+        { "id": 3, "text": "Immediately report the incident to school administration or the designated privacy/contact officer according to school policy" },
+        { "id": 4, "text": "Ask the online community not to share the information further" }
+      ],
+      "correctId": 3,
+      "explanation": "Accidental disclosure of student information to external third parties may constitute a FERPA violation and must be reported immediately according to school policy. Prompt reporting allows the school to assess the scope of exposure and take appropriate mitigation steps."
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "prompt": "If you have a class list with student names, addresses, and parent phone numbers on your desk for attendance or parent contact, what should you do when you are done using it for the day?",
+      "choices": [
+        { "id": 1, "text": "Leave it face-up on my desk so I can grab it quickly tomorrow" },
+        { "id": 2, "text": "Take it home so I have it ready for parent calls" },
+        { "id": 3, "text": "Put it away in a locked drawer or folder so no one can see PII like names and addresses" },
+        { "id": 4, "text": "Leave it on the copier so the next teacher can use it" }
+      ],
+      "correctId": 3,
+      "explanation": "PII (names, addresses, etc.) should be secured when not in use, locking it away prevents accidental exposure and protects student privacy."
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "prompt": "It's okay to post a photo of my class activity or mention a student's first name on my personal social media or in a staff group chat to share something fun from the day.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 2,
+      "explanation": "Posting student images without permission from the parents may violate FERPA or your school's privacy policy and can be dangerous for the child."
+    },
+    {
+      "id": "q5",
+      "type": "mcq",
+      "prompt": "A visitor asks to quickly use your school tablet to check something while you are still logged into your account. What is the most appropriate response?",
+      "choices": [
+        { "id": 1, "text": "Let them use it briefly while you supervise" },
+        { "id": 2, "text": "Log out first and then let them use it" },
+        { "id": 3, "text": "Politely decline and direct them to school administration or IT for proper access" },
+        { "id": 4, "text": "Share your login credentials so they can sign in themselves" }
+      ],
+      "correctId": 3,
+      "explanation": "School devices often provide access to student records and other sensitive information. Allowing unauthorized individuals to use a device—even temporarily—can expose confidential data. Access to school systems should only be granted through proper channels with authorized credentials."
+    }
+    
+  ]
+}

@@ -21,7 +21,7 @@ const CHECKLIST_V1 = [
       {
         id: "employee_training",
         label: "Employee training conducted",
-        hint: "Staff receive cybersecurity awareness training on a regular basis.",
+        hint: "Majority of staff receive cybersecurity awareness training on a regular basis.",
       },
     ],
   },
@@ -337,7 +337,7 @@ export default function SecurityReadiness() {
                 Attestation (required to save)
               </div>
               <div style={{ ...subtleText, marginTop: 4 }}>
-                Confirms alignment tracking, not legal certification.
+                Confirms alignment tracking, not legal certification. Only Coordinators can attest.
               </div>
             </div>
 

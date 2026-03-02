@@ -4,20 +4,33 @@ import { useNavigate, useParams } from "react-router-dom";
 import ModuleVideo from "../components/ModuleVideo";
 import LearningModuleQuiz from "../components/LearningModuleQuiz";
 
+import moduleRegistry from "../learningContent/moduleRegistry.json";
+
 // content JSON imports
 import phishingContent from "../learningContent/phishing.content.json";
+import eduPrivacyContent from "../learningContent/education_student_privacy.json";
 // import passwordsContent from "../learningContent/passwords.content.json";
 
 const CONTENT = {
   phishing: phishingContent,
+  education_student_privacy: eduPrivacyContent,
   // passwords: passwordsContent,
 };
 
+const REGISTRY_BY_ID = Object.fromEntries(
+  (moduleRegistry.modules || []).map((m) => [m.moduleId, m])
+);
+
 export default function LearningModuleContent() {
-  const { topic } = useParams();
+  const { moduleId } = useParams();
   const navigate = useNavigate();
 
-  const moduleData = useMemo(() => CONTENT[topic], [topic]);
+  const moduleMeta = useMemo(() => REGISTRY_BY_ID[moduleId], [moduleId]);
+  const moduleData = useMemo(
+    () => (moduleMeta ? CONTENT[moduleMeta.contentKey] : null),
+    [moduleMeta]
+  );
+
   const [pageIndex, setPageIndex] = useState(0);
 
   // quiz results live here after quiz finishes
@@ -37,6 +50,26 @@ export default function LearningModuleContent() {
 
   const pages = moduleData.pages || [];
   const page = pages[pageIndex];
+
+  if (!pages.length) {
+    return (
+      <div style={{ padding: 24 }}>
+        <h2>Module is missing pages</h2>
+        <p>This content file doesn’t include a <code>pages</code> array yet.</p>
+        <button onClick={() => navigate(-1)}>Go Back</button>
+      </div>
+    );
+  }
+
+  if (!page) {
+    return (
+      <div style={{ padding: 24 }}>
+        <h2>Invalid page index</h2>
+        <p>Page {pageIndex + 1} doesn’t exist for this module.</p>
+        <button onClick={() => setPageIndex(0)}>Restart Module</button>
+      </div>
+    );
+  }
 
   const goNext = () => setPageIndex((i) => Math.min(pages.length - 1, i + 1));
   const goBack = () => setPageIndex((i) => Math.max(0, i - 1));

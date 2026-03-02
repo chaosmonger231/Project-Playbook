@@ -64,6 +64,12 @@ export default function Home() {
                 <div className="action-card__divider" />
                 <div className="action-card__body">
                   Manage playbooks, set participant visibility, and track organization completion.
+                  <div className="showcase-grid">
+                    <img src="/images/playbookImage1.png" alt="Phishing" />
+                    <img src="/images/playbookImage1.png" alt="Ransomware" />
+                    <img src="/images/playbookImage2.png" alt="Passwords" />
+                    <img src="/images/playbookImage2.png" alt="Incident Response" />
+                  </div>
                 </div>
               </button>
 
@@ -79,7 +85,17 @@ export default function Home() {
                 <div className="action-card__divider" />
                 <div className="action-card__body">
                   Invite members, manage roles, and view participation across your organization.
+
+                  {/* All Images below are from www.flaticon.com */}
+                  <div className="showcase-grid">
+                    <img src="/images/networking.png" alt="Networking" />
+                    <img src="/images/column.png" alt="Column" />
+                    <img src="/images/piechart.png" alt="Pie Chart" />
+                    <img src="/images/management.png" alt="Management" />
+                  </div>
+
                 </div>
+                
               </button>
 
               {/* Incident Response */}
@@ -94,6 +110,14 @@ export default function Home() {
                 <div className="action-card__divider" />
                 <div className="action-card__body">
                   Edit emergency contacts and response guidance for your organization.
+
+                  {/* All Images below are from www.flaticon.com */}
+                  <div className="showcase-grid">
+                    <img src="/images/cybersecurity.png" alt="Cybersecurity" />
+                    <img src="/images/contact.png" alt="Contact" />
+                    <img src="/images/alarm.png" alt="Alarm" />
+                    <img src="/images/info.png" alt="Info" />
+                  </div>
                 </div>
               </button>
 

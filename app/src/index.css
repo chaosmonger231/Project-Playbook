@@ -31,13 +31,33 @@ body {
 
 .news-panel {
   border-radius: 10px;
-  padding: 10px 12px;
-  background: #0f172a;
+  padding: 6px 12px;
+  /* background: #0f172a; */ /* dark mode */
+  background: #eef2f7;
   border: 1px solid #1e293b;
   max-height: 420px;     /* capped */
   overflow-y: auto;
-  color: #e5e7eb;
+  /* color: #e5e7eb; */
+  color: #6b7280;
 }
+
+.news-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.news-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.news-panel::-webkit-scrollbar-thumb {
+  background: rgba(239, 68, 68, 0.5);
+  border-radius: 999px;
+}
+
+.news-panel::-webkit-scrollbar-thumb:hover {
+  background: #ef4444;
+}
+
 
 .news-title {
   font-size: 1.05rem;
@@ -170,7 +190,7 @@ body {
   opacity: 0.9;
   line-height: 1.4;
   flex: 1;
-  overflow: auto;  /* scroll inside card if needed */
+  /* scroll inside card if needed */
 }
 
 /* ============================================================
@@ -318,4 +338,27 @@ body {
   .playbooks-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  height: 100%;
+  align-content: center;
+}
+
+.showcase-grid img {
+  width: 100%;
+  max-height: 80px;
+  object-fit: contain;
+}
+
+.playbook-grid img {
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.playbook-grid img:hover {
+  transform: scale(1.05);
 }

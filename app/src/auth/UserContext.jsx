@@ -1,4 +1,3 @@
-// This allows us to use user id as a way to show personalized site based on whether they are a coordinator or participant.
 import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
@@ -42,8 +41,13 @@ export function UserProvider({ children }) {
       value={{
         firebaseUser,
         profile,
+
+        // convenience fields
         role: profile?.role || null,
         orgId: profile?.orgId || null,
+        orgType: profile?.orgType || null,   
+        orgName: profile?.orgName || null,   
+
         loading,
       }}
     >
