@@ -11,7 +11,7 @@ export default function Home() {
 
   // --- TEMP TEST: API Gateway -> Lambda -> S3 signed URL ---
   async function testSignedUrl() {
-    const apiBase = "https://e71s0lsvsd.execute-api.us-east-1.amazonaws.com";
+    const apiBase = "https://e71s0lsvsd.execute-api.us-east-1.amazonaws.com/prod";
     const key = "Images/meme2.jpg";
 
     try {

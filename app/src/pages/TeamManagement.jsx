@@ -1,8 +1,9 @@
 // src/pages/TeamManagement.jsx
-import React, { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useMemo, useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ContentPanel from "../components/ContentPanel";
 import "./TeamManagement.css";
+import AttestationsList from "../components/AttestationsList";
 
 const TABS = [
   { key: "members", label: "Members" },
@@ -11,12 +12,39 @@ const TABS = [
   { key: "insights", label: "Insights" },
 ];
 
+// --- helpers ---
+function isValidTabKey(key) {
+  return TABS.some((t) => t.key === key);
+}
+
+function getInitialTabFromSearchParams(searchParams) {
+  const raw = (searchParams.get("tab") || "").trim();
+  if (isValidTabKey(raw)) return raw;
+  return "members";
+}
+
 export default function TeamManagement() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [tab, setTab] = useState("members");
+  // Default: members
+  // Special link: /organization?tab=attestations (or training/insights)
+  const [tab, setTab] = useState(() => getInitialTabFromSearchParams(searchParams));
+
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
+
+  // If the user arrives via a different tab param (or refreshes on a URL),
+  // update the selected tab. This keeps it durable + refresh-safe.
+  useEffect(() => {
+    const next = getInitialTabFromSearchParams(searchParams);
+    setTab((prev) => (prev === next ? prev : next));
+  }, [searchParams]);
+
+  function handleTabChange(nextTab) {
+    setTab(nextTab);
+    setSearchParams({ tab: nextTab });
+  }
 
   // Placeholder stats (wire later)
   const stats = useMemo(
@@ -44,7 +72,11 @@ export default function TeamManagement() {
           <button
             type="button"
             className="tm-btn tm-btn-primary"
-            onClick={() => alert("Under construction: for now, share the Join Code from Account to add members.")}
+            onClick={() =>
+              alert(
+                "Under construction: for now, share the Join Code from Account to add members."
+              )
+            }
           >
             + Invite Member
           </button>
@@ -92,7 +124,7 @@ export default function TeamManagement() {
             key={t.key}
             type="button"
             className={`tm-tab ${tab === t.key ? "tm-tab-active" : ""}`}
-            onClick={() => setTab(t.key)}
+            onClick={() => handleTabChange(t.key)}
           >
             {t.label}
           </button>
@@ -111,7 +143,7 @@ export default function TeamManagement() {
         )}
 
         {tab === "training" && <TrainingPanel />}
-        {tab === "attestations" && <AttestationsPanel />}
+        {tab === "attestations" && <AttestationsList />}
         {tab === "insights" && <InsightsPanel />}
       </div>
 
@@ -305,35 +337,6 @@ function TrainingPanel() {
   );
 }
 
-function AttestationsPanel() {
-  return (
-    <div className="tm-card">
-      <div className="tm-card-head">
-        <div>
-          <div className="tm-card-title">Saved Attestations</div>
-          <div className="tm-card-sub">
-            Audit history for compliance (name + timestamp + playbook +
-            responses).
-          </div>
-        </div>
-
-        <button
-          type="button"
-          className="tm-btn tm-btn-ghost"
-          onClick={() => alert("Wire filters/export later")}
-        >
-          Filters / Export
-        </button>
-      </div>
-
-      <div className="tm-empty">
-        No attestations found yet. When a user submits an attestation, it will
-        appear here.
-      </div>
-    </div>
-  );
-}
-
 function InsightsPanel() {
   return (
     <div className="tm-card">
@@ -341,13 +344,15 @@ function InsightsPanel() {
         <div>
           <div className="tm-card-title">Insights</div>
           <div className="tm-card-sub">
-            Dashboard view of training adoption and compliance activity (wire data next).
+            Dashboard view of training adoption and compliance activity (wire
+            data next).
           </div>
         </div>
       </div>
 
       <div className="tm-empty">
-        Placeholder: charts + summary stats will appear here once data is connected.
+        Placeholder: charts + summary stats will appear here once data is
+        connected.
       </div>
     </div>
   );
@@ -385,7 +390,6 @@ function RightDrawer({ open, title, onClose, children }) {
   // Focus close button when opening
   React.useEffect(() => {
     if (open) {
-      // next tick so element exists
       setTimeout(() => closeBtnRef.current?.focus(), 0);
     }
   }, [open]);
