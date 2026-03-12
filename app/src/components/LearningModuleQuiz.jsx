@@ -2,14 +2,16 @@ import React, { useEffect, useMemo, useState } from "react";
 
 /**
  * LearningModuleQuiz
- * - Loads a module JSON from /public (served as static asset)
- * - Renders questions and choices
- * - Checks correctness using correctId
+ *
+ * New flow:
+ * - user can move question-to-question without grading each one
+ * - correctness is checked only at the very end
+ * - all questions must be answered before finishing
+ * - onComplete receives full review data
  *
  * Props:
- * - modulePath: string (default: "/learningModule/phishing.json")
+ * - modulePath: string
  * - onComplete: function(result) => void
- *   result = { score, total, answers: [{ question, userAnswer, correctAnswer, correct }] }
  */
 export default function LearningModuleQuiz({
   modulePath = "/learningModule/phishing.json",
@@ -20,12 +22,9 @@ export default function LearningModuleQuiz({
   const [isLoading, setIsLoading] = useState(true);
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedId, setSelectedId] = useState(null);
-  const [hasSubmitted, setHasSubmitted] = useState(false);
 
-  // Score + review tracking
-  const [correctCount, setCorrectCount] = useState(0);
-  const [answerLog, setAnswerLog] = useState([]); // one entry per question index
+  // store answers by question index
+  const [selectedAnswers, setSelectedAnswers] = useState({});
 
   useEffect(() => {
     let isMounted = true;
@@ -35,12 +34,8 @@ export default function LearningModuleQuiz({
       setError("");
       setModuleData(null);
 
-      // reset quiz state on module load
       setCurrentIndex(0);
-      setSelectedId(null);
-      setHasSubmitted(false);
-      setCorrectCount(0);
-      setAnswerLog([]);
+      setSelectedAnswers({});
 
       try {
         const res = await fetch(modulePath);
@@ -69,116 +64,158 @@ export default function LearningModuleQuiz({
   const question = questions[currentIndex];
 
   const isLast = useMemo(() => currentIndex >= total - 1, [currentIndex, total]);
+  const selectedId = selectedAnswers[currentIndex] ?? null;
+
+  const answeredCount = useMemo(() => {
+    return Object.values(selectedAnswers).filter(
+      (value) => value !== null && value !== undefined
+    ).length;
+  }, [selectedAnswers]);
+
+  const allAnswered = total > 0 && answeredCount === total;
 
   if (isLoading) return <div>Loading module…</div>;
   if (error) return <div style={{ color: "crimson" }}>Error: {error}</div>;
   if (!moduleData) return <div>No module data found.</div>;
   if (!questions.length) return <div>This module has no questions.</div>;
 
-  const isCorrect = selectedId === question.correctId;
-
   function handleSelect(choiceId) {
-    if (hasSubmitted) return; // lock after submit
-    setSelectedId(choiceId);
+    setSelectedAnswers((prev) => ({
+      ...prev,
+      [currentIndex]: choiceId,
+    }));
   }
 
-  function handleSubmit() {
-    if (selectedId == null) return;
-    if (hasSubmitted) return;
+  function goBack() {
+    setCurrentIndex((i) => Math.max(0, i - 1));
+  }
 
-    const correct = selectedId === question.correctId;
+  function goNext() {
+    setCurrentIndex((i) => Math.min(total - 1, i + 1));
+  }
 
-    setHasSubmitted(true);
-    if (correct) setCorrectCount((c) => c + 1);
-
-    // Build a human-readable review entry
-    const userChoiceText =
-      question.choices.find((c) => c.id === selectedId)?.text ?? String(selectedId);
-
-    const correctChoiceText =
-      question.choices.find((c) => c.id === question.correctId)?.text ??
-      String(question.correctId);
-
-    const entry = {
-      question: question.prompt,
-      userAnswer: userChoiceText,
-      correctAnswer: correctChoiceText,
-      correct,
-    };
-
-    // Store at the index of the current question
-    setAnswerLog((prev) => {
-      const next = [...prev];
-      next[currentIndex] = entry;
-      return next;
-    });
+  function goToQuestion(index) {
+    setCurrentIndex(index);
   }
 
   function finishQuiz() {
-    const result = {
-      score: correctCount,
+    if (!allAnswered) return;
+
+    const answers = questions.map((q, idx) => {
+      const userSelectedId = selectedAnswers[idx];
+
+      const userChoiceText =
+        q.choices.find((c) => c.id === userSelectedId)?.text ??
+        String(userSelectedId);
+
+      const correctChoiceText =
+        q.choices.find((c) => c.id === q.correctId)?.text ?? String(q.correctId);
+
+      const correct = userSelectedId === q.correctId;
+
+      return {
+        question: q.prompt,
+        userAnswer: userChoiceText,
+        correctAnswer: correctChoiceText,
+        correct,
+        explanation: q.explanation || "",
+      };
+    });
+
+    const score = answers.filter((a) => a.correct).length;
+
+    onComplete?.({
+      score,
       total,
-      answers: answerLog.filter(Boolean),
-    };
-
-    onComplete?.(result);
+      answers,
+    });
   }
 
-  function handleNext() {
-    if (!hasSubmitted) return;
-
-    if (isLast) {
-      // ✅ finished: report upward instead of alert()
-      finishQuiz();
-      return;
-    }
-
-    setCurrentIndex((i) => i + 1);
-    setSelectedId(null);
-    setHasSubmitted(false);
-  }
+  const mutedTextColor = "#55657d";
+  const borderColor = "#d6e3f8";
+  const primaryText = "#16325c";
+  const selectedBg = "#eaf3ff";
+  const cardBg = "#f8fbff";
 
   return (
-    <div style={{ maxWidth: 760, margin: "0 auto", padding: "1rem" }}>
-      <div style={{ marginBottom: "0.75rem" }}>
-        <h2 style={{ margin: 0 }}>{moduleData.title || moduleData.moduleId}</h2>
+    <div style={{ maxWidth: 860, margin: "0 auto" }}>
+      <div style={{ marginBottom: 18 }}>
+        <h2
+          style={{
+            margin: 0,
+            fontSize: "2rem",
+            lineHeight: 1.15,
+            color: primaryText,
+          }}
+        >
+          {moduleData.title || moduleData.moduleId}
+        </h2>
+
         {moduleData.description ? (
-          <p style={{ marginTop: "0.25rem", color: "#555" }}>
+          <p
+            style={{
+              marginTop: 8,
+              marginBottom: 0,
+              color: mutedTextColor,
+              fontSize: "1.05rem",
+              lineHeight: 1.6,
+            }}
+          >
             {moduleData.description}
           </p>
         ) : null}
-        <div style={{ marginTop: "0.5rem", color: "#666" }}>
+
+        <div
+          style={{
+            marginTop: 16,
+            color: mutedTextColor,
+            fontSize: "1rem",
+            fontWeight: 500,
+          }}
+        >
           Question {currentIndex + 1} of {total}
         </div>
       </div>
 
-      <div style={{ border: "1px solid #ddd", borderRadius: 12, padding: "1rem" }}>
-        <h3 style={{ marginTop: 0 }}>{question.prompt}</h3>
+      <div
+        style={{
+          border: `1px solid ${borderColor}`,
+          borderRadius: 16,
+          padding: 24,
+          background: cardBg,
+        }}
+      >
+        <h3
+          style={{
+            marginTop: 0,
+            marginBottom: 18,
+            fontSize: "1.9rem",
+            lineHeight: 1.25,
+            color: "#000",
+          }}
+        >
+          {question.prompt}
+        </h3>
 
-        <div style={{ display: "grid", gap: "0.5rem", marginTop: "0.75rem" }}>
+        <div style={{ display: "grid", gap: 12 }}>
           {question.choices.map((choice, idx) => {
             const label = ["A", "B", "C", "D"][idx] || "";
             const isSelected = selectedId === choice.id;
-            const showCorrect = hasSubmitted && choice.id === question.correctId;
-            const showWrong = hasSubmitted && isSelected && choice.id !== question.correctId;
 
             return (
               <button
                 key={choice.id}
+                type="button"
                 onClick={() => handleSelect(choice.id)}
                 style={{
                   textAlign: "left",
-                  padding: "0.75rem",
-                  borderRadius: 10,
-                  border: "1px solid #ccc",
-                  cursor: hasSubmitted ? "default" : "pointer",
-                  background: showCorrect
-                    ? "#d1fadf"
-                    : showWrong
-                    ? "#ffe0e0"
-                    : isSelected
-                    ? "#e7f0ff"
-                    : "#f7f7f7",
+                  padding: "16px 18px",
+                  borderRadius: 14,
+                  border: "1px solid #c4d2e8",
+                  cursor: "pointer",
+                  background: isSelected ? selectedBg : "#fff",
+                  fontSize: "1rem",
+                  lineHeight: 1.45,
                 }}
               >
                 <strong>{label ? `${label}. ` : ""}</strong>
@@ -188,46 +225,123 @@ export default function LearningModuleQuiz({
           })}
         </div>
 
-        <div style={{ marginTop: "1rem", display: "flex", gap: "0.5rem" }}>
-          <button
-            onClick={handleSubmit}
-            disabled={selectedId == null || hasSubmitted}
-            style={{
-              padding: "0.6rem 0.9rem",
-              borderRadius: 10,
-              border: "1px solid #333",
-              cursor: selectedId == null || hasSubmitted ? "not-allowed" : "pointer",
-              background: "#fff",
-            }}
-          >
-            Submit
-          </button>
+        <div
+          style={{
+            marginTop: 18,
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 10,
+            justifyContent: "center",
+          }}
+        >
+          {questions.map((_, idx) => {
+            const isCurrent = idx === currentIndex;
+            const isAnswered = selectedAnswers[idx] != null;
 
-          <button
-            onClick={handleNext}
-            disabled={!hasSubmitted}
-            style={{
-              padding: "0.6rem 0.9rem",
-              borderRadius: 10,
-              border: "1px solid #333",
-              cursor: !hasSubmitted ? "not-allowed" : "pointer",
-              background: "#fff",
-            }}
-          >
-            {isLast ? "Finish" : "Next"}
-          </button>
+            return (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => goToQuestion(idx)}
+                aria-label={`Go to question ${idx + 1}`}
+                title={`Question ${idx + 1}`}
+                style={{
+                  width: 14,
+                  height: 14,
+                  borderRadius: "50%",
+                  border: isCurrent ? "2px solid #16325c" : "1px solid #9bb3d8",
+                  background: isCurrent
+                    ? "#16325c"
+                    : isAnswered
+                    ? "#8fb8ff"
+                    : "#ffffff",
+                  cursor: "pointer",
+                  padding: 0,
+                }}
+              />
+            );
+          })}
         </div>
 
-        {hasSubmitted ? (
-          <div style={{ marginTop: "0.75rem" }}>
-            <div style={{ fontWeight: 600 }}>{isCorrect ? "✅ Correct" : "❌ Incorrect"}</div>
-            {question.explanation ? (
-              <div style={{ marginTop: "0.25rem", color: "#444" }}>
-                {question.explanation}
-              </div>
-            ) : null}
+        <div
+          style={{
+            marginTop: 20,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: 12,
+            flexWrap: "wrap",
+          }}
+        >
+          <div style={{ color: mutedTextColor, fontSize: "0.95rem" }}>
+            {answeredCount} of {total} answered
           </div>
-        ) : null}
+
+          {!allAnswered && (
+            <div style={{ color: mutedTextColor, fontSize: "0.95rem" }}>
+              Answer all questions before finishing.
+            </div>
+          )}
+        </div>
+
+        <div
+          style={{
+            marginTop: 22,
+            display: "flex",
+            gap: 12,
+            flexWrap: "wrap",
+          }}
+        >
+          <button
+            type="button"
+            disabled={currentIndex === 0}
+            onClick={goBack}
+            style={{
+              padding: "12px 16px",
+              borderRadius: 12,
+              border: "1px solid #333",
+              background: "#fff",
+              cursor: currentIndex === 0 ? "not-allowed" : "pointer",
+              opacity: currentIndex === 0 ? 0.5 : 1,
+            }}
+          >
+            Back
+          </button>
+
+          {!isLast ? (
+            <button
+              type="button"
+              onClick={goNext}
+              style={{
+                padding: "12px 16px",
+                borderRadius: 12,
+                border: "1px solid #333",
+                background: "#fff",
+                cursor: "pointer",
+                marginLeft: "auto",
+              }}
+            >
+              Next
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={finishQuiz}
+              disabled={!allAnswered}
+              style={{
+                padding: "12px 16px",
+                borderRadius: 12,
+                border: "1px solid #333",
+                background: "#fff",
+                cursor: !allAnswered ? "not-allowed" : "pointer",
+                opacity: !allAnswered ? 0.5 : 1,
+                marginLeft: "auto",
+              }}
+            >
+              Finish Quiz
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

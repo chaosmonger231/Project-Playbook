@@ -1,21 +1,108 @@
 {
   "description": "Module Registry (table of contents) for Project Playbook learning lessons. This file defines what learning modules exist, how they are grouped (category), who can access them (allowedOrgTypes), and which local content JSON to load (contentKey). The app uses this to render the Lessons UI and enforce access rules.",
+  "notes": {
+    "ordering": "Modules are grouped in this file by category in this order: general, education, small_business, local_government.",
+    "imageUsage": "Images are loaded from /public using paths such as /sampleimage1.png or /lesson-images/phishing.png. Set image to null if no image exists yet."
+  },
   "modules": [
     {
-      "moduleId": "general_phishing",
+      "moduleId": "phishing-basics",
       "title": "Phishing Basics",
-      "synopsis": "Learn how to spot phishing emails, fake logins, and suspicious links.",
+      "synopsis": "Learn how to spot phishing emails, fake logins, and suspicious links before they become incidents.",
       "category": "general",
       "allowedOrgTypes": ["all"],
-      "contentKey": "phishing"
+      "contentKey": "phishing",
+      "estimatedMinutes": 10,
+      "image": "/sampleimage1.png",
+      "imageLabel": "Phishing"
     },
     {
-      "moduleId": "education_student_privacy",
+      "moduleId": "password-basics",
+      "title": "Password Basics",
+      "synopsis": "Build better password habits, understand password managers, and reduce account takeover risk.",
+      "category": "general",
+      "allowedOrgTypes": ["all"],
+      "contentKey": "password_basics",
+      "estimatedMinutes": 8,
+      "image": null,
+      "imageLabel": "Passwords"
+    },
+    {
+      "moduleId": "multi-factor-authentication",
+      "title": "Multi-Factor Authentication",
+      "synopsis": "Understand why MFA matters, where to enable it, and how it helps stop account compromise.",
+      "category": "general",
+      "allowedOrgTypes": ["all"],
+      "contentKey": "multi_factor_authentication",
+      "estimatedMinutes": 12,
+      "image": null,
+      "imageLabel": "MFA"
+    },
+    {
+      "moduleId": "student-privacy-ferpa",
       "title": "Keeping Student Health and Personal Info Safe",
-      "synopsis": "Handle student data safely and avoid FERPA violations (AI tools, sharing, devices).",
+      "synopsis": "Handle student data safely and avoid FERPA issues involving AI tools, email, sharing, and personal devices.",
       "category": "education",
       "allowedOrgTypes": ["education"],
-      "contentKey": "education_student_privacy"
+      "contentKey": "education_student_privacy",
+      "estimatedMinutes": 14,
+      "image": null,
+      "imageLabel": "FERPA"
+    },
+    {
+      "moduleId": "student-device-safety",
+      "title": "Student Device and Account Safety",
+      "synopsis": "Reduce classroom technology risk through safer device handling, account hygiene, and smart daily practices.",
+      "category": "education",
+      "allowedOrgTypes": ["education"],
+      "contentKey": "student_device_safety",
+      "estimatedMinutes": 9,
+      "image": null,
+      "imageLabel": "Devices"
+    },
+    {
+      "moduleId": "vendor-email-fraud",
+      "title": "Vendor Invoice and Email Fraud",
+      "synopsis": "Recognize invoice scams, payment redirection attempts, and high-risk business email patterns.",
+      "category": "small_business",
+      "allowedOrgTypes": ["small_business"],
+      "contentKey": "vendor_email_fraud",
+      "estimatedMinutes": 11,
+      "image": null,
+      "imageLabel": "Vendors"
+    },
+    {
+      "moduleId": "customer-data-handling",
+      "title": "Customer Data Handling Basics",
+      "synopsis": "Protect customer and employee information through practical handling, storage, and sharing habits.",
+      "category": "small_business",
+      "allowedOrgTypes": ["small_business"],
+      "contentKey": "customer_data_handling",
+      "estimatedMinutes": 10,
+      "image": null,
+      "imageLabel": "Data"
+    },
+    {
+      "moduleId": "public-records-and-email",
+      "title": "Public Records and Email Awareness",
+      "synopsis": "Understand how public-sector communications, retention expectations, and disclosure risk intersect.",
+      "category": "local_government",
+      "allowedOrgTypes": ["local_government"],
+      "contentKey": "public_records_email",
+      "estimatedMinutes": 13,
+      "image": null,
+      "imageLabel": "Records"
+    },
+    {
+      "moduleId": "incident-reporting-for-agencies",
+      "title": "Incident Reporting for Agencies",
+      "synopsis": "Teach staff when to escalate suspicious activity and how to respond without creating more risk.",
+      "category": "local_government",
+      "allowedOrgTypes": ["local_government"],
+      "contentKey": "incident_reporting_agencies",
+      "estimatedMinutes": 7,
+      "image": null,
+      "imageLabel": "Reporting"
     }
   ]
 }

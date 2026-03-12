@@ -22,35 +22,28 @@ export default function Onboarding() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  // Auth/user state
   const [currentUser, setCurrentUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
 
-  // UI state
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
-  // Form state
-  const [role, setRole] = useState(""); // "coordinator" | "participant"
+  const [role, setRole] = useState("");
   const [name, setName] = useState("");
   const [orgName, setOrgName] = useState("");
   const [department, setDepartment] = useState("");
-  const [orgType, setOrgType] = useState(""); // stable key
-  const [employeeRange, setEmployeeRange] = useState(""); // stable key
+  const [orgType, setOrgType] = useState("");
+  const [employeeRange, setEmployeeRange] = useState("");
 
-  // Participants join existing org via code
   const inviteCodeFromUrl = (searchParams.get("code") || "").trim();
   const [inviteCode, setInviteCode] = useState(inviteCodeFromUrl);
 
-  // For coordinators: show the org join code after creation
   const [createdJoinCode, setCreatedJoinCode] = useState("");
 
-  // Helpful: if code exists, default role to participant
   useEffect(() => {
     if (inviteCodeFromUrl) setRole("participant");
   }, [inviteCodeFromUrl]);
 
-  // Listen for Firebase Auth user
   useEffect(() => {
     const unsub = auth.onAuthStateChanged((user) => {
       if (!user) {
@@ -123,7 +116,6 @@ export default function Onboarding() {
         resolvedOrgType = orgType;
         resolvedEmployeeRange = employeeRange || "";
 
-        // optional: show it briefly on the page before redirect
         setCreatedJoinCode(created.joinCode);
       }
 
@@ -134,9 +126,9 @@ export default function Onboarding() {
         const joined = await joinOrgByCode(code);
 
         orgId = joined.orgId;
-        resolvedOrgName = "";
-        resolvedOrgType = "";
-        resolvedEmployeeRange = "";
+        resolvedOrgName = joined.orgName || "";
+        resolvedOrgType = joined.orgType || "";
+        resolvedEmployeeRange = joined.employeeRange || "";
         resolvedJoinCode = joined.joinCode;
       }
 
@@ -155,7 +147,6 @@ export default function Onboarding() {
         onboardingVersion: 2,
       });
 
-      // ✅ go Home for BOTH roles once everything is saved
       navigate("/", { replace: true });
     } catch (err) {
       console.error("Onboarding save failed:", err);
@@ -169,6 +160,8 @@ export default function Onboarding() {
           ? "Please select an organization type."
           : err?.code === "ORG_NOT_FOUND" || err?.message === "ORG_NOT_FOUND"
           ? "That invite code wasn’t recognized."
+          : err?.code === "INVITE_CODE_INACTIVE" || err?.message === "INVITE_CODE_INACTIVE"
+          ? "That invite code is no longer active."
           : "Something went wrong saving your info. Please try again.";
 
       setError(msg);
@@ -176,7 +169,6 @@ export default function Onboarding() {
       setSaving(false);
     }
   }
-
 
   if (loadingUser) {
     return (
@@ -199,7 +191,6 @@ export default function Onboarding() {
         {error && <p className="onboarding-error">{error}</p>}
 
         <form onSubmit={handleSubmit} className="onboarding-form">
-          {/* Name */}
           <div className="onboarding-field">
             <h3>Name</h3>
             <input
@@ -211,7 +202,6 @@ export default function Onboarding() {
             />
           </div>
 
-          {/* Role selection */}
           <div className="onboarding-field">
             <h3>Role</h3>
             <div className="role-buttons">
@@ -234,7 +224,6 @@ export default function Onboarding() {
             </div>
           </div>
 
-          {/* Participant join code */}
           {isParticipant && (
             <div className="onboarding-field">
               <h3>Invite Code</h3>
@@ -251,7 +240,6 @@ export default function Onboarding() {
             </div>
           )}
 
-          {/* Coordinator-only org creation */}
           {isCoordinator && (
             <>
               <div className="onboarding-field">
@@ -307,7 +295,6 @@ export default function Onboarding() {
                 </select>
               </div>
 
-              {/* Show join code after org creation */}
               {createdJoinCode && (
                 <div className="onboarding-field">
                   <h3>Organization Join Code</h3>

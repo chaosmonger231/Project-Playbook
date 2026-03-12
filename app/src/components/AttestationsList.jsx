@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
-import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
-import { db } from "../auth/firebase";
+import {
+  collection,
+  query,
+  orderBy,
+  limit,
+  getDocs,
+  doc,
+  getDoc,
+} from "firebase/firestore";
+import { auth, db } from "../auth/firebase";
 import { useUser } from "../auth/UserContext";
 
 function formatDate(ts) {
@@ -13,10 +21,23 @@ function formatDate(ts) {
   }
 }
 
-function getReadinessValue(data) {
-  if (typeof data?.readinessScore === "number") return data.readinessScore;
-  if (typeof data?.readiness?.score === "number") return data.readiness.score;
-  return null;
+function getSubmitterUid(row) {
+  return row?.createdBy || row?.submittedBy || row?.uid || null;
+}
+
+async function getSubmitterLabel(uid) {
+  if (!uid) return "—";
+
+  try {
+    const snap = await getDoc(doc(db, "users", uid));
+    if (!snap.exists()) return uid;
+
+    const data = snap.data();
+    return data?.displayName || data?.name || data?.email || uid;
+  } catch (err) {
+    console.error("Failed to load submitter user:", uid, err);
+    return uid;
+  }
 }
 
 export default function AttestationsList() {
@@ -48,12 +69,24 @@ export default function AttestationsList() {
 
         const snap = await getDocs(q);
 
-        const items = snap.docs.map((docSnap) => ({
+        const baseItems = snap.docs.map((docSnap) => ({
           id: docSnap.id,
           ...docSnap.data(),
         }));
 
-        setRows(items);
+        const itemsWithSubmitter = await Promise.all(
+          baseItems.map(async (item) => {
+            const submitterUid = getSubmitterUid(item);
+            const submittedBy = await getSubmitterLabel(submitterUid);
+
+            return {
+              ...item,
+              submittedBy,
+            };
+          })
+        );
+
+        setRows(itemsWithSubmitter);
       } catch (err) {
         console.error("Failed to load attestations:", err);
         setError(err.message || "Failed to load attestations.");
@@ -69,18 +102,48 @@ export default function AttestationsList() {
     try {
       setWorkingId(row.id);
 
-      const directUrl =
-        row?.pdf?.downloadUrl ||
-        row?.pdf?.publicUrl ||
-        row?.pdf?.url ||
-        "";
-
-      if (directUrl) {
-        window.open(directUrl, "_blank", "noopener,noreferrer");
-        return;
+      const token = await auth.currentUser?.getIdToken();
+      if (!token) {
+        throw new Error("You must be signed in to download this PDF.");
       }
 
-      alert("Download is not wired yet. The report is ready, but no downloadable URL is stored yet.");
+      const res = await fetch(
+        "https://e71s0lsvsd.execute-api.us-east-1.amazonaws.com/prod/hb96/download-url",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            orgId,
+            submissionId: row.id,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok || !data?.ok) {
+        console.error("Download API error:", {
+          status: res.status,
+          statusText: res.statusText,
+          data,
+        });
+        alert(JSON.stringify(data, null, 2));
+        throw new Error(data?.error || `Failed to prepare download (${res.status}).`);
+      }
+
+      if (!data.downloadUrl) {
+        throw new Error("Download URL was not returned.");
+      }
+
+      const a = document.createElement("a");
+      a.href = data.downloadUrl;
+      a.download = data.fileName || "hb96-report.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
     } catch (err) {
       console.error("Download failed:", err);
       alert(err.message || "Download failed.");
@@ -110,7 +173,11 @@ export default function AttestationsList() {
     }
 
     if (pdfStatus === "failed") {
-      return <span className="tm-muted" style={{ color: "crimson" }}>Failed</span>;
+      return (
+        <span className="tm-muted" style={{ color: "crimson" }}>
+          Failed
+        </span>
+      );
     }
 
     return <span className="tm-muted">Unavailable</span>;
@@ -157,24 +224,21 @@ export default function AttestationsList() {
             <thead>
               <tr>
                 <th style={thStyle}>Submitted</th>
+                <th style={thStyle}>Submitted By</th>
                 <th style={thStyle}>Submission ID</th>
-                <th style={thStyle}>Readiness</th>
                 <th style={thStyle}>PDF Status</th>
                 <th style={thStyle}>Action</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((row) => {
-                const readiness = getReadinessValue(row);
                 const pdfStatus = row?.pdf?.status || "none";
 
                 return (
                   <tr key={row.id}>
                     <td style={tdStyle}>{formatDate(row.createdAt)}</td>
+                    <td style={tdStyle}>{row.submittedBy || "—"}</td>
                     <td style={tdStyle}>{row.id}</td>
-                    <td style={tdStyle}>
-                      {readiness !== null ? `${readiness}%` : "—"}
-                    </td>
                     <td style={tdStyle}>{pdfStatus}</td>
                     <td style={tdStyle}>{renderActionCell(row)}</td>
                   </tr>

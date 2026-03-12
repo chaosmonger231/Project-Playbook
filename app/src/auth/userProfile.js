@@ -4,6 +4,7 @@ import {
   doc,
   getDoc,
   setDoc,
+  updateDoc,
   serverTimestamp,
   collection,
   writeBatch,
@@ -32,12 +33,16 @@ async function generateUniqueJoinCode() {
 
 /**
  * Create an org doc and its initial join code atomically.
- * No org update needed during bootstrap (avoids permission errors).
+ * IMPORTANT:
+ * We store org snapshot fields on the join code doc so participants
+ * can resolve orgName/orgType without reading /orgs/{orgId} before membership.
  */
 export async function createOrg({ name, orgType, employeeRange = null, createdBy }) {
   if (!name?.trim()) throw new Error("ORG_NAME_REQUIRED");
   if (!orgType) throw new Error("ORG_TYPE_REQUIRED");
   if (!createdBy) throw new Error("CREATED_BY_REQUIRED");
+
+  const trimmedName = name.trim();
 
   const orgRef = doc(collection(db, "orgs"));
   const orgId = orgRef.id;
@@ -47,9 +52,8 @@ export async function createOrg({ name, orgType, employeeRange = null, createdBy
 
   const batch = writeBatch(db);
 
-  // Create org with joinCode included up front
   batch.set(orgRef, {
-    name: name.trim(),
+    name: trimmedName,
     type: orgType,
     employeeRange: employeeRange || null,
     createdAt: serverTimestamp(),
@@ -58,9 +62,11 @@ export async function createOrg({ name, orgType, employeeRange = null, createdBy
     joinCodeUpdatedAt: serverTimestamp(),
   });
 
-  // Create join code document
   batch.set(joinRef, {
     orgId,
+    orgName: trimmedName,
+    orgType,
+    employeeRange: employeeRange || null,
     active: true,
     createdAt: serverTimestamp(),
     createdBy,
@@ -73,22 +79,33 @@ export async function createOrg({ name, orgType, employeeRange = null, createdBy
 
 /**
  * Regenerate join code (coordinator-only usage after onboarding).
+ * IMPORTANT:
+ * New join code doc also carries org snapshot fields so future participants
+ * can join without needing a direct org read first.
  */
 export async function regenerateOrgJoinCode({ orgId, createdBy, oldCode = null }) {
   if (!orgId) throw new Error("ORG_ID_REQUIRED");
   if (!createdBy) throw new Error("CREATED_BY_REQUIRED");
 
+  const orgRef = doc(db, "orgs", orgId);
+  const orgSnap = await getDoc(orgRef);
+  if (!orgSnap.exists()) throw new Error("ORG_NOT_FOUND");
+
+  const orgData = orgSnap.data() || {};
   const newCode = await generateUniqueJoinCode();
   const batch = writeBatch(db);
 
   batch.set(doc(db, "joinCodes", newCode), {
     orgId,
+    orgName: orgData.name || "",
+    orgType: orgData.type || "",
+    employeeRange: orgData.employeeRange || null,
     active: true,
     createdAt: serverTimestamp(),
     createdBy,
   });
 
-  batch.update(doc(db, "orgs", orgId), {
+  batch.update(orgRef, {
     joinCode: newCode,
     joinCodeUpdatedAt: serverTimestamp(),
   });
@@ -103,9 +120,9 @@ export async function regenerateOrgJoinCode({ orgId, createdBy, oldCode = null }
 
 /**
  * Participant join flow.
- * IMPORTANT FIX:
- * We DO NOT read /orgs/{orgId} here because the participant
- * is not yet a member and rules will block that read.
+ * IMPORTANT:
+ * We resolve org snapshot data from /joinCodes/{code}, not /orgs/{orgId},
+ * because participants may not be allowed to read the org doc yet.
  */
 export async function joinOrgByCode(inviteCodeRaw) {
   const code = (inviteCodeRaw || "").trim().toUpperCase();
@@ -118,7 +135,7 @@ export async function joinOrgByCode(inviteCodeRaw) {
     throw err;
   }
 
-  const codeData = codeSnap.data();
+  const codeData = codeSnap.data() || {};
 
   if (codeData.active === false) {
     const err = new Error("INVITE_CODE_INACTIVE");
@@ -129,9 +146,11 @@ export async function joinOrgByCode(inviteCodeRaw) {
   const orgId = codeData.orgId;
   if (!orgId) throw new Error("INVITE_CODE_MISSING_ORG");
 
-  // 🚨 DO NOT read org doc here
   return {
     orgId,
+    orgName: codeData.orgName || "",
+    orgType: codeData.orgType || "",
+    employeeRange: codeData.employeeRange || "",
     joinCode: code,
   };
 }
@@ -144,6 +163,8 @@ export async function upsertUserProfile(currentUser, profileData) {
   if (!currentUser?.uid) throw new Error("USER_REQUIRED");
 
   const userRef = doc(db, "users", currentUser.uid);
+  const existingSnap = await getDoc(userRef);
+  const alreadyExists = existingSnap.exists();
 
   await setDoc(
     userRef,
@@ -152,10 +173,37 @@ export async function upsertUserProfile(currentUser, profileData) {
       uid: currentUser.uid,
       email: currentUser.email || profileData.email || "",
       updatedAt: serverTimestamp(),
-      createdAt: serverTimestamp(),
+      ...(alreadyExists ? {} : { createdAt: serverTimestamp() }),
     },
     { merge: true }
   );
 
   return true;
+}
+
+/**
+ * Optional helper for repairing old users who have orgId but no orgName.
+ * Safe to call after a user is already linked to an org.
+ */
+export async function backfillUserOrgFieldsFromOrg({ uid, orgId }) {
+  if (!uid) throw new Error("UID_REQUIRED");
+  if (!orgId) throw new Error("ORG_ID_REQUIRED");
+
+  const orgSnap = await getDoc(doc(db, "orgs", orgId));
+  if (!orgSnap.exists()) throw new Error("ORG_NOT_FOUND");
+
+  const orgData = orgSnap.data() || {};
+
+  await updateDoc(doc(db, "users", uid), {
+    orgName: orgData.name || "",
+    orgType: orgData.type || "",
+    employeeRange: orgData.employeeRange || "",
+    updatedAt: serverTimestamp(),
+  });
+
+  return {
+    orgName: orgData.name || "",
+    orgType: orgData.type || "",
+    employeeRange: orgData.employeeRange || "",
+  };
 }

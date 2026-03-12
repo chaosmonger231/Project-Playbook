@@ -1,9 +1,12 @@
 // src/pages/TeamManagement.jsx
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import ContentPanel from "../components/ContentPanel";
-import "./TeamManagement.css";
 import AttestationsList from "../components/AttestationsList";
+import { db } from "../auth/firebase";
+import { useUser } from "../auth/UserContext";
+import "./TeamManagement.css";
 
 const TABS = [
   { key: "members", label: "Members" },
@@ -23,19 +26,61 @@ function getInitialTabFromSearchParams(searchParams) {
   return "members";
 }
 
+function csvEscape(value) {
+  const s = String(value ?? "");
+  if (s.includes('"') || s.includes(",") || s.includes("\n")) {
+    return `"${s.replace(/"/g, '""')}"`;
+  }
+  return s;
+}
+
+function downloadCsv(filename, rows) {
+  const csvContent = rows.map((row) => row.map(csvEscape).join(",")).join("\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", filename);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
+}
+
+function getTrainingCounts(userData) {
+  const completed =
+    userData?.trainingCompletedCount ??
+    userData?.training?.completedCount ??
+    userData?.training?.completed ??
+    0;
+
+  const total =
+    userData?.trainingTotalCount ??
+    userData?.training?.totalCount ??
+    userData?.training?.total ??
+    0;
+
+  return {
+    completed: Number.isFinite(Number(completed)) ? Number(completed) : 0,
+    total: Number.isFinite(Number(total)) ? Number(total) : 0,
+  };
+}
+
+function formatTrainingSummary(userData) {
+  const { completed, total } = getTrainingCounts(userData);
+  return `${completed} / ${total} complete`;
+}
+
 export default function TeamManagement() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Default: members
-  // Special link: /organization?tab=attestations (or training/insights)
   const [tab, setTab] = useState(() => getInitialTabFromSearchParams(searchParams));
-
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
 
-  // If the user arrives via a different tab param (or refreshes on a URL),
-  // update the selected tab. This keeps it durable + refresh-safe.
   useEffect(() => {
     const next = getInitialTabFromSearchParams(searchParams);
     setTab((prev) => (prev === next ? prev : next));
@@ -45,17 +90,6 @@ export default function TeamManagement() {
     setTab(nextTab);
     setSearchParams({ tab: nextTab });
   }
-
-  // Placeholder stats (wire later)
-  const stats = useMemo(
-    () => [
-      { label: "Total Members", value: "—" },
-      { label: "Coordinators", value: "—" },
-      { label: "Participants", value: "—" },
-      { label: "Join Code", value: "—" },
-    ],
-    []
-  );
 
   return (
     <ContentPanel>
@@ -91,30 +125,12 @@ export default function TeamManagement() {
 
           <button
             type="button"
-            className="tm-btn tm-btn-danger-soft"
-            onClick={() => alert("Export CSV feature coming soon")}
-          >
-            Export CSV
-          </button>
-
-          <button
-            type="button"
             className="tm-btn tm-btn-link"
             onClick={() => navigate("/")}
           >
             ← Home
           </button>
         </div>
-      </div>
-
-      {/* Stats */}
-      <div className="tm-stats">
-        {stats.map((s) => (
-          <div key={s.label} className="tm-stat">
-            <div className="tm-stat-label">{s.label}</div>
-            <div className="tm-stat-value">{s.value}</div>
-          </div>
-        ))}
       </div>
 
       {/* Tabs */}
@@ -160,44 +176,84 @@ export default function TeamManagement() {
 }
 
 function MembersPanel({ onManage }) {
-  const [query, setQuery] = React.useState("");
+  const { orgId, role, orgName } = useUser();
+
+  const [queryText, setQueryText] = React.useState("");
   const [roleFilter, setRoleFilter] = React.useState("all");
   const [statusFilter, setStatusFilter] = React.useState("all");
 
-  // Placeholder rows (wire later)
-  const rows = [
-    {
-      id: "u1",
-      name: "Alex Rivera",
-      email: "alex@example.com",
-      role: "participant",
-      status: "active",
-      training: "—",
-      attestations: "—",
-    },
-    {
-      id: "u2",
-      name: "Jordan Kim",
-      email: "jordan@example.com",
-      role: "coordinator",
-      status: "active",
-      training: "—",
-      attestations: "—",
-    },
-    {
-      id: "u3",
-      name: "Taylor Singh",
-      email: "taylor@example.com",
-      role: "participant",
-      status: "invited",
-      training: "—",
-      attestations: "—",
-    },
-  ];
+  const [rows, setRows] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState("");
 
-  // Filters (placeholder logic for now)
+  useEffect(() => {
+    async function loadMembers() {
+      if (!orgId) {
+        setRows([]);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        setError("");
+
+        const q = query(collection(db, "users"), where("orgId", "==", orgId));
+        const snap = await getDocs(q);
+
+        const members = snap.docs.map((memberDoc) => {
+          const d = memberDoc.data();
+
+          const normalizedRole =
+            d.role === "coordinator" ? "coordinator" : "participant";
+
+          const normalizedStatus =
+            d.status === "invited" || d.status === "disabled" || d.status === "active"
+              ? d.status
+              : "active";
+
+          return {
+            id: memberDoc.id,
+            name: d.displayName || d.name || "—",
+            email: d.email || "—",
+            role: normalizedRole,
+            status: normalizedStatus,
+            training: formatTrainingSummary(d),
+            trainingCompleted:
+              d?.trainingCompletedCount ??
+              d?.training?.completedCount ??
+              d?.training?.completed ??
+              0,
+            trainingTotal:
+              d?.trainingTotalCount ??
+              d?.training?.totalCount ??
+              d?.training?.total ??
+              0,
+          };
+        });
+
+        members.sort((a, b) => {
+          const nameA = (a.name || "").toLowerCase();
+          const nameB = (b.name || "").toLowerCase();
+          return nameA.localeCompare(nameB);
+        });
+
+        setRows(members);
+      } catch (err) {
+        console.error("Failed to load members", err);
+        setError("Could not load organization members.");
+        setRows([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadMembers();
+  }, [orgId]);
+
   const filtered = rows.filter((r) => {
-    const q = query.trim().toLowerCase();
+    const q = queryText.trim().toLowerCase();
+
     const matchesQuery =
       !q ||
       r.name.toLowerCase().includes(q) ||
@@ -212,6 +268,29 @@ function MembersPanel({ onManage }) {
   const activeCount = rows.filter((r) => r.status === "active").length;
   const invitedCount = rows.filter((r) => r.status === "invited").length;
 
+  function handleExportMembersCsv() {
+    if (role !== "coordinator") {
+      alert("Only coordinators can export member data.");
+      return;
+    }
+
+    const header = ["Name", "Email", "Role", "Status", "Training"];
+    const body = filtered.map((member) => [
+      member.name,
+      member.email,
+      member.role,
+      member.status,
+      member.training,
+    ]);
+
+    const today = new Date().toISOString().slice(0, 10);
+    const safeOrgName = (orgName || "organization")
+      .replace(/[^a-z0-9-_]+/gi, "-")
+      .replace(/^-+|-+$/g, "");
+
+    downloadCsv(`${safeOrgName}-members-${today}.csv`, [header, ...body]);
+  }
+
   return (
     <div className="tm-card">
       <div className="tm-card-head">
@@ -222,6 +301,22 @@ function MembersPanel({ onManage }) {
             progress signals.
           </div>
         </div>
+
+        {role === "coordinator" && (
+          <button
+            type="button"
+            className="tm-btn tm-btn-danger-soft"
+            onClick={handleExportMembersCsv}
+            disabled={loading || filtered.length === 0}
+            title={
+              filtered.length === 0
+                ? "No filtered members to export"
+                : "Export the currently filtered member list"
+            }
+          >
+            Export Filtered CSV
+          </button>
+        )}
       </div>
 
       {/* Controls */}
@@ -230,8 +325,8 @@ function MembersPanel({ onManage }) {
           <div className="tm-label">Search</div>
           <input
             className="tm-input"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            value={queryText}
+            onChange={(e) => setQueryText(e.target.value)}
             placeholder="Search name or email…"
           />
         </div>
@@ -272,47 +367,55 @@ function MembersPanel({ onManage }) {
         </div>
       </div>
 
-      {/* Table */}
-      <div className="tm-table">
-        <div className="tm-row tm-row-head tm-row-members">
-          <div>Name</div>
-          <div>Email</div>
-          <div>Role</div>
-          <div>Status</div>
-          <div>Training</div>
-          <div>Attestations</div>
-          <div className="tm-align-right">Actions</div>
-        </div>
+      {loading && <div className="tm-empty">Loading members...</div>}
+      {!loading && error && <div className="tm-empty">{error}</div>}
 
-        {filtered.map((r) => (
-          <div key={r.id} className="tm-row tm-row-members">
-            <div className="tm-strong">{r.name}</div>
-            <div className="tm-muted">{r.email}</div>
-            <div>
-              <span className="tm-pill">{r.role}</span>
+      {!loading && !error && (
+        <>
+          <div className="tm-table">
+            <div className="tm-row tm-row-head tm-row-members">
+              <div>Name</div>
+              <div>Email</div>
+              <div>Role</div>
+              <div>Status</div>
+              <div>Training</div>
+              <div className="tm-align-right">Actions</div>
             </div>
-            <div>
-              <span className="tm-pill">{r.status}</span>
-            </div>
-            <div className="tm-muted">{r.training}</div>
-            <div className="tm-muted">{r.attestations}</div>
-            <div className="tm-align-right">
-              <button
-                type="button"
-                className="tm-link"
-                onClick={() => onManage(r)}
-              >
-                Manage
-              </button>
-            </div>
+
+            {filtered.length === 0 ? (
+              <div className="tm-empty">No members matched your search.</div>
+            ) : (
+              filtered.map((r) => (
+                <div key={r.id} className="tm-row tm-row-members">
+                  <div className="tm-strong">{r.name}</div>
+                  <div className="tm-muted">{r.email}</div>
+                  <div>
+                    <span className="tm-pill">{r.role}</span>
+                  </div>
+                  <div>
+                    <span className="tm-pill">{r.status}</span>
+                  </div>
+                  <div className="tm-muted">{r.training}</div>
+                  <div className="tm-align-right">
+                    <button
+                      type="button"
+                      className="tm-link"
+                      onClick={() => onManage(r)}
+                    >
+                      Manage
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
-        ))}
-      </div>
 
-      <div className="tm-hint">
-        Tip: “Training” and “Attestations” will become live once we wire lesson
-        tracking + attestation logs.
-      </div>
+          <div className="tm-hint">
+            Tip: the export downloads only the members currently visible under your
+            active search and filters.
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -363,7 +466,6 @@ function InsightsPanel() {
 function RightDrawer({ open, title, onClose, children }) {
   const closeBtnRef = React.useRef(null);
 
-  // ESC to close
   React.useEffect(() => {
     if (!open) return;
 
@@ -375,7 +477,6 @@ function RightDrawer({ open, title, onClose, children }) {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [open, onClose]);
 
-  // Lock body scroll while open
   React.useEffect(() => {
     if (!open) return;
 
@@ -387,7 +488,6 @@ function RightDrawer({ open, title, onClose, children }) {
     };
   }, [open]);
 
-  // Focus close button when opening
   React.useEffect(() => {
     if (open) {
       setTimeout(() => closeBtnRef.current?.focus(), 0);
@@ -490,11 +590,15 @@ function MemberDetails({ member }) {
         <div className="tm-section-title">Training</div>
         <div className="tm-kv">
           <div className="tm-k">Completed</div>
-          <div className="tm-v">—</div>
+          <div className="tm-v">{member.trainingCompleted ?? 0}</div>
         </div>
         <div className="tm-kv">
-          <div className="tm-k">In progress</div>
-          <div className="tm-v">—</div>
+          <div className="tm-k">Total assigned</div>
+          <div className="tm-v">{member.trainingTotal ?? 0}</div>
+        </div>
+        <div className="tm-kv">
+          <div className="tm-k">Summary</div>
+          <div className="tm-v">{member.training}</div>
         </div>
       </div>
 

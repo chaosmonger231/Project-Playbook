@@ -40,7 +40,7 @@ export default function AccountPage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
-  const [uid, setUid] = useState(""); // ✅ added
+  const [uid, setUid] = useState("");
 
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
@@ -52,7 +52,6 @@ export default function AccountPage() {
   const [orgJoinCode, setOrgJoinCode] = useState("");
   const [copied, setCopied] = useState(false);
 
-  // Modal state
   const [modalOpen, setModalOpen] = useState(false);
   const [modalField, setModalField] = useState("");
   const [modalTitle, setModalTitle] = useState("");
@@ -70,36 +69,57 @@ export default function AccountPage() {
         return;
       }
 
-      setUid(user.uid); // ✅ added
+      setUid(user.uid);
 
       try {
         setError("");
 
-        // Load user profile
         const userRef = doc(db, "users", user.uid);
         const userSnap = await getDoc(userRef);
 
         if (userSnap.exists()) {
-          const data = userSnap.data();
+          const data = userSnap.data() || {};
 
           setDisplayName(data.displayName || user.displayName || "");
-          setOrgName(data.orgName || "");
           setRole(data.role || "");
           setDepartment(data.department || "");
 
           const foundOrgId = data.orgId || "";
           setOrgId(foundOrgId);
 
-          // Load joinCode from org doc (source of truth)
+          let resolvedOrgName = data.orgName || "";
+          let resolvedOrgJoinCode = "";
+
           if (foundOrgId) {
             const orgRef = doc(db, "orgs", foundOrgId);
             const orgSnap = await getDoc(orgRef);
-            setOrgJoinCode(orgSnap.exists() ? (orgSnap.data().joinCode || "") : "");
-          } else {
-            setOrgJoinCode("");
+
+            if (orgSnap.exists()) {
+              const orgData = orgSnap.data() || {};
+              resolvedOrgJoinCode = orgData.joinCode || "";
+
+              if (!resolvedOrgName && orgData.name) {
+                resolvedOrgName = orgData.name;
+
+                await setDoc(
+                  userRef,
+                  {
+                    orgName: orgData.name,
+                    orgType: data.orgType || orgData.type || "",
+                    employeeRange: data.employeeRange || orgData.employeeRange || "",
+                  },
+                  { merge: true }
+                );
+              }
+            }
           }
+
+          setOrgName(resolvedOrgName);
+          setOrgJoinCode(resolvedOrgJoinCode);
         } else {
           setDisplayName(user.displayName || "");
+          setOrgName("");
+          setOrgJoinCode("");
         }
 
         setEmail(user.email || "");
@@ -171,6 +191,7 @@ export default function AccountPage() {
 
       closeModal();
     } catch (e) {
+      console.error(e);
       setError("Failed to save changes.");
     } finally {
       setBusy(false);
@@ -183,7 +204,9 @@ export default function AccountPage() {
       await navigator.clipboard.writeText(orgJoinCode);
       setCopied(true);
       setTimeout(() => setCopied(false), 1200);
-    } catch {}
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const regenJoinCode = async () => {
@@ -194,7 +217,8 @@ export default function AccountPage() {
     try {
       const newCode = await regenerateOrgJoinCode({
         orgId,
-        createdBy: uid, // ✅ FIX
+        createdBy: uid,
+        oldCode: orgJoinCode || null,
       });
       setOrgJoinCode(newCode);
     } catch (e) {
@@ -240,7 +264,12 @@ export default function AccountPage() {
             onClick={() => openModal("name")}
           />
 
-          <AccountTile title="Email" subtitle={email || "No email on file"} clickable={false} center />
+          <AccountTile
+            title="Email"
+            subtitle={email || "No email on file"}
+            clickable={false}
+            center
+          />
 
           <AccountTile
             title="Organization"
@@ -250,7 +279,11 @@ export default function AccountPage() {
             center={!isCoordinator}
           />
 
-          <AccountTile title="Role" subtitle={role || "Role not set"} onClick={handleRoleClick} />
+          <AccountTile
+            title="Role"
+            subtitle={role || "Role not set"}
+            onClick={handleRoleClick}
+          />
 
           {isCoordinator && (
             <AccountTile
