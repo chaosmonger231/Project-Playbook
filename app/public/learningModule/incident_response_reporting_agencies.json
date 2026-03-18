@@ -1,0 +1,197 @@
+{
+  "moduleId": "incident_response_reporting_agencies",
+  "title": "Incident Response & Reporting for Agencies",
+  "description": "Test your understanding of Ohio cyber incident reporting requirements, early response actions, and scenario-based decisions for public employees.",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Under Ohio law, how soon must a political subdivision report a discovered cybersecurity incident to OCIC?",
+      "choices": [
+        { "id": 1, "text": "Within 24 hours" },
+        { "id": 2, "text": "Within 7 days" },
+        { "id": 3, "text": "Within 14 days" },
+        { "id": 4, "text": "Within 30 days" }
+      ],
+      "correctId": 2,
+      "explanation": "Ohio requires reporting to the Ohio Cyber Integration Center within 7 days after discovery."
+    },
+    {
+      "id": "q2",
+      "prompt": "Under Ohio law, how soon must the Auditor of State be notified after a cybersecurity incident is discovered?",
+      "choices": [
+        { "id": 1, "text": "Within 7 days" },
+        { "id": 2, "text": "Within 10 business days" },
+        { "id": 3, "text": "Within 30 days" },
+        { "id": 4, "text": "Only after recovery is complete" }
+      ],
+      "correctId": 3,
+      "explanation": "Ohio requires reporting to the Auditor of State within 30 days after discovery."
+    },
+    {
+      "id": "q3",
+      "prompt": "Scenario: You receive multiple unexpected MFA prompts and then notice a login alert from an unfamiliar location. Nothing has crashed yet. What is the best next step?",
+      "choices": [
+        { "id": 1, "text": "Ignore it because no outage has occurred" },
+        { "id": 2, "text": "Report it immediately using your agency's incident reporting process" },
+        { "id": 3, "text": "Wait until the end of the week to see if it happens again" },
+        { "id": 4, "text": "Post a warning in a public forum" }
+      ],
+      "correctId": 2,
+      "explanation": "Suspicious login activity and MFA prompts may indicate account compromise and should be escalated quickly."
+    },
+    {
+      "id": "q4",
+      "prompt": "Which of the following should an Ohio political subdivision's cybersecurity program include?",
+      "choices": [
+        { "id": 1, "text": "Identification of critical functions and risks" },
+        { "id": 2, "text": "Incident response procedures and recovery planning" },
+        { "id": 3, "text": "Cybersecurity training for employees based on job duties" },
+        { "id": 4, "text": "All of the above" }
+      ],
+      "correctId": 4,
+      "explanation": "Ohio guidance says a cybersecurity program should address critical functions and risks, detection, incident response, recovery, and employee training."
+    },
+    {
+      "id": "q5",
+      "prompt": "Scenario: A coworker says files on a shared drive are suddenly inaccessible and a ransom note appears on screen. What should happen first?",
+      "choices": [
+        { "id": 1, "text": "Delete the note and keep working" },
+        { "id": 2, "text": "Report the incident immediately and follow agency instructions, including isolating affected systems if directed" },
+        { "id": 3, "text": "Pay the ransom immediately to restore service" },
+        { "id": 4, "text": "Reinstall the operating system right away" }
+      ],
+      "correctId": 2,
+      "explanation": "Suspected ransomware should be reported immediately, and affected systems may need to be isolated according to agency guidance."
+    },
+    {
+      "id": "q6",
+      "prompt": "Which implementation deadline is correct under Ohio guidance?",
+      "choices": [
+        { "id": 1, "text": "Counties and cities by January 1, 2026; all other political subdivisions by July 1, 2026" },
+        { "id": 2, "text": "All political subdivisions by January 1, 2027" },
+        { "id": 3, "text": "Only counties must comply, and only by July 1, 2026" },
+        { "id": 4, "text": "There are no implementation deadlines" }
+      ],
+      "correctId": 1,
+      "explanation": "Ohio guidance gives January 1, 2026 for counties and cities, and July 1, 2026 for other political subdivisions."
+    },
+    {
+      "id": "q7",
+      "prompt": "Scenario: You accidentally clicked a suspicious attachment, but nothing obvious happened. What should you do?",
+      "choices": [
+        { "id": 1, "text": "Say nothing unless your computer locks up later" },
+        { "id": 2, "text": "Report the event immediately because early warning signs matter" },
+        { "id": 3, "text": "Delete the email and assume the risk is gone" },
+        { "id": 4, "text": "Use your personal email to ask a friend for advice" }
+      ],
+      "correctId": 2,
+      "explanation": "A suspicious click can still lead to compromise even if nothing obvious happens right away."
+    },
+    {
+      "id": "q8",
+      "prompt": "True or False: Records and reports related to a cybersecurity program or reported cybersecurity incident under ORC 9.64 are public records that can always be shared freely.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 2,
+      "explanation": "ORC 9.64 exempts certain cybersecurity program and incident records from public records requirements."
+    },
+    {
+      "id": "q9",
+      "prompt": "Scenario: A supervisor tells you not to report a likely cyber incident yet because they do not want attention before a public meeting. What is the best response?",
+      "choices": [
+        { "id": 1, "text": "Agree and wait until after the meeting" },
+        { "id": 2, "text": "Quietly delete related messages to reduce concern" },
+        { "id": 3, "text": "Follow the agency's reporting process anyway because delaying may worsen harm and affect compliance" },
+        { "id": 4, "text": "Post online so the public knows first" }
+      ],
+      "correctId": 3,
+      "explanation": "Delaying reporting can increase damage and interfere with legal and operational obligations."
+    },
+    {
+      "id": "q10",
+      "prompt": "What is IC3?",
+      "choices": [
+        { "id": 1, "text": "An Ohio-only public records portal" },
+        { "id": 2, "text": "The FBI's central hub for reporting cyber-enabled crime" },
+        { "id": 3, "text": "A local government training vendor" },
+        { "id": 4, "text": "A password recovery tool" }
+      ],
+      "correctId": 2,
+      "explanation": "IC3 is the FBI-run Internet Crime Complaint Center for reporting cyber-enabled crime."
+    },
+    {
+      "id": "q11",
+      "prompt": "Scenario: Your agency experiences ransomware. Leadership is discussing whether to pay. Which statement is most accurate under Ohio guidance?",
+      "choices": [
+        { "id": 1, "text": "Ohio fully bans ransom payments in all circumstances" },
+        { "id": 2, "text": "Ohio prefers a no-ransom approach, and if payment is made the legislative authority must adopt a public resolution explaining why it is in the public interest" },
+        { "id": 3, "text": "Any employee may approve payment if systems are down" },
+        { "id": 4, "text": "Payment decisions are never documented" }
+      ],
+      "correctId": 2,
+      "explanation": "Ohio's Auditor of State favors a no-ransom policy, but the law allows payment only with a public resolution explaining why it is in the public interest."
+    },
+    {
+      "id": "q12",
+      "prompt": "Scenario: A mayor's assistant asks you to email screenshots of a suspected breach to their personal account so they can review it from home. What is the best response?",
+      "choices": [
+        { "id": 1, "text": "Send them immediately because leadership requested them" },
+        { "id": 2, "text": "Only share incident information through approved channels and report the request if it seems improper" },
+        { "id": 3, "text": "Post them to a shared public folder" },
+        { "id": 4, "text": "Text them to multiple coworkers instead" }
+      ],
+      "correctId": 2,
+      "explanation": "Incident details should be handled through authorized channels, not personal accounts or ad hoc sharing."
+    },
+    {
+      "id": "q13",
+      "prompt": "Which action is usually a bad idea during a suspected incident unless specifically directed by your response team?",
+      "choices": [
+        { "id": 1, "text": "Reporting quickly" },
+        { "id": 2, "text": "Preserving suspicious emails or evidence" },
+        { "id": 3, "text": "Wiping devices or trying to erase traces on your own" },
+        { "id": 4, "text": "Following agency guidance" }
+      ],
+      "correctId": 3,
+      "explanation": "Self-directed wiping or deletion can destroy evidence and interfere with response and investigation."
+    },
+    {
+      "id": "q14",
+      "prompt": "Scenario: Your county office is hit by ransomware and leadership directs outside reporting. Which additional federal contact is specifically recommended by the FBI for ransomware victims?",
+      "choices": [
+        { "id": 1, "text": "IC3 and the local FBI field office" },
+        { "id": 2, "text": "Only the local Chamber of Commerce" },
+        { "id": 3, "text": "Only a social media post" },
+        { "id": 4, "text": "No federal reporting is recommended" }
+      ],
+      "correctId": 1,
+      "explanation": "The FBI recommends contacting the local FBI field office and reporting ransomware through IC3."
+    },
+    {
+      "id": "q15",
+      "prompt": "Scenario: You discover that a coworker transferred sensitive files to an unknown external address after receiving a fake request. The sender claims it was a misunderstanding. What should you do?",
+      "choices": [
+        { "id": 1, "text": "Treat it as resolved if the sender apologizes" },
+        { "id": 2, "text": "Report it immediately as a potential incident involving unauthorized disclosure" },
+        { "id": 3, "text": "Delete the sent email and move on" },
+        { "id": 4, "text": "Wait to see if anyone complains" }
+      ],
+      "correctId": 2,
+      "explanation": "Potential unauthorized disclosure or compromise should be escalated immediately."
+    },
+    {
+      "id": "q16",
+      "prompt": "Scenario: Your agency is located in Cincinnati-area coverage and leadership wants FBI contact information as part of the response checklist. Which is the correct local FBI field office number listed in the guidance we discussed?",
+      "choices": [
+        { "id": 1, "text": "(614) 387-1089" },
+        { "id": 2, "text": "(513) 421-4310" },
+        { "id": 3, "text": "(216) 522-1400" },
+        { "id": 4, "text": "(937) 222-2013" }
+      ],
+      "correctId": 2,
+      "explanation": "FBI Cincinnati is reached at (513) 421-4310."
+    }
+  ]
+}

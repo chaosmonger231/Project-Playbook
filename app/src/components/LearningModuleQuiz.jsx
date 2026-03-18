@@ -192,9 +192,10 @@ export default function LearningModuleQuiz({
             fontSize: "1.9rem",
             lineHeight: 1.25,
             color: "#000",
+            whiteSpace: "pre-wrap",
           }}
+          dangerouslySetInnerHTML={{ __html: question.prompt }}
         >
-          {question.prompt}
         </h3>
 
         <div style={{ display: "grid", gap: 12 }}>

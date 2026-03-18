@@ -1,0 +1,123 @@
+{
+  "moduleId": "customer_data_handling",
+  "title": "Customer Data Handling Basics",
+  "description": "Test your ability to recognize safe and unsafe ways to handle customer and employee information.",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Why is customer data handling a cybersecurity issue?",
+      "choices": [
+        { "id": 1, "text": "Because only cybersecurity staff can view customer records" },
+        { "id": 2, "text": "Because exposed, misused, or poorly stored data can be accessed by unauthorized people" },
+        { "id": 3, "text": "Because all business files are public by default" },
+        { "id": 4, "text": "Because customer data only matters during tax season" }
+      ],
+      "correctId": 2,
+      "explanation": "Poor data handling can expose information to unauthorized people and create privacy, fraud, and security risks."
+    },
+    {
+      "id": "q2",
+      "prompt": "Which of the following is an example of sensitive data a small business should protect?",
+      "choices": [
+        { "id": 1, "text": "Customer contact information" },
+        { "id": 2, "text": "Employee payroll records" },
+        { "id": 3, "text": "Account login credentials" },
+        { "id": 4, "text": "All of the above" }
+      ],
+      "correctId": 4,
+      "explanation": "Customer data, employee records, and credentials can all create serious security and privacy risks if exposed."
+    },
+    {
+      "id": "q3",
+      "prompt": "It is safe to store business files containing customer information on a personal device if it is more convenient.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 2,
+      "explanation": "Sensitive business data should be stored only in approved systems and locations, not on personal devices unless specifically authorized."
+    },
+    {
+      "id": "q4",
+      "prompt": "What is one reason access to sensitive data should be limited?",
+      "choices": [
+        { "id": 1, "text": "It reduces unnecessary exposure and lowers risk" },
+        { "id": 2, "text": "It makes files impossible to use" },
+        { "id": 3, "text": "It removes the need for passwords" },
+        { "id": 4, "text": "It means no one can do their job" }
+      ],
+      "correctId": 1,
+      "explanation": "Limiting access helps reduce the number of people who can accidentally or intentionally expose sensitive information."
+    },
+    {
+      "id": "q5",
+      "prompt": "Which of the following is a common data handling mistake?",
+      "choices": [
+        { "id": 1, "text": "Double-checking the recipient before sending a file" },
+        { "id": 2, "text": "Using approved business storage systems" },
+        { "id": 3, "text": "Sending sensitive information to the wrong email recipient" },
+        { "id": 4, "text": "Reporting suspicious access quickly" }
+      ],
+      "correctId": 3,
+      "explanation": "Sending files to the wrong recipient is a common and preventable cause of data exposure."
+    },
+    {
+      "id": "q6",
+      "prompt": "HIPAA is an example of a regulation related to protecting what kind of information?",
+      "choices": [
+        { "id": 1, "text": "Medical and health information" },
+        { "id": 2, "text": "Public marketing materials" },
+        { "id": 3, "text": "Shipping schedules only" },
+        { "id": 4, "text": "Printer settings" }
+      ],
+      "correctId": 1,
+      "explanation": "HIPAA is associated with the protection of medical and health information handled by covered healthcare entities."
+    },
+    {
+      "id": "q7",
+      "prompt": "Scenario: You are about to email a spreadsheet with customer contact details and billing notes. What should you do first?",
+      "choices": [
+        { "id": 1, "text": "Send it quickly so you do not forget" },
+        { "id": 2, "text": "Double-check the recipient and make sure the sharing method is appropriate" },
+        { "id": 3, "text": "Forward it to several coworkers in case someone else needs it" },
+        { "id": 4, "text": "Move it to your personal phone before sending" }
+      ],
+      "correctId": 2,
+      "explanation": "Before sending sensitive information, verify the recipient and use approved, appropriate sharing methods."
+    },
+    {
+      "id": "q8",
+      "prompt": "A data exposure incident always requires a hacker to break into the network.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 2,
+      "explanation": "Many exposures happen through everyday mistakes like oversharing, wrong recipients, or lost devices."
+    },
+    {
+      "id": "q9",
+      "prompt": "Which habit best helps protect customer and employee data?",
+      "choices": [
+        { "id": 1, "text": "Reusing the same password across systems" },
+        { "id": 2, "text": "Sharing folders with everyone for convenience" },
+        { "id": 3, "text": "Using strong passwords and MFA where available" },
+        { "id": 4, "text": "Storing files wherever there is extra space" }
+      ],
+      "correctId": 3,
+      "explanation": "Strong passwords and MFA are important protections against unauthorized access to sensitive business data."
+    },
+    {
+      "id": "q10",
+      "prompt": "What should you do if sensitive data is sent to the wrong person or accessed unexpectedly?",
+      "choices": [
+        { "id": 1, "text": "Ignore it unless someone complains" },
+        { "id": 2, "text": "Try to fix it quietly and not tell anyone" },
+        { "id": 3, "text": "Report it promptly through your organization's process" },
+        { "id": 4, "text": "Delete your own copy and assume the problem is solved" }
+      ],
+      "correctId": 3,
+      "explanation": "Mistaken sharing or suspicious access should be reported quickly so the organization can respond and reduce harm."
+    }
+  ]
+}

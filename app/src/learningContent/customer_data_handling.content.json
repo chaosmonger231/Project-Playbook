@@ -1,0 +1,145 @@
+{
+  "topic": "customer_data_handling",
+  "title": "Customer Data Handling Basics",
+  "pages": [
+    {
+      "type": "welcome",
+      "title": "Welcome to Customer Data Handling Basics",
+      "subtitle": "Learn how everyday business habits can help protect customer and employee information from cyber risk.",
+      "video": {
+        "videoId": "VIDEO_ID_CUSTOMER_DATA_WELCOME",
+        "caption": "Introduction to safe customer data handling (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Why data handling matters",
+      "text": "Small businesses often store or use <b>sensitive information</b> such as customer contact details, payment information, employee records, invoices, and account documents.\n\nThis becomes a cybersecurity issue when information is shared too broadly, stored in unsafe places, left exposed on devices, or sent through insecure channels.\n\nPoor data handling can lead to unauthorized access, fraud, identity theft, customer distrust, and legal or business consequences.",
+      "video": {
+        "videoId": "VIDEO_ID_CUSTOMER_DATA_IMPORTANCE",
+        "caption": "Why safe handling of customer data matters"
+      },
+      "image": {
+        "src": "IMAGE_URL_CUSTOMER_DATA_IMPORTANCE",
+        "alt": "Customer data protection illustration (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "What kind of data needs protection?",
+      "text": "Not all business data has the same risk, but many common records should be handled carefully.\n\nExamples include:\n\n• Customer names, addresses, phone numbers, and email addresses\n• Payment or billing information\n• Employee records and payroll information\n• Contracts, invoices, and account files\n• Login credentials or account recovery information\n\nIf the information could harm a person, customer, employee, or business if exposed, it should be handled with care.",
+      "video": {
+        "videoId": "VIDEO_ID_CUSTOMER_DATA_TYPES",
+        "caption": "Examples of sensitive business and customer data"
+      },
+      "image": {
+        "src": "IMAGE_URL_CUSTOMER_DATA_TYPES",
+        "alt": "Examples of customer and business data"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Sensitive data and regulations",
+      "text": "Some types of information are protected by privacy laws and industry regulations.\n\nFor example:\n\n• <b>HIPAA</b> protects medical and health information handled by healthcare providers.\n• <b>Financial and payment data</b> may fall under payment security standards.\n• <b>Personal identifying information</b> such as addresses, phone numbers, and account data should be handled carefully.\n\nEven if your organization is not directly regulated, protecting this information is still critical to prevent fraud, identity theft, and reputational damage.\n\nAlways follow your organization's policies when storing, sharing, or accessing sensitive data.",
+      "video": {
+        "videoId": "VIDEO_ID_DATA_REGULATIONS",
+        "caption": "Overview of sensitive data regulations (replace later)"
+      },
+      "image": {
+        "src": "IMAGE_URL_DATA_REGULATIONS",
+        "alt": "Sensitive data and compliance illustration (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Did you know?",
+      "bullets": [
+        {
+          "title": "Data exposure does not always come from hackers",
+          "text": "Sometimes information is exposed because it was emailed to the wrong person, stored on an unprotected device, or shared too broadly."
+        },
+        {
+          "title": "Employee information matters too",
+          "text": "Payroll records, tax forms, and internal personnel details should be protected just like customer data."
+        },
+        {
+          "title": "Access should be limited",
+          "text": "Not every employee needs access to every file. Limiting access reduces risk."
+        },
+        {
+          "title": "Simple habits can prevent major problems",
+          "text": "Checking recipients, using strong passwords, and storing files in approved locations can prevent many incidents."
+        }
+      ],
+      "image": {
+        "src": "IMAGE_URL_CUSTOMER_DATA_DID_YOU_KNOW",
+        "alt": "Did you know customer data graphic (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Common data handling mistakes",
+      "text": "Many data incidents happen because of everyday mistakes rather than advanced attacks.\n\nCommon examples include:\n\n• Sending sensitive files to the wrong email recipient\n• Saving business files on personal devices without approval\n• Sharing folders with more people than necessary\n• Reusing weak passwords on business systems\n• Leaving printed or digital records accessible to unauthorized people\n• Storing customer data in unapproved tools or locations\n\nEven small mistakes can create serious privacy and security risks.",
+      "video": {
+        "videoId": "VIDEO_ID_CUSTOMER_DATA_MISTAKES",
+        "caption": "Common small business data handling mistakes"
+      },
+      "image": {
+        "src": "IMAGE_URL_CUSTOMER_DATA_MISTAKES",
+        "alt": "Common customer data handling mistakes (replace later)"
+      }
+    },
+
+    {
+      "type": "video",
+      "title": "Real-world business scenario",
+      "video": {
+        "videoId": "VIDEO_ID_CUSTOMER_DATA_SCENARIO",
+        "caption": "Example of a small business data handling mistake and its impact (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Safe habits to follow",
+      "text": "To handle customer and employee data more safely:\n\n1) <b>Only access the data you need</b>\n2) <b>Store files in approved business systems</b>\n3) <b>Double-check recipients before sending emails</b>\n4) <b>Use strong passwords and MFA where available</b>\n5) <b>Report lost devices, mistaken sharing, or suspicious access quickly</b>\n\nGood cybersecurity starts with careful daily habits, not just technical tools.",
+      "video": {
+        "videoId": "VIDEO_ID_CUSTOMER_DATA_SAFE_HABITS",
+        "caption": "Safe habits for handling customer and employee data"
+      },
+      "image": {
+        "src": "IMAGE_URL_CUSTOMER_DATA_SAFE_HABITS",
+        "alt": "Safe data handling workflow (replace later)"
+      }
+    },
+
+    {
+      "type": "quizWelcome",
+      "title": "Ready for the quiz?",
+      "subtitle": "This short quiz will test your understanding of safe customer and employee data handling.",
+      "quizModulePath": "/learningModule/customer_data_handling.json",
+      "startButtonText": "Start Quiz"
+    },
+
+    {
+      "type": "quiz",
+      "quizModulePath": "/learningModule/customer_data_handling.json"
+    },
+
+    {
+      "type": "results",
+      "title": "Quiz Results",
+      "subtitle": "Here’s how you did.",
+      "showReview": true,
+      "buttons": {
+        "restartQuizText": "Restart Quiz",
+        "backToHomeText": "Back to Home"
+      }
+    }
+  ]
+}

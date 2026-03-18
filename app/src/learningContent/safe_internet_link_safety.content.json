@@ -1,0 +1,105 @@
+{
+  "topic": "safe_internet_link_safety",
+  "title": "Safe Internet & Link Safety",
+  "pages": [
+    {
+      "type": "welcome",
+      "title": "Welcome to Safe Internet & Link Safety",
+      "subtitle": "Learn how to identify suspicious links and practice safer browsing habits online."
+    },
+
+    {
+      "type": "textImage",
+      "title": "Why link safety matters",
+      "text": "Many cyberattacks begin when someone clicks a malicious link.\n\nA link may lead to:\n\n<ul><li>A fake login page designed to steal passwords</li><li>A website that downloads malware</li><li>A page that tricks users into sharing sensitive information</li></ul>\n\nBeing cautious with links helps prevent many security incidents.",
+      "image": {
+        "src": "IMAGE_URL_LINK_RISK",
+        "alt": "Example of a malicious link"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Check links before clicking",
+      "text": "Before clicking a link, take a moment to inspect it.\n\nMany email programs and browsers allow you to <strong>hover over a link</strong> to see the real destination.\n\nIf the link address looks unfamiliar, misspelled, or unrelated to the sender, it may be unsafe.",
+      "image": {
+        "src": "IMAGE_URL_HOVER_LINK",
+        "alt": "Hovering over a link to see the destination"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Shortened links",
+      "text": "Shortened links hide the real destination of a website.\n\nExamples include:\n\n<ul><li>bit.ly</li><li>tinyurl.com</li><li>shortened links used on social media</li></ul>\n\nBecause the true destination is hidden, shortened links should be treated carefully unless they come from a trusted source.",
+      "image": {
+        "src": "IMAGE_URL_SHORT_LINK",
+        "alt": "Example of shortened link services"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Look-alike domains",
+      "text": "Attackers often create websites that look very similar to legitimate ones.\n\nExamples include:\n\n<ul><li>micr0soft.com instead of microsoft.com</li><li>paypaI.com using a capital letter instead of lowercase L</li></ul>\n\nAlways read website addresses carefully before entering login credentials.",
+      "image": {
+        "src": "IMAGE_URL_LOOKALIKE_DOMAIN",
+        "alt": "Example of a look-alike domain"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "HTTPS and secure connections",
+      "text": "Most legitimate websites use <strong>HTTPS</strong>, which encrypts communication between your browser and the website.\n\nYou can often see a lock icon in the browser address bar.\n\nHTTPS does not guarantee a website is trustworthy, but it is an important indicator of a secure connection.",
+      "image": {
+        "src": "IMAGE_URL_HTTPS_LOCK",
+        "alt": "HTTPS lock icon in browser"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Pop-ups and downloads",
+      "text": "Unexpected pop-ups may try to convince you to download software or click urgent warnings.\n\nExamples include:\n\n<ul><li>Fake virus alerts</li><li>Unexpected software downloads</li><li>Requests to install browser extensions</li></ul>\n\nOnly download files or software from trusted sources.",
+      "image": {
+        "src": "IMAGE_URL_POPUP_WARNING",
+        "alt": "Suspicious pop-up example"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Safe browsing habits",
+      "text": "To browse the internet more safely:\n\n<ul><li>Pause before clicking unfamiliar links</li><li>Verify website addresses carefully</li><li>Avoid downloading unknown files</li><li>Use trusted websites when entering credentials</li></ul>\n\nTaking a few seconds to verify a link can prevent many cyber incidents.",
+      "image": {
+        "src": "IMAGE_URL_SAFE_BROWSING",
+        "alt": "Safe browsing practices"
+      }
+    },
+
+    {
+      "type": "quizWelcome",
+      "title": "Ready for the quiz?",
+      "subtitle": "This quiz will test your understanding of link safety and safe browsing habits.",
+      "quizModulePath": "/learningModule/safe_internet_link_safety.json",
+      "startButtonText": "Start Quiz"
+    },
+
+    {
+      "type": "quiz",
+      "quizModulePath": "/learningModule/safe_internet_link_safety.json"
+    },
+
+    {
+      "type": "results",
+      "title": "Quiz Results",
+      "subtitle": "Here’s how you did.",
+      "showReview": true,
+      "buttons": {
+        "restartQuizText": "Restart Quiz",
+        "backToHomeText": "Back to Home"
+      }
+    }
+  ]
+}

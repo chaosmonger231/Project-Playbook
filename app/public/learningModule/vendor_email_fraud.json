@@ -1,0 +1,123 @@
+{
+  "moduleId": "vendor_email_fraud",
+  "title": "Vendor Invoice and Email Fraud",
+  "description": "Test your ability to recognize payment fraud, suspicious vendor emails, and risky invoice requests.",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Why is vendor invoice fraud considered a cybersecurity issue?",
+      "choices": [
+        { "id": 1, "text": "Because printers often break during accounting work" },
+        { "id": 2, "text": "Because attackers may use fake emails, impersonation, or compromised accounts to steal money" },
+        { "id": 3, "text": "Because only IT staff can approve invoices" },
+        { "id": 4, "text": "Because invoices always contain malware" }
+      ],
+      "correctId": 2,
+      "explanation": "Vendor payment fraud is often cyber-enabled through email impersonation, account compromise, or social engineering."
+    },
+    {
+      "id": "q2",
+      "prompt": "It is safe to update vendor banking information based only on an email if the message looks professional.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 2,
+      "explanation": "Professional-looking emails can still be fraudulent. Payment changes should be verified through a trusted separate channel."
+    },
+    {
+      "id": "q3",
+      "prompt": "Which of the following is the biggest red flag in a vendor payment message?",
+      "choices": [
+        { "id": 1, "text": "It references a real vendor name" },
+        { "id": 2, "text": "It asks you to verify new banking details through a known phone number" },
+        { "id": 3, "text": "It urgently requests a change to payment instructions" },
+        { "id": 4, "text": "It includes an invoice number" }
+      ],
+      "correctId": 3,
+      "explanation": "Urgent requests involving payment changes are a major warning sign and should always be verified."
+    },
+    {
+      "id": "q4",
+      "prompt": "A message appears to come from a trusted vendor but the email address is slightly different than usual. What should you do?",
+      "choices": [
+        { "id": 1, "text": "Process the request if the logo looks correct" },
+        { "id": 2, "text": "Reply and ask the sender if they are legitimate" },
+        { "id": 3, "text": "Verify the request using a known contact method before taking action" },
+        { "id": 4, "text": "Ignore the difference because small changes are normal" }
+      ],
+      "correctId": 3,
+      "explanation": "Look-alike email addresses are a common fraud tactic. Use a trusted phone number or known vendor contact to verify."
+    },
+    {
+      "id": "q5",
+      "prompt": "Which employee groups are commonly targeted by vendor invoice fraud?",
+      "choices": [
+        { "id": 1, "text": "Only software developers" },
+        { "id": 2, "text": "Finance, operations, purchasing, or anyone handling payments" },
+        { "id": 3, "text": "Only external auditors" },
+        { "id": 4, "text": "Only front desk staff" }
+      ],
+      "correctId": 2,
+      "explanation": "Attackers often target employees who handle invoices, purchasing, payroll, or vendor communication."
+    },
+    {
+      "id": "q6",
+      "prompt": "A familiar display name in an email always proves the sender is legitimate.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 2,
+      "explanation": "Display names can be spoofed. Always check the actual sender address and verify sensitive requests."
+    },
+    {
+      "id": "q7",
+      "prompt": "Scenario: You receive an email saying a long-time vendor has changed banks and needs today's payment sent to a new account immediately. What is the safest next step?",
+      "choices": [
+        { "id": 1, "text": "Pay immediately to avoid a late fee" },
+        { "id": 2, "text": "Reply to the email and ask if the new account is correct" },
+        { "id": 3, "text": "Call the vendor using a known trusted number and verify the change before sending payment" },
+        { "id": 4, "text": "Forward the email to coworkers and ask what they think" }
+      ],
+      "correctId": 3,
+      "explanation": "Payment changes should be verified outside of email using a trusted contact method."
+    },
+    {
+      "id": "q8",
+      "prompt": "Why is urgency so effective in payment fraud scams?",
+      "choices": [
+        { "id": 1, "text": "It makes invoices easier to read" },
+        { "id": 2, "text": "It pressures employees to act before verifying" },
+        { "id": 3, "text": "It automatically confirms bank details" },
+        { "id": 4, "text": "It improves email security" }
+      ],
+      "correctId": 2,
+      "explanation": "Attackers use urgency to reduce careful thinking and push people into skipping verification steps."
+    },
+    {
+      "id": "q9",
+      "prompt": "What should you do if you suspect a vendor invoice or payment request is fraudulent?",
+      "choices": [
+        { "id": 1, "text": "Delete it without telling anyone" },
+        { "id": 2, "text": "Process it later when less busy" },
+        { "id": 3, "text": "Report it through your organization’s process and verify before acting" },
+        { "id": 4, "text": "Send a test payment first" }
+      ],
+      "correctId": 3,
+      "explanation": "Suspicious payment messages should be reported and verified before any money is sent."
+    },
+    {
+      "id": "q10",
+      "prompt": "Which of the following is the best protection against vendor email fraud?",
+      "choices": [
+        { "id": 1, "text": "Trusting known names automatically" },
+        { "id": 2, "text": "Handling payment changes only through email" },
+        { "id": 3, "text": "Using a separate verification process for financial requests" },
+        { "id": 4, "text": "Opening all attachments to inspect them manually" }
+      ],
+      "correctId": 3,
+      "explanation": "A separate verification process is one of the strongest protections against business email and payment fraud."
+    }
+  ]
+}

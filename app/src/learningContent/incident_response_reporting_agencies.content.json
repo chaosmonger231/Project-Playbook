@@ -1,0 +1,216 @@
+{
+  "topic": "incident_response_reporting_agencies",
+  "title": "Incident Response & Reporting for Agencies",
+  "pages": [
+    {
+      "type": "welcome",
+      "title": "Welcome to Incident Response & Reporting for Agencies",
+      "subtitle": "Learn how Ohio public employees should recognize, report, and support response to cybersecurity incidents.",
+      "video": {
+        "videoId": "VIDEO_ID_INCIDENT_RESPONSE_WELCOME",
+        "caption": "Introduction to incident response and reporting for Ohio agencies (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Why this matters in Ohio",
+      "text": "Cyber incidents in government do more than disrupt computers. They can interrupt <b>public services</b>, delay operations, affect public safety, expose sensitive information, and reduce public trust.\n\nOhio law requires political subdivisions to take cybersecurity seriously. That includes adopting a cybersecurity program and reporting incidents through the proper channels.\n\n<b>Fast reporting helps the right people respond sooner, preserve evidence, coordinate assistance, and reduce damage.</b>",
+      "video": {
+        "videoId": "VIDEO_ID_OHIO_IMPORTANCE",
+        "caption": "Why cybersecurity reporting matters for Ohio public entities"
+      },
+      "image": {
+        "src": "IMAGE_URL_OHIO_IMPORTANCE",
+        "alt": "Ohio local government incident response illustration (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Ohio cybersecurity program requirements",
+      "text": "Ohio Revised Code <b>§ 9.64</b> requires political subdivisions to adopt a cybersecurity program appropriate for their size and risk.\n\nA cybersecurity program should include:\n\n• <b>Identification of critical functions and risks</b>\n• <b>Threat detection and monitoring</b>\n• <b>Incident response procedures</b>\n• <b>Recovery and ongoing security measures</b>\n• <b>Cybersecurity training</b> for employees based on job duties\n\nEach organization can design its own program, but these areas must be addressed.",
+      "video": {
+        "videoId": "VIDEO_ID_OHIO_PROGRAM_REQUIREMENTS",
+        "caption": "Ohio cybersecurity program requirements under state law"
+      },
+      "image": {
+        "src": "IMAGE_URL_OHIO_PROGRAM_REQUIREMENTS",
+        "alt": "Ohio cybersecurity program requirements graphic (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Implementation deadlines in Ohio",
+      "text": "Ohio's cybersecurity program requirement has implementation deadlines for political subdivisions.\n\n• <b>Counties and cities</b> must have programs in place by <b>January 1, 2026</b>\n• <b>All other political subdivisions</b> must comply by <b>July 1, 2026</b>\n\n<b>Regular Auditor of State audits may review whether these requirements are being met.</b>",
+      "video": {
+        "videoId": "VIDEO_ID_OHIO_DEADLINES",
+        "caption": "Ohio cybersecurity implementation deadlines"
+      },
+      "image": {
+        "src": "IMAGE_URL_OHIO_DEADLINES",
+        "alt": "Ohio cybersecurity compliance deadlines graphic (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Ohio reporting deadlines under state law",
+      "text": "If a political subdivision discovers a cybersecurity incident, Ohio requires reporting to state authorities on a timeline.\n\n<b>Report to the Ohio Cyber Integration Center (OCIC) within 7 days.</b>\n\n<b>Report to the Auditor of State within 30 days.</b>\n\nThese reports support both operational response and legal compliance. Your agency should know who is responsible for making those reports, but every employee should understand that incidents must be escalated quickly rather than ignored or delayed.",
+      "video": {
+        "videoId": "VIDEO_ID_OHIO_REPORTING_DEADLINES",
+        "caption": "Ohio OCIC and Auditor reporting deadlines"
+      },
+      "image": {
+        "src": "IMAGE_URL_OHIO_REPORTING_DEADLINES",
+        "alt": "Ohio cyber incident reporting timeline graphic (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Who gets notified",
+      "text": "Ohio public entities may need to work with several response and reporting partners.\n\nCommon reporting or coordination contacts include:\n\n• <b>OCIC</b> for state-level incident reporting and coordination\n• <b>Auditor of State</b> for the required state reporting process\n• <b>FBI</b> for cybercrime reporting and investigative support\n• <b>IC3</b> for reporting internet-enabled crime to the FBI\n\nIn southern and central Ohio, agencies may contact <b>FBI Cincinnati</b> when directed by leadership, legal counsel, IT, or incident response procedures.",
+      "video": {
+        "videoId": "VIDEO_ID_REPORTING_PARTNERS",
+        "caption": "State and federal cyber reporting partners"
+      },
+      "image": {
+        "src": "IMAGE_URL_REPORTING_PARTNERS",
+        "alt": "State and federal cyber reporting partners diagram (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "What counts as a cyber incident",
+      "text": "Not every technical issue is a cyber incident, but employees should report suspicious activity early instead of trying to decide alone that it is harmless.\n\nExamples that may require escalation include:\n\n• <b>Ransomware or locked files</b>\n• <b>Unauthorized access or suspicious logins</b>\n• <b>Business email compromise or account compromise</b>\n• <b>Data exposure or suspicious data transfers</b>\n• <b>Malware alerts or strange system behavior</b>\n• <b>System outages caused by suspected malicious activity</b>\n\n<b>When in doubt, report it through the agency's process.</b>",
+      "video": {
+        "videoId": "VIDEO_ID_WHAT_COUNTS",
+        "caption": "Examples of cyber incidents that should be escalated"
+      },
+      "image": {
+        "src": "IMAGE_URL_WHAT_COUNTS",
+        "alt": "Examples of cyber incidents in government systems (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "First actions during a suspected incident",
+      "text": "Employees should know the difference between helping and making the situation worse.\n\nIf you suspect a cyber incident:\n\n1) <b>Pause and stop interacting with suspicious systems, files, or messages</b>\n2) <b>Report the issue immediately</b> through the approved chain\n3) <b>Do not delete evidence</b>, wipe devices, or try to quietly fix the problem yourself\n4) <b>If instructed by your agency</b>, disconnect affected devices from the network\n5) <b>Follow guidance</b> from IT, security, leadership, and legal counsel\n\n<b>Quick escalation and evidence preservation are critical.</b>",
+      "video": {
+        "videoId": "VIDEO_ID_FIRST_ACTIONS",
+        "caption": "What employees should do first during a suspected cyber incident"
+      },
+      "image": {
+        "src": "IMAGE_URL_FIRST_ACTIONS",
+        "alt": "Immediate response steps for a suspected cyber incident (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Ransomware: report, isolate, do not panic",
+      "text": "Ransomware can spread quickly and interrupt public services.\n\nIf a device appears infected, the priority is to <b>report the incident immediately</b> and follow agency instructions. Ohio guidance also recommends removing an infected computer from the network or internet and isolating other affected devices when appropriate.\n\nDo not assume paying a ransom is the answer. Ohio's Auditor of State prefers a statewide <b>no ransom policy</b>. If a local government decides to pay, the legislative authority must adopt a public resolution explaining why payment is in the public interest.",
+      "video": {
+        "videoId": "VIDEO_ID_RANSOMWARE_RESPONSE",
+        "caption": "How agencies should respond to suspected ransomware"
+      },
+      "image": {
+        "src": "IMAGE_URL_RANSOMWARE_RESPONSE",
+        "alt": "Ransomware response and isolation flow (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Public records and confidentiality",
+      "text": "Employees should not assume incident details can be shared freely.\n\nUnder Ohio law, records, documents, and reports related to a cybersecurity program, cybersecurity framework, or reported cybersecurity incident under ORC 9.64 are <b>not public records</b>.\n\nThat means employees should avoid casually sharing incident details, screenshots, or internal response information unless authorized to do so. <b>Sensitive information should be handled through approved channels only.</b>",
+      "video": {
+        "videoId": "VIDEO_ID_PUBLIC_RECORDS_EXCEPTION",
+        "caption": "How Ohio law treats cybersecurity records and incident reports"
+      },
+      "image": {
+        "src": "IMAGE_URL_PUBLIC_RECORDS_EXCEPTION",
+        "alt": "Confidential cyber incident information graphic (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Why reporting helps more than your own agency",
+      "text": "Reporting is not just about checking a box. It helps your organization and can also support broader investigations and defense.\n\nReporting to state and federal partners can help:\n\n• <b>Coordinate response assistance</b>\n• <b>Preserve investigative leads</b>\n• <b>Connect your incident to larger attack patterns</b>\n• <b>Warn other organizations facing similar threats</b>\n• <b>Support recovery and accountability</b>\n\n<b>Hiding or delaying an incident can make the damage worse.</b>",
+      "video": {
+        "videoId": "VIDEO_ID_WHY_REPORTING_MATTERS",
+        "caption": "Why early reporting matters during cyber incidents"
+      },
+      "image": {
+        "src": "IMAGE_URL_WHY_REPORTING_MATTERS",
+        "alt": "Benefits of early cyber incident reporting (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Key Ohio and federal contacts",
+      "text": "Your agency should maintain current contact information in its response procedures.\n\nCommon resources include:\n\n• <b>OCIC</b> – state incident reporting and coordination\n• <b>Auditor of State</b> – required state reporting form and email process\n• <b>IC3</b> – <b>www.ic3.gov</b>\n• <b>FBI Cincinnati</b> – <b>(513) 421-4310</b> for central and southern Ohio\n\n<b>Employees should still follow internal agency procedures first unless directed otherwise.</b>",
+      "video": {
+        "videoId": "VIDEO_ID_CONTACTS",
+        "caption": "Ohio and federal cyber reporting contacts"
+      },
+      "image": {
+        "src": "IMAGE_URL_CONTACTS",
+        "alt": "Ohio and federal cyber incident contacts (replace later)"
+      }
+    },
+
+    {
+      "type": "video",
+      "title": "Real-world incident response scenario",
+      "video": {
+        "videoId": "VIDEO_ID_REAL_WORLD_IR_SCENARIO",
+        "caption": "Example of how a public entity should escalate and respond to a cyber incident (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "What employees should remember",
+      "text": "You do not need to be the incident commander to make a difference.\n\nRemember:\n\n• <b>Report early</b>\n• <b>Do not hide problems</b>\n• <b>Do not destroy evidence</b>\n• <b>Use approved channels</b>\n• <b>Support a coordinated response</b>\n\n<b>Strong incident response starts with people recognizing warning signs and taking the reporting process seriously.</b>",
+      "video": {
+        "videoId": "VIDEO_ID_EMPLOYEE_REMEMBER",
+        "caption": "Final takeaways for agency employees"
+      },
+      "image": {
+        "src": "IMAGE_URL_EMPLOYEE_REMEMBER",
+        "alt": "Incident response takeaways for employees (replace later)"
+      }
+    },
+
+    {
+      "type": "quizWelcome",
+      "title": "Ready for the quiz?",
+      "subtitle": "This scenario-heavy quiz will test your understanding of incident response and reporting for Ohio agencies.",
+      "quizModulePath": "/learningModule/incident_response_reporting_agencies.json",
+      "startButtonText": "Start Quiz"
+    },
+
+    {
+      "type": "quiz",
+      "quizModulePath": "/learningModule/incident_response_reporting_agencies.json"
+    },
+
+    {
+      "type": "results",
+      "title": "Quiz Results",
+      "subtitle": "Here’s how you did.",
+      "showReview": true,
+      "buttons": {
+        "restartQuizText": "Restart Quiz",
+        "backToHomeText": "Back to Home"
+      }
+    }
+  ]
+}

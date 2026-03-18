@@ -1,29 +1,66 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 
 import ModuleVideo from "../components/ModuleVideo";
 import LearningModuleQuiz from "../components/LearningModuleQuiz";
 
 import moduleRegistry from "../learningContent/moduleRegistry.json";
+import { db } from "../auth/firebase";
+import { useUser } from "../auth/UserContext";
 
 // content JSON imports
 import phishingContent from "../learningContent/phishing.content.json";
 import eduPrivacyContent from "../learningContent/education_student_privacy.json";
-// import passwordsContent from "../learningContent/passwords.content.json";
+import socialEngineeringContent from "../learningContent/social_engineering_awareness.content.json";
+import passwordBasicsContent from "../learningContent/password_basics.content.json";
+import mfaContent from "../learningContent/multi_factor_authentication.content.json";
+import safeInternetContent from "../learningContent/safe_internet_link_safety.content.json";
+import studentDeviceSafetyContent from "../learningContent/student_device_safety.content.json";
+import classroomCommunicationContent from "../learningContent/classroom_communication_data_safety.content.json";
+import vendorEmailFraudContent from "../learningContent/vendor_email_fraud.content.json";
+import customerDataHandlingContent from "../learningContent/customer_data_handling.content.json";
+import ransomwareBackupContent from "../learningContent/ransomware_backup_awareness.content.json";
+import governmentTargetedAttacks from "../learningContent/government_targeted_attacks.content.json";
+import incidentResponseReportingAgenciesContent from "../learningContent/incident_response_reporting_agencies.content.json";
+import ransomwareServiceDisruptionContent from "../learningContent/ransomware_service_disruption_awareness.content.json";
 
 const CONTENT = {
   phishing: phishingContent,
   education_student_privacy: eduPrivacyContent,
-  // passwords: passwordsContent,
+  social_engineering_awareness: socialEngineeringContent,
+  password_basics: passwordBasicsContent,
+  multi_factor_authentication: mfaContent,
+  safe_internet_link_safety: safeInternetContent,
+  student_device_safety: studentDeviceSafetyContent,
+  classroom_communication_data_safety: classroomCommunicationContent,
+  vendor_email_fraud: vendorEmailFraudContent,
+  customer_data_handling: customerDataHandlingContent,
+  ransomware_backup_awareness: ransomwareBackupContent,
+  government_targeted_attacks: governmentTargetedAttacks,
+  incident_response_reporting_agencies: incidentResponseReportingAgenciesContent,
+  ransomware_service_disruption_awareness: ransomwareServiceDisruptionContent,
 };
 
 const REGISTRY_BY_ID = Object.fromEntries(
   (moduleRegistry.modules || []).map((m) => [m.moduleId, m])
 );
 
+function canAccessModule(moduleMeta, orgType, role) {
+  if (!moduleMeta) return false;
+  if (role === "coordinator") return true;
+
+  const allowedOrgTypes = moduleMeta.allowedOrgTypes || [];
+  if (allowedOrgTypes.includes("all")) return true;
+  if (!orgType) return false;
+
+  return allowedOrgTypes.includes(orgType);
+}
+
 export default function LearningModuleContent() {
   const { moduleId } = useParams();
   const navigate = useNavigate();
+  const { uid, orgId, orgType, role, loading } = useUser();
 
   const moduleMeta = useMemo(() => REGISTRY_BY_ID[moduleId], [moduleId]);
   const moduleData = useMemo(
@@ -32,12 +69,138 @@ export default function LearningModuleContent() {
   );
 
   const [pageIndex, setPageIndex] = useState(0);
-
-  // quiz results live here after quiz finishes
   const [quizResult, setQuizResult] = useState(null);
-
-  // allow only ONE retake
   const [retakeUsed, setRetakeUsed] = useState(false);
+  const [accessChecked, setAccessChecked] = useState(false);
+  const [progressError, setProgressError] = useState("");
+
+  const progressInitializedRef = useRef(false);
+  const completionWriteRef = useRef(false);
+
+  const isAllowed = useMemo(
+    () => canAccessModule(moduleMeta, orgType, role),
+    [moduleMeta, orgType, role]
+  );
+
+  useEffect(() => {
+    if (loading) return;
+
+    if (!moduleMeta || !moduleData) {
+      setAccessChecked(true);
+      return;
+    }
+
+    if (!isAllowed) {
+      alert("You do not have access to this lesson.");
+      navigate("/lessons", { replace: true });
+      return;
+    }
+
+    setAccessChecked(true);
+  }, [loading, moduleMeta, moduleData, isAllowed, navigate]);
+
+  useEffect(() => {
+    async function ensureTrainingProgressStarted() {
+      if (
+        loading ||
+        !accessChecked ||
+        !isAllowed ||
+        !uid ||
+        !orgId ||
+        !moduleMeta ||
+        progressInitializedRef.current
+      ) {
+        return;
+      }
+
+      try {
+        progressInitializedRef.current = true;
+
+        const progressRef = doc(db, "users", uid, "trainingProgress", moduleMeta.moduleId);
+        const progressSnap = await getDoc(progressRef);
+
+        if (!progressSnap.exists()) {
+          await setDoc(progressRef, {
+            moduleId: moduleMeta.moduleId,
+            orgId,
+            assigned: true,
+            status: "in_progress",
+            assignedAt: serverTimestamp(),
+            startedAt: serverTimestamp(),
+            completedAt: null,
+            updatedAt: serverTimestamp(),
+          });
+          return;
+        }
+
+        const existing = progressSnap.data() || {};
+        if (existing.status !== "completed") {
+          await updateDoc(progressRef, {
+            assigned: true,
+            status: "in_progress",
+            startedAt: existing.startedAt || serverTimestamp(),
+            updatedAt: serverTimestamp(),
+          });
+        }
+      } catch (err) {
+        console.error("Failed to initialize training progress", err);
+        setProgressError("We could not save your lesson progress right now.");
+      }
+    }
+
+    ensureTrainingProgressStarted();
+  }, [loading, accessChecked, isAllowed, uid, orgId, moduleMeta]);
+
+  useEffect(() => {
+    async function markCompleted() {
+      if (
+        loading ||
+        !accessChecked ||
+        !isAllowed ||
+        !uid ||
+        !orgId ||
+        !moduleMeta ||
+        !quizResult ||
+        completionWriteRef.current
+      ) {
+        return;
+      }
+
+      const total = Number(quizResult.total) || 0;
+      const score = Number(quizResult.score) || 0;
+      const passed = total > 0 && score / total >= 0.5;
+
+      if (!passed) return;
+
+      try {
+        completionWriteRef.current = true;
+
+        const progressRef = doc(db, "users", uid, "trainingProgress", moduleMeta.moduleId);
+
+        await setDoc(
+          progressRef,
+          {
+            moduleId: moduleMeta.moduleId,
+            orgId,
+            assigned: true,
+            status: "completed",
+            completedAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+          },
+          { merge: true }
+        );
+      } catch (err) {
+        console.error("Failed to mark lesson completed", err);
+        setProgressError("We could not save your quiz completion right now.");
+      }
+    }
+
+    markCompleted();
+  }, [quizResult, loading, accessChecked, isAllowed, uid, orgId, moduleMeta]);
+
+  if (loading || !accessChecked) {
+    return <div style={{ padding: 24 }}>Loading…</div>;
+  }
 
   if (!moduleData) {
     return (
@@ -85,8 +248,6 @@ export default function LearningModuleContent() {
     );
   }
 
-  // Lesson pages = everything except active quiz and results
-  // quizWelcome still counts as a lesson page
   const lessonPageIndexes = pages
     .map((p, idx) => ({ page: p, idx }))
     .filter(({ page }) => page.type !== "quiz" && page.type !== "results")
@@ -104,7 +265,6 @@ export default function LearningModuleContent() {
   const showLessonPageCount = !isQuizPage && !isResultsPage && lessonPageNumber != null;
   const showTopLessonNav = !isQuizPage && !isResultsPage && !isQuizWelcome;
 
-  // Global 50% pass rule
   const hasQuizResult = !!quizResult && Number(quizResult.total) > 0;
   const passed =
     hasQuizResult &&
@@ -149,6 +309,7 @@ export default function LearningModuleContent() {
 
     setQuizResult(null);
     setRetakeUsed(true);
+    completionWriteRef.current = false;
 
     const quizWelcomeIndex = pages.findIndex((p) => p.type === "quizWelcome");
     setPageIndex(quizWelcomeIndex >= 0 ? quizWelcomeIndex : 0);
@@ -290,7 +451,7 @@ export default function LearningModuleContent() {
         return (
           <div>
             <h2>{page.title}</h2>
-            {<p>{page.subtitle}</p>}
+            {page.subtitle && <p>{page.subtitle}</p>}
             {page.video && (
               <ModuleVideo
                 videoId={page.video.videoId}
@@ -306,9 +467,10 @@ export default function LearningModuleContent() {
             <h2>{page.title}</h2>
 
             {typeof page.text === "string" && page.text.trim().length > 0 && (
-              <div style={{ lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
-                {page.text}
-              </div>
+              <div
+                style={{ lineHeight: 1.6, whiteSpace: "pre-wrap" }}
+                dangerouslySetInnerHTML={{ __html: page.text }}
+              />
             )}
 
             {Array.isArray(page.bullets) && page.bullets.length > 0 && (
@@ -555,6 +717,22 @@ export default function LearningModuleContent() {
           {showLessonPageCount && (
             <div style={{ opacity: 0.75, marginTop: 8 }}>
               Page {lessonPageNumber} / {lessonPageTotal}
+            </div>
+          )}
+
+          {progressError && (
+            <div
+              style={{
+                marginTop: 10,
+                color: "#991b1b",
+                background: "#fef2f2",
+                border: "1px solid #fca5a5",
+                borderRadius: 10,
+                padding: "8px 10px",
+                fontSize: 14,
+              }}
+            >
+              {progressError}
             </div>
           )}
         </div>

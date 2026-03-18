@@ -39,17 +39,18 @@ export function UserProvider({ children }) {
   return (
     <UserContext.Provider
       value={{
-        firebaseUser,
-        profile,
+      firebaseUser,
+      profile,
 
-        // convenience fields
-        role: profile?.role || null,
-        orgId: profile?.orgId || null,
-        orgType: profile?.orgType || null,   
-        orgName: profile?.orgName || null,   
+      // convenience fields
+      uid: firebaseUser?.uid || profile?.uid || null,
+      role: profile?.role || null,
+      orgId: profile?.orgId || null,
+      orgType: profile?.orgType || null,
+      orgName: profile?.orgName || null,
 
-        loading,
-      }}
+      loading,
+    }}
     >
       {children}
     </UserContext.Provider>

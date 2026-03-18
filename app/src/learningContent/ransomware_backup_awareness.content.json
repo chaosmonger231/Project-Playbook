@@ -1,0 +1,145 @@
+{
+  "topic": "ransomware_backup_awareness",
+  "title": "Ransomware & Backup Awareness",
+  "pages": [
+    {
+      "type": "welcome",
+      "title": "Welcome to Ransomware & Backup Awareness",
+      "subtitle": "Learn how ransomware can affect daily operations, why backups matter, and how employees can reduce business risk.",
+      "video": {
+        "videoId": "VIDEO_ID_RANSOMWARE_WELCOME",
+        "caption": "Introduction to ransomware and backup awareness (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "What is ransomware?",
+      "text": "Ransomware is a type of cyberattack where criminals lock, encrypt, or make files and systems unusable until a payment demand is met.\n\nFor a small business, that can mean losing access to customer records, invoices, scheduling systems, shared drives, email, or even the computers employees rely on every day.\n\nRansomware is not just an IT problem. It can disrupt sales, operations, payroll, customer service, and trust.",
+      "video": {
+        "videoId": "VIDEO_ID_RANSOMWARE_EXPLAINED",
+        "caption": "Short explanation of how ransomware affects organizations"
+      },
+      "image": {
+        "src": "IMAGE_URL_RANSOMWARE_EXPLAINED",
+        "alt": "Ransomware warning or locked files example (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "How ransomware often gets in",
+      "text": "Ransomware frequently begins with everyday mistakes or unsafe activity.\n\nCommon entry points include:\n\n• Clicking a phishing email link or attachment\n• Using weak or reused passwords\n• Logging into compromised websites or fake portals\n• Using outdated systems or software\n• Opening suspicious files from unknown senders\n\nAttackers often look for the easiest way in, which is why employee awareness matters so much.",
+      "video": {
+        "videoId": "VIDEO_ID_RANSOMWARE_ENTRY",
+        "caption": "Common ransomware entry points"
+      },
+      "image": {
+        "src": "IMAGE_URL_RANSOMWARE_ENTRY",
+        "alt": "Common ways ransomware enters an organization"
+      }
+    },
+
+    {
+        "type": "textImage",
+        "title": "Close to home: an Ohio example",
+        "text": "Ransomware incidents do not only happen to giant companies. In Ohio, Kettering Health publicly dealt with a ransomware attack that disrupted operations and forced the cancellation of elective inpatient and outpatient procedures.\n\nThat example shows the real danger of ransomware: one cyberattack can interrupt normal work, delay services, create confusion, and put heavy pressure on the organization responding to it.\n\nEven if your business is smaller and in a different industry, the lesson is the same. Ransomware can cause serious disruption close to home, and preparation matters before an incident happens.",
+        "video": {
+            "videoId": "VIDEO_ID_RANSOMWARE_OHIO_CASE",
+            "caption": "Ohio ransomware case study (replace later)"
+        },
+        "image": {
+            "src": "IMAGE_URL_RANSOMWARE_OHIO_CASE",
+            "alt": "Ohio ransomware case study illustration (replace later)"
+        }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Did you know?",
+      "bullets": [
+        {
+          "title": "Ransomware can affect backups too",
+          "text": "If backups are connected, exposed, or not protected properly, attackers may encrypt or delete them along with other files."
+        },
+        {
+          "title": "Operations can stop quickly",
+          "text": "Even a short outage can affect billing, orders, payroll, communication, and customer service."
+        },
+        {
+          "title": "Not every ransomware incident starts with a big warning",
+          "text": "Sometimes the first sign is unusual account activity, missing files, or systems acting strangely."
+        },
+        {
+          "title": "Employees play an important role in prevention",
+          "text": "Reporting suspicious messages, avoiding risky clicks, and following safe habits can stop an incident before it spreads."
+        }
+      ],
+      "image": {
+        "src": "IMAGE_URL_RANSOMWARE_DID_YOU_KNOW",
+        "alt": "Did you know ransomware graphic (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Why backups matter",
+      "text": "Backups help an organization recover important files and systems after ransomware, accidental deletion, or other disruptions.\n\nBut backups only help if they are:\n\n• Kept regularly\n• Tested to make sure they work\n• Protected from unauthorized access\n• Separated well enough that attackers cannot easily encrypt them too\n\nA backup strategy is part of cybersecurity because it helps reduce damage when prevention fails.",
+      "video": {
+        "videoId": "VIDEO_ID_RANSOMWARE_BACKUPS",
+        "caption": "Why protected backups matter during ransomware incidents"
+      },
+      "image": {
+        "src": "IMAGE_URL_RANSOMWARE_BACKUPS",
+        "alt": "Backup and recovery illustration (replace later)"
+      }
+    },
+
+    {
+      "type": "video",
+      "title": "Real-world ransomware scenario",
+      "video": {
+        "videoId": "VIDEO_ID_RANSOMWARE_SCENARIO",
+        "caption": "Example of how a ransomware incident can spread through a small organization (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "What employees should do",
+      "text": "If you suspect ransomware or unusual system activity:\n\n1) <b>Stop interacting with suspicious files or messages</b>\n2) <b>Disconnect from the network if your organization instructs you to do so</b>\n3) <b>Report the problem immediately</b> to IT, security, management, or your incident contact\n4) <b>Do not try to hide the problem</b>\n5) <b>Do not assume backups will fix everything automatically</b>\n\nFast reporting can reduce damage and help protect the rest of the business.",
+      "video": {
+        "videoId": "VIDEO_ID_RANSOMWARE_RESPONSE",
+        "caption": "How employees should respond to suspected ransomware"
+      },
+      "image": {
+        "src": "IMAGE_URL_RANSOMWARE_RESPONSE",
+        "alt": "Ransomware response flow (replace later)"
+      }
+    },
+
+    {
+      "type": "quizWelcome",
+      "title": "Ready for the quiz?",
+      "subtitle": "This short quiz will test your understanding of ransomware risks, backups, and safe response steps.",
+      "quizModulePath": "/learningModule/ransomware_backup_awareness.json",
+      "startButtonText": "Start Quiz"
+    },
+
+    {
+      "type": "quiz",
+      "quizModulePath": "/learningModule/ransomware_backup_awareness.json"
+    },
+
+    {
+      "type": "results",
+      "title": "Quiz Results",
+      "subtitle": "Here’s how you did.",
+      "showReview": true,
+      "buttons": {
+        "restartQuizText": "Restart Quiz",
+        "backToHomeText": "Back to Home"
+      }
+    }
+  ]
+}

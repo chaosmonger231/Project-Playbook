@@ -1,0 +1,132 @@
+{
+  "moduleId": "safe_internet_link_safety",
+  "title": "Safe Internet & Link Safety",
+  "description": "Test your ability to recognize suspicious links and practice safe browsing habits.",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Why should you be cautious when clicking links?",
+      "choices": [
+        { "id": 1, "text": "Links may lead to malicious websites or malware" },
+        { "id": 2, "text": "Links always slow down computers" },
+        { "id": 3, "text": "Links delete browser history" },
+        { "id": 4, "text": "Links disable antivirus software automatically" }
+      ],
+      "correctId": 1,
+      "explanation": "Malicious links may lead to fake login pages, malware downloads, or scams."
+    },
+
+    {
+      "id": "q2",
+      "prompt": "True or False: Hovering over a link can help reveal its true destination.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 1,
+      "explanation": "Hovering over a link often shows the real URL before clicking."
+    },
+
+    {
+      "id": "q3",
+      "prompt": "Why are shortened links sometimes risky?",
+      "choices": [
+        { "id": 1, "text": "They hide the real destination of the link" },
+        { "id": 2, "text": "They remove encryption" },
+        { "id": 3, "text": "They always contain viruses" },
+        { "id": 4, "text": "They disable MFA" }
+      ],
+      "correctId": 1,
+      "explanation": "Shortened links hide the full destination, making it harder to verify where the link leads."
+    },
+
+    {
+      "id": "q4",
+      "prompt": "What is a look-alike domain?",
+      "choices": [
+        { "id": 1, "text": "A website with similar spelling designed to trick users" },
+        { "id": 2, "text": "A secure company domain" },
+        { "id": 3, "text": "A backup website server" },
+        { "id": 4, "text": "A password manager service" }
+      ],
+      "correctId": 1,
+      "explanation": "Attackers create domains that look similar to trusted sites to trick users."
+    },
+
+    {
+      "id": "q5",
+      "prompt": "True or False: HTTPS guarantees that a website is completely safe.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 2,
+      "explanation": "HTTPS encrypts communication but does not guarantee the website itself is legitimate."
+    },
+
+    {
+      "id": "q6",
+      "prompt": "Which of the following is a warning sign of a suspicious website?",
+      "choices": [
+        { "id": 1, "text": "Misspelled domain names" },
+        { "id": 2, "text": "Secure login pages" },
+        { "id": 3, "text": "Official company logos" },
+        { "id": 4, "text": "Clear contact information" }
+      ],
+      "correctId": 1,
+      "explanation": "Misspelled or unusual domains may indicate a fraudulent website."
+    },
+
+    {
+      "id": "q7",
+      "prompt": "What should you do if a website suddenly asks you to download unexpected software?",
+      "choices": [
+        { "id": 1, "text": "Download it immediately" },
+        { "id": 2, "text": "Close the page and avoid the download" },
+        { "id": 3, "text": "Share the link with coworkers" },
+        { "id": 4, "text": "Disable your antivirus software" }
+      ],
+      "correctId": 2,
+      "explanation": "Unexpected downloads can contain malware and should be avoided."
+    },
+
+    {
+      "id": "q8",
+      "prompt": "Which of the following is a safe browsing habit?",
+      "choices": [
+        { "id": 1, "text": "Click links immediately without checking them" },
+        { "id": 2, "text": "Verify website addresses before entering information" },
+        { "id": 3, "text": "Download files from unknown sources" },
+        { "id": 4, "text": "Ignore browser security warnings" }
+      ],
+      "correctId": 2,
+      "explanation": "Checking website addresses helps ensure you are visiting legitimate sites."
+    },
+
+    {
+      "id": "q9",
+      "prompt": "What is the safest approach when encountering unfamiliar links?",
+      "choices": [
+        { "id": 1, "text": "Click them quickly to see where they go" },
+        { "id": 2, "text": "Pause and verify the link first" },
+        { "id": 3, "text": "Send them to coworkers" },
+        { "id": 4, "text": "Disable browser security warnings" }
+      ],
+      "correctId": 2,
+      "explanation": "Taking time to verify a link helps prevent many cyber incidents."
+    },
+
+    {
+      "id": "q10",
+      "prompt": "Which of the following helps reduce risk when browsing online?",
+      "choices": [
+        { "id": 1, "text": "Ignoring suspicious warnings" },
+        { "id": 2, "text": "Downloading unknown files" },
+        { "id": 3, "text": "Using trusted websites and verifying links" },
+        { "id": 4, "text": "Disabling browser security features" }
+      ],
+      "correctId": 3,
+      "explanation": "Using trusted sites and verifying links helps reduce the risk of phishing and malware."
+    }
+  ]
+}

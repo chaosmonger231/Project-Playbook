@@ -13,8 +13,19 @@
       "allowedOrgTypes": ["all"],
       "contentKey": "phishing",
       "estimatedMinutes": 10,
-      "image": "/sampleimage1.png",
+      "image": "/images/lesson-images/phishing-basics-logo.png",
       "imageLabel": "Phishing"
+    },
+    {
+      "moduleId": "social-engineering-awareness",
+      "title": "Social Engineering Awareness",
+      "synopsis": "Recognize manipulation tactics like impersonation, pretexting, baiting, and tailgating.",
+      "category": "general",
+      "allowedOrgTypes": ["all"],
+      "contentKey": "social_engineering_awareness",
+      "estimatedMinutes": 8,
+      "image": "/images/lesson-images/social-engineering-awareness-logo.png",
+      "imageLabel": "Social"
     },
     {
       "moduleId": "password-basics",
@@ -24,7 +35,7 @@
       "allowedOrgTypes": ["all"],
       "contentKey": "password_basics",
       "estimatedMinutes": 8,
-      "image": null,
+      "image": "/images/lesson-images/password-basics-logo.png",
       "imageLabel": "Passwords"
     },
     {
@@ -34,9 +45,20 @@
       "category": "general",
       "allowedOrgTypes": ["all"],
       "contentKey": "multi_factor_authentication",
-      "estimatedMinutes": 12,
-      "image": null,
+      "estimatedMinutes": 8,
+      "image": "/images/lesson-images/Multi-Factor-Authentication-logo.png",
       "imageLabel": "MFA"
+    },
+    {
+      "moduleId": "safe-internet-link-safety",
+      "title": "Safe Internet & Link Safety",
+      "synopsis": "Use safer browsing habits, verify links, and avoid risky downloads and fake websites.",
+      "category": "general",
+      "allowedOrgTypes": ["all"],
+      "contentKey": "safe_internet_link_safety",
+      "estimatedMinutes": 8,
+      "image": "images/lesson-images/safe-internet-logo.png",
+      "imageLabel": "Browsing"
     },
     {
       "moduleId": "student-privacy-ferpa",
@@ -46,7 +68,7 @@
       "allowedOrgTypes": ["education"],
       "contentKey": "education_student_privacy",
       "estimatedMinutes": 14,
-      "image": null,
+      "image": "images/lesson-images/ferpa-logo.png",
       "imageLabel": "FERPA"
     },
     {
@@ -57,8 +79,19 @@
       "allowedOrgTypes": ["education"],
       "contentKey": "student_device_safety",
       "estimatedMinutes": 9,
-      "image": null,
+      "image": "images/lesson-images/student-device-logo.png",
       "imageLabel": "Devices"
+    },
+    {
+      "moduleId": "classroom-communication-data-safety",
+      "title": "Classroom Communication & Data Safety",
+      "synopsis": "Avoid common mistakes when emailing, sharing, and discussing student information across school platforms.",
+      "category": "education",
+      "allowedOrgTypes": ["education"],
+      "contentKey": "classroom_communication_data_safety",
+      "estimatedMinutes": 9,
+      "image": "images/lesson-images/communication-and-data-logo.png",
+      "imageLabel": "Classroom"
     },
     {
       "moduleId": "vendor-email-fraud",
@@ -68,7 +101,7 @@
       "allowedOrgTypes": ["small_business"],
       "contentKey": "vendor_email_fraud",
       "estimatedMinutes": 11,
-      "image": null,
+      "image": "images/lesson-images/vendor-safety-logo.png",
       "imageLabel": "Vendors"
     },
     {
@@ -79,30 +112,52 @@
       "allowedOrgTypes": ["small_business"],
       "contentKey": "customer_data_handling",
       "estimatedMinutes": 10,
-      "image": null,
+      "image": "images/lesson-images/customer-data-handling-logo.png",
       "imageLabel": "Data"
     },
     {
-      "moduleId": "public-records-and-email",
-      "title": "Public Records and Email Awareness",
-      "synopsis": "Understand how public-sector communications, retention expectations, and disclosure risk intersect.",
-      "category": "local_government",
-      "allowedOrgTypes": ["local_government"],
-      "contentKey": "public_records_email",
-      "estimatedMinutes": 13,
-      "image": null,
-      "imageLabel": "Records"
+      "moduleId": "ransomware-backup-awareness",
+      "title": "Ransomware & Backup Awareness",
+      "synopsis": "Understand ransomware warning signs, why backups matter, and when to report suspicious activity quickly.",
+      "category": "small_business",
+      "allowedOrgTypes": ["small_business"],
+      "contentKey": "ransomware_backup_awareness",
+      "estimatedMinutes": 10,
+      "image": "images/lesson-images/ransomware-backup-logo.png",
+      "imageLabel": "Backup"
     },
     {
-      "moduleId": "incident-reporting-for-agencies",
-      "title": "Incident Reporting for Agencies",
-      "synopsis": "Teach staff when to escalate suspicious activity and how to respond without creating more risk.",
+      "moduleId": "government-targeted-attacks",
+      "title": "Government Systems & Targeted Attacks",
+      "synopsis": "Understand why government systems are frequent cyberattack targets and how employees can recognize early warning signs.",
       "category": "local_government",
-      "allowedOrgTypes": ["local_government"],
-      "contentKey": "incident_reporting_agencies",
-      "estimatedMinutes": 7,
-      "image": null,
-      "imageLabel": "Reporting"
+      "allowedOrgTypes": ["local_gov"],
+      "contentKey": "government_targeted_attacks",
+      "estimatedMinutes": 10,
+      "image": "images/lesson-images/government-systems-logo.png",
+      "imageLabel": "Threats"
+    },
+    {
+      "moduleId": "incident-response-reporting-for-agencies",
+      "title": "Incident Response & Reporting for Agencies",
+      "synopsis": "Teach staff how to recognize, escalate, document, and support response to cybersecurity incidents using approved agency procedures.",
+      "category": "local_government",
+      "allowedOrgTypes": ["local_gov"],
+      "contentKey": "incident_response_reporting_agencies",
+      "estimatedMinutes": 9,
+      "image": "images/lesson-images/incident-response-logo.png",
+      "imageLabel": "Response"
+    },
+    {
+      "moduleId": "ransomware-service-disruption-awareness",
+      "title": "Ransomware & Service Disruption Awareness",
+      "synopsis": "Prepare staff to recognize ransomware risks early and understand how outages can affect public services.",
+      "category": "local_government",
+      "allowedOrgTypes": ["local_gov"],
+      "contentKey": "ransomware_service_disruption_awareness",
+      "estimatedMinutes": 10,
+      "image": "images/lesson-images/service-disruption-logo.png",
+      "imageLabel": "Disruption"
     }
   ]
 }

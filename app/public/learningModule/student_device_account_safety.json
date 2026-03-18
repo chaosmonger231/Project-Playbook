@@ -1,0 +1,123 @@
+{
+  "moduleId": "student_device_account_safety",
+  "title": "Student Device and Account Safety",
+  "description": "Test your understanding of safe school device use, account protection, and classroom technology habits.",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Why is it important for students to keep their school account password private?",
+      "choices": [
+        { "id": 1, "text": "Because shared passwords make devices faster" },
+        { "id": 2, "text": "Because sharing passwords can expose personal information and schoolwork" },
+        { "id": 3, "text": "Because only teachers are allowed to know passwords" },
+        { "id": 4, "text": "Because passwords are only used once" }
+      ],
+      "correctId": 2,
+      "explanation": "Sharing a school account password can expose student files, messages, and activity to unauthorized users."
+    },
+    {
+      "id": "q2",
+      "prompt": "<strong>Scenario:</strong>\n\nStudents are using shared Chromebooks during class. One student leaves without logging out of their school account. Another student sits down at the same device and can still see the previous student's files and school apps.\n\n<strong>Question:</strong>\nWhat is the main security problem in this situation?",
+      "choices": [
+        { "id": 1, "text": "The Chromebook battery may run low" },
+        { "id": 2, "text": "The second student may access the first student's account and information" },
+        { "id": 3, "text": "The classroom internet may disconnect" },
+        { "id": 4, "text": "The teacher may need more devices" }
+      ],
+      "correctId": 2,
+      "explanation": "Failing to log out of a shared device can allow another person to access the previous user's account, files, and school information."
+    },
+    {
+      "id": "q3",
+      "prompt": "<strong>Scenario:</strong>\n\nStudents are using shared Chromebooks during class. One student leaves without logging out of their school account. Another student sits down at the same device and can still see the previous student's files and school apps.\n\n<strong>Question:</strong>\nWhat is the best way to prevent this situation?",
+      "choices": [
+        { "id": 1, "text": "Leave the account open so the next student can help" },
+        { "id": 2, "text": "Turn the screen brightness down" },
+        { "id": 3, "text": "Log out completely when finished using the shared device" },
+        { "id": 4, "text": "Let another student monitor the device" }
+      ],
+      "correctId": 3,
+      "explanation": "Logging out completely is one of the best ways to prevent unauthorized access on a shared device."
+    },
+    {
+      "id": "q4",
+      "prompt": "What should a student do before walking away from a shared school device?",
+      "choices": [
+        { "id": 1, "text": "Leave everything open for convenience" },
+        { "id": 2, "text": "Log out of their account and close school applications" },
+        { "id": 3, "text": "Ask a friend to watch it while still signed in" },
+        { "id": 4, "text": "Write their password on the desk" }
+      ],
+      "correctId": 2,
+      "explanation": "Logging out and closing applications helps keep the next user from accessing the previous user's information."
+    },
+    {
+      "id": "q5",
+      "prompt": "True or False: It is okay to let a classmate use your signed-in school account if they say it will only take a minute.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 2,
+      "explanation": "Even brief access to a signed-in account can expose personal information, schoolwork, or activity history."
+    },
+    {
+      "id": "q6",
+      "prompt": "<strong>Scenario:</strong>\n\nA teacher steps out of the classroom for a moment and leaves a school laptop unlocked on the desk. Students are still in the room, and the device has access to grades, email, and student records.\n\n<strong>Question:</strong>\nWhat is the biggest risk in this situation?",
+      "choices": [
+        { "id": 1, "text": "The device may restart automatically" },
+        { "id": 2, "text": "Someone could access school systems or student information without permission" },
+        { "id": 3, "text": "The Wi-Fi might slow down" },
+        { "id": 4, "text": "The charger may be unplugged" }
+      ],
+      "correctId": 2,
+      "explanation": "Leaving a device unlocked can allow unauthorized access to sensitive school systems and student information."
+    },
+    {
+      "id": "q7",
+      "prompt": "<strong>Scenario:</strong>\n\nA teacher steps out of the classroom for a moment and leaves a school laptop unlocked on the desk. Students are still in the room, and the device has access to grades, email, and student records.\n\n<strong>Question:</strong>\nWhat is the best prevention for this situation?",
+      "choices": [
+        { "id": 1, "text": "Ask students not to touch the laptop and leave it unlocked" },
+        { "id": 2, "text": "Lock the device before stepping away" },
+        { "id": 3, "text": "Put the laptop closer to the edge of the desk" },
+        { "id": 4, "text": "Leave the classroom door open" }
+      ],
+      "correctId": 2,
+      "explanation": "Locking the device before stepping away helps prevent unauthorized access."
+    },
+    {
+      "id": "q8",
+      "prompt": "Which of the following is the safest practice when downloading files on a school device?",
+      "choices": [
+        { "id": 1, "text": "Download any file that looks interesting" },
+        { "id": 2, "text": "Use only approved websites, school tools, and trusted downloads" },
+        { "id": 3, "text": "Install any browser extension that promises to help with homework" },
+        { "id": 4, "text": "Ignore warnings if the file is needed quickly" }
+      ],
+      "correctId": 2,
+      "explanation": "Trusted websites and approved tools reduce the risk of malware, unsafe downloads, and device misuse."
+    },
+    {
+      "id": "q9",
+      "prompt": "True or False: If something unusual happens with a school device or account, it is best to report it quickly to a teacher, administrator, or IT support.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 1,
+      "explanation": "Quick reporting can help stop or limit the impact of device or account problems."
+    },
+    {
+      "id": "q10",
+      "prompt": "What is the best response if a student account or school device may be compromised?",
+      "choices": [
+        { "id": 1, "text": "Ignore it and hope it goes away" },
+        { "id": 2, "text": "Keep using the account normally" },
+        { "id": 3, "text": "Tell a teacher, administrator, or IT support right away and secure the account if possible" },
+        { "id": 4, "text": "Post about it in a public group chat" }
+      ],
+      "correctId": 3,
+      "explanation": "Possible compromise should be reported right away so the issue can be contained and investigated."
+    }
+  ]
+}

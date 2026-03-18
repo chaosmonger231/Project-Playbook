@@ -1,11 +1,10 @@
 {
   "moduleId": "phishing",
   "title": "Phishing & Email Safety",
-  "description": "Learn how to identify and avoid phishing attacks.",
+  "description": "Test your ability to recognize phishing attempts and respond safely.",
   "questions": [
     {
       "id": "q1",
-      "type": "mcq",
       "prompt": "Which of the following is the strongest sign that an email is a phishing attempt?",
       "choices": [
         { "id": 1, "text": "The email is from a coworker." },
@@ -14,18 +13,113 @@
         { "id": 4, "text": "The email is written formally." }
       ],
       "correctId": 2,
-      "explanation": "Phishing emails often create urgency to pressure users into clicking without thinking."
+      "explanation": "Phishing messages often create urgency to pressure users into acting quickly without verifying the message."
     },
     {
       "id": "q2",
-      "type": "true_false",
       "prompt": "It is safe to click a link in an email if it looks professional.",
       "choices": [
         { "id": 1, "text": "True" },
         { "id": 2, "text": "False" }
       ],
       "correctId": 2,
-      "explanation": "Even professional-looking emails can be malicious. Always verify the sender and the link."
+      "explanation": "Professional-looking emails can still be malicious. Always verify links and senders."
+    },
+    {
+      "id": "q3",
+      "prompt": "What is phishing?",
+      "choices": [
+        { "id": 1, "text": "A firewall tool" },
+        { "id": 2, "text": "An attack that tricks users into revealing information" },
+        { "id": 3, "text": "A password update process" },
+        { "id": 4, "text": "An encryption method" }
+      ],
+      "correctId": 2,
+      "explanation": "Phishing is a social engineering attack designed to trick users into revealing sensitive information or taking unsafe actions."
+    },
+    {
+      "id": "q4",
+      "prompt": "Which of the following is a common phishing red flag?",
+      "choices": [
+        { "id": 1, "text": "Urgent language such as 'Act now!'" },
+        { "id": 2, "text": "Proper grammar" },
+        { "id": 3, "text": "A normal email signature" },
+        { "id": 4, "text": "A known sender name" }
+      ],
+      "correctId": 1,
+      "explanation": "Attackers often create urgency to push users into making quick decisions without verifying the message."
+    },
+    {
+      "id": "q5",
+      "prompt": "What is smishing?",
+      "choices": [
+        { "id": 1, "text": "Email phishing" },
+        { "id": 2, "text": "Text message phishing" },
+        { "id": 3, "text": "Phone call scam" },
+        { "id": 4, "text": "Malware scanning" }
+      ],
+      "correctId": 2,
+      "explanation": "Smishing is phishing delivered through SMS or text messages."
+    },
+    {
+      "id": "q6",
+      "prompt": "What is vishing?",
+      "choices": [
+        { "id": 1, "text": "Email phishing" },
+        { "id": 2, "text": "Voice or phone phishing" },
+        { "id": 3, "text": "A fake website" },
+        { "id": 4, "text": "A software bug" }
+      ],
+      "correctId": 2,
+      "explanation": "Vishing involves attackers calling victims and pretending to be trusted organizations."
+    },
+    {
+      "id": "q7",
+      "prompt": "What should you do with a suspicious email?",
+      "choices": [
+        { "id": 1, "text": "Click the link to verify it" },
+        { "id": 2, "text": "Reply asking if it is legitimate" },
+        { "id": 3, "text": "Report it to IT or security" },
+        { "id": 4, "text": "Forward it to coworkers" }
+      ],
+      "correctId": 3,
+      "explanation": "Suspicious emails should be reported through the organization's security or IT reporting process."
+    },
+    {
+      "id": "q8",
+      "prompt": "What is social engineering?",
+      "choices": [
+        { "id": 1, "text": "Installing software updates" },
+        { "id": 2, "text": "Manipulating people to reveal confidential information" },
+        { "id": 3, "text": "Encrypting company files" },
+        { "id": 4, "text": "Updating operating systems" }
+      ],
+      "correctId": 2,
+      "explanation": "Social engineering attacks manipulate human behavior to gain access to systems or information."
+    },
+    {
+      "id": "q9",
+      "prompt": "A caller claims to be IT and asks for your password. What should you do?",
+      "choices": [
+        { "id": 1, "text": "Give the password" },
+        { "id": 2, "text": "Verify through official channels first" },
+        { "id": 3, "text": "Ignore company policies" },
+        { "id": 4, "text": "Email them the password later" }
+      ],
+      "correctId": 2,
+      "explanation": "Always verify requests for sensitive information through official communication channels."
+    },
+    {
+      "id": "q10",
+      "prompt": "Why should you verify a sender’s email address carefully?",
+      "choices": [
+        { "id": 1, "text": "It loads faster" },
+        { "id": 2, "text": "Attackers can spoof or imitate addresses" },
+        { "id": 3, "text": "It changes fonts" },
+        { "id": 4, "text": "It improves internet speed" }
+      ],
+      "correctId": 2,
+      "explanation": "Attackers often spoof email addresses or use look-alike domains to appear legitimate."
     }
   ]
 }

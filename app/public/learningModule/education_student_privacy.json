@@ -1,0 +1,123 @@
+{
+  "moduleId": "education_student_privacy",
+  "title": "Keeping Student Health and Personal Info Safe",
+  "description": "Test your understanding of FERPA awareness and safe handling of student records and personal information.",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "A teacher receives an email from a parent that includes a doctor's note describing a student's medical condition and required classroom accommodations. Unsure how to handle the situation, the teacher copies the email, including the student's name and medical details, into an online AI tool or public teacher forum to ask for advice. What is the biggest problem with this action?",
+      "choices": [
+        { "id": 1, "text": "The teacher may receive too many opinions" },
+        { "id": 2, "text": "The AI tool might give incorrect advice" },
+        { "id": 3, "text": "The teacher disclosed confidential student information to an external third party without authorization" },
+        { "id": 4, "text": "Other teachers might disagree with the approach" }
+      ],
+      "correctId": 3,
+      "explanation": "Copying identifiable student information into external tools or public forums can expose confidential student information to unauthorized third parties."
+    },
+    {
+      "id": "q2",
+      "prompt": "After realizing that identifiable student information was pasted into an online AI tool or public forum, what should the teacher do first?",
+      "choices": [
+        { "id": 1, "text": "Delete the post and take no further action" },
+        { "id": 2, "text": "Ignore it since the intention was to help the student" },
+        { "id": 3, "text": "Immediately report the incident to school administration or the designated privacy contact according to school policy" },
+        { "id": 4, "text": "Ask the online community not to share the information further" }
+      ],
+      "correctId": 3,
+      "explanation": "Possible exposure of student information should be reported immediately so the school can assess the risk and respond appropriately."
+    },
+    {
+      "id": "q3",
+      "prompt": "If you have a class list with student names, addresses, and parent phone numbers on your desk for attendance or parent contact, what should you do when you are done using it for the day?",
+      "choices": [
+        { "id": 1, "text": "Leave it face-up on the desk so it is easy to grab tomorrow" },
+        { "id": 2, "text": "Take it home automatically for convenience" },
+        { "id": 3, "text": "Put it away in a locked drawer, cabinet, or folder so others cannot see it" },
+        { "id": 4, "text": "Leave it on the copier so the next teacher can use it" }
+      ],
+      "correctId": 3,
+      "explanation": "Student personal information should be secured when not in use to reduce the risk of accidental exposure."
+    },
+    {
+      "id": "q4",
+      "prompt": "True or False: It is okay to post a class activity photo or mention a student's first name on personal social media or an informal group chat just to share something fun from the day.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 2,
+      "explanation": "Sharing student photos or personal details on unapproved channels can create privacy risks and may violate school policy or privacy requirements."
+    },
+    {
+      "id": "q5",
+      "prompt": "A visitor asks to quickly use your school tablet while you are still logged into your account. What is the most appropriate response?",
+      "choices": [
+        { "id": 1, "text": "Let them use it briefly while you supervise" },
+        { "id": 2, "text": "Log out first and then let them use it anyway" },
+        { "id": 3, "text": "Politely decline and direct them to school administration or IT for proper access" },
+        { "id": 4, "text": "Share your login credentials so they can sign in themselves" }
+      ],
+      "correctId": 3,
+      "explanation": "School devices may provide access to student records and internal systems. Unauthorized use should go through proper channels."
+    },
+    {
+      "id": "q6",
+      "prompt": "Which of the following is an example of sensitive student information?",
+      "choices": [
+        { "id": 1, "text": "A student's accommodation details" },
+        { "id": 2, "text": "A public school mascot name" },
+        { "id": 3, "text": "A classroom wall color" },
+        { "id": 4, "text": "A lunch menu posted publicly" }
+      ],
+      "correctId": 1,
+      "explanation": "Accommodation details are directly related to a student and should be handled carefully."
+    },
+    {
+      "id": "q7",
+      "prompt": "Who should generally have access to student information?",
+      "choices": [
+        { "id": 1, "text": "Anyone employed by the school" },
+        { "id": 2, "text": "Only people who are authorized and have a legitimate school-related need to know" },
+        { "id": 3, "text": "Any parent of any student in the building" },
+        { "id": 4, "text": "Anyone who asks politely" }
+      ],
+      "correctId": 2,
+      "explanation": "Student information should only be shared with authorized people who have a legitimate educational or administrative need to know."
+    },
+    {
+      "id": "q8",
+      "prompt": "Which of the following is a safer way to handle student information?",
+      "choices": [
+        { "id": 1, "text": "Forwarding student details to a personal email account" },
+        { "id": 2, "text": "Leaving printed records visible on a desk overnight" },
+        { "id": 3, "text": "Using approved school channels and securing records when not in use" },
+        { "id": 4, "text": "Posting a question with identifying details in a public online group" }
+      ],
+      "correctId": 3,
+      "explanation": "Approved channels and proper storage help protect student information from unauthorized access."
+    },
+    {
+      "id": "q9",
+      "prompt": "True or False: If you accidentally expose student information, it is better to stay quiet and fix it yourself rather than report it.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 2,
+      "explanation": "Possible privacy incidents should be reported immediately so the school can respond properly."
+    },
+    {
+      "id": "q10",
+      "prompt": "What is the best first step if you think student information has been exposed improperly?",
+      "choices": [
+        { "id": 1, "text": "Wait to see whether anyone notices" },
+        { "id": 2, "text": "Immediately report the incident according to school policy" },
+        { "id": 3, "text": "Post a clarification online" },
+        { "id": 4, "text": "Share the issue with unrelated staff for advice" }
+      ],
+      "correctId": 2,
+      "explanation": "Immediate reporting allows the school to assess exposure, mitigate risk, and follow required procedures."
+    }
+  ]
+}

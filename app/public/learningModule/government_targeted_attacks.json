@@ -1,0 +1,101 @@
+{
+  "moduleId": "government_targeted_attacks",
+  "title": "Government Systems & Targeted Attacks",
+  "description": "Test your understanding of why local governments are targeted and how employees should respond to warning signs.",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Why are local governments attractive targets for cyber attackers?",
+      "choices": [
+        { "id": 1, "text": "Because they do not provide important services" },
+        { "id": 2, "text": "Because they often manage essential services and sensitive information" },
+        { "id": 3, "text": "Because only federal agencies are attacked" },
+        { "id": 4, "text": "Because local governments never use technology" }
+      ],
+      "correctId": 2,
+      "explanation": "Local governments often support critical services and hold operational or sensitive information that attackers may want to disrupt or access."
+    },
+    {
+      "id": "q2",
+      "prompt": "Which of the following is one possible goal of a targeted attack against a government agency?",
+      "choices": [
+        { "id": 1, "text": "To improve the agency's website" },
+        { "id": 2, "text": "To disrupt services, steal information, or demand payment" },
+        { "id": 3, "text": "To reduce paperwork" },
+        { "id": 4, "text": "To help employees log in faster" }
+      ],
+      "correctId": 2,
+      "explanation": "Attackers may target government agencies for money, disruption, intelligence, or long-term access."
+    },
+    {
+      "id": "q3",
+      "prompt": "What does the term Advanced Persistent Threat (APT) generally mean?",
+      "choices": [
+        { "id": 1, "text": "A software patch that improves performance" },
+        { "id": 2, "text": "A highly organized attacker that may try to stay hidden inside systems over time" },
+        { "id": 3, "text": "A required yearly compliance test" },
+        { "id": 4, "text": "A public alert system for residents" }
+      ],
+      "correctId": 2,
+      "explanation": "APT generally refers to organized attackers that may quietly maintain access for long periods."
+    },
+    {
+      "id": "q4",
+      "prompt": "Cybersecurity is only the responsibility of technical staff.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 2,
+      "explanation": "All employees play a role in reducing risk, especially by recognizing and reporting suspicious activity."
+    },
+    {
+      "id": "q5",
+      "prompt": "Which of the following is a warning sign that should be reported?",
+      "choices": [
+        { "id": 1, "text": "Unexpected password reset notifications" },
+        { "id": 2, "text": "Suspicious urgent requests for sensitive information" },
+        { "id": 3, "text": "Login alerts from unfamiliar locations" },
+        { "id": 4, "text": "All of the above" }
+      ],
+      "correctId": 4,
+      "explanation": "These are all examples of warning signs that could indicate suspicious or malicious activity."
+    },
+    {
+      "id": "q6",
+      "prompt": "Why can cyber incidents affect public trust in a government agency?",
+      "choices": [
+        { "id": 1, "text": "Because residents may lose confidence when services are disrupted or data is exposed" },
+        { "id": 2, "text": "Because cyber incidents automatically erase all records" },
+        { "id": 3, "text": "Because only IT notices them" },
+        { "id": 4, "text": "Because public trust is unrelated to service availability" }
+      ],
+      "correctId": 1,
+      "explanation": "Residents depend on government services, and disruptions or data exposure can reduce confidence in the agency."
+    },
+    {
+      "id": "q7",
+      "prompt": "Scenario: You receive a message claiming to be from agency leadership asking you to urgently send internal information to a new external address. What should you do first?",
+      "choices": [
+        { "id": 1, "text": "Send the information quickly because it appears urgent" },
+        { "id": 2, "text": "Reply to the message and ask if it is real" },
+        { "id": 3, "text": "Verify the request through a trusted channel and report it if suspicious" },
+        { "id": 4, "text": "Forward it to coworkers and ask them to decide" }
+      ],
+      "correctId": 3,
+      "explanation": "Urgent requests for sensitive information should be verified through trusted channels and reported if suspicious."
+    },
+    {
+      "id": "q8",
+      "prompt": "What should an employee do after noticing strange system behavior or a suspicious request?",
+      "choices": [
+        { "id": 1, "text": "Ignore it unless systems completely fail" },
+        { "id": 2, "text": "Try to investigate everything alone" },
+        { "id": 3, "text": "Report it through the agency's process and follow guidance" },
+        { "id": 4, "text": "Post about it publicly first" }
+      ],
+      "correctId": 3,
+      "explanation": "Prompt reporting and following agency procedures helps reduce damage and supports a coordinated response."
+    }
+  ]
+}

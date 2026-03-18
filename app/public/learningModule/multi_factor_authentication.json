@@ -1,0 +1,123 @@
+{
+  "moduleId": "multi_factor_authentication",
+  "title": "Multi-Factor Authentication",
+  "description": "Test your understanding of MFA, stronger MFA methods, and safe responses to suspicious login prompts.",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What is multi-factor authentication (MFA)?",
+      "choices": [
+        { "id": 1, "text": "A way to reuse one password across all accounts" },
+        { "id": 2, "text": "A security measure that requires more than one form of verification" },
+        { "id": 3, "text": "A method for disabling login alerts" },
+        { "id": 4, "text": "A tool that removes the need for passwords entirely" }
+      ],
+      "correctId": 2,
+      "explanation": "MFA requires more than one form of verification, such as a password plus a code or approval prompt."
+    },
+    {
+      "id": "q2",
+      "prompt": "True or False: MFA can help protect an account even if a password is stolen.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 1,
+      "explanation": "MFA adds another layer of protection, so a stolen password alone may not be enough for an attacker to log in."
+    },
+    {
+      "id": "q3",
+      "prompt": "Which of the following is a common MFA method?",
+      "choices": [
+        { "id": 1, "text": "Authenticator app" },
+        { "id": 2, "text": "Sticky note reminder" },
+        { "id": 3, "text": "Screen brightness setting" },
+        { "id": 4, "text": "Browser bookmark" }
+      ],
+      "correctId": 1,
+      "explanation": "Authenticator apps are a common MFA method that generate temporary login codes."
+    },
+    {
+      "id": "q4",
+      "prompt": "Which MFA method is generally stronger than SMS-based codes?",
+      "choices": [
+        { "id": 1, "text": "Authenticator app" },
+        { "id": 2, "text": "Public Wi-Fi login" },
+        { "id": 3, "text": "Email signature" },
+        { "id": 4, "text": "Password hint" }
+      ],
+      "correctId": 1,
+      "explanation": "Authenticator apps are generally considered stronger than SMS because text messages can sometimes be intercepted or redirected."
+    },
+    {
+      "id": "q5",
+      "prompt": "Which option is considered one of the strongest MFA methods?",
+      "choices": [
+        { "id": 1, "text": "Hardware security key" },
+        { "id": 2, "text": "Shared spreadsheet" },
+        { "id": 3, "text": "Printed password list" },
+        { "id": 4, "text": "Email auto-reply" }
+      ],
+      "correctId": 1,
+      "explanation": "Hardware security keys provide one of the strongest forms of MFA protection."
+    },
+    {
+      "id": "q6",
+      "prompt": "What should you do if you receive an MFA prompt you did not expect?",
+      "choices": [
+        { "id": 1, "text": "Approve it quickly to clear the notification" },
+        { "id": 2, "text": "Ignore it forever and tell no one" },
+        { "id": 3, "text": "Do not approve it and report it according to policy" },
+        { "id": 4, "text": "Approve it if it happens more than once" }
+      ],
+      "correctId": 3,
+      "explanation": "Unexpected MFA prompts may mean someone is trying to access your account. They should not be approved."
+    },
+    {
+      "id": "q7",
+      "prompt": "What is a push fatigue attack?",
+      "choices": [
+        { "id": 1, "text": "A slow internet connection during login" },
+        { "id": 2, "text": "Repeated MFA prompts sent in hopes that a user approves one" },
+        { "id": 3, "text": "A software update for mobile devices" },
+        { "id": 4, "text": "A locked account after vacation" }
+      ],
+      "correctId": 2,
+      "explanation": "Push fatigue attacks rely on repeated prompts to annoy or confuse a user into approving a malicious login request."
+    },
+    {
+      "id": "q8",
+      "prompt": "True or False: It is acceptable to share your MFA code with someone claiming to be IT if the request sounds urgent.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 2,
+      "explanation": "MFA codes should never be shared in response to an unverified request, even if the person sounds urgent or official."
+    },
+    {
+      "id": "q9",
+      "prompt": "Why do organizations use MFA for sensitive systems?",
+      "choices": [
+        { "id": 1, "text": "Because passwords alone may not be enough" },
+        { "id": 2, "text": "Because it removes all login risk forever" },
+        { "id": 3, "text": "Because it replaces the need for security awareness" },
+        { "id": 4, "text": "Because it makes password reuse safe" }
+      ],
+      "correctId": 1,
+      "explanation": "Organizations use MFA because passwords can be stolen, guessed, or reused, and MFA adds another layer of defense."
+    },
+    {
+      "id": "q10",
+      "prompt": "If something seems wrong with your MFA activity, what is the best response?",
+      "choices": [
+        { "id": 1, "text": "Approve the request and change nothing" },
+        { "id": 2, "text": "Do not approve it, change your password if needed, and report it" },
+        { "id": 3, "text": "Turn off MFA permanently" },
+        { "id": 4, "text": "Wait several days before acting" }
+      ],
+      "correctId": 2,
+      "explanation": "The safest response is to deny unexpected prompts, secure the account, and report the issue through the proper process."
+    }
+  ]
+}

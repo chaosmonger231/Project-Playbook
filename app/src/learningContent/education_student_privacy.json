@@ -1,71 +1,125 @@
 {
-  "moduleId": "education",
+  "topic": "education_student_privacy",
   "title": "Keeping Student Health and Personal Info Safe",
-  "description": "Learn how to follow health privacy guidelines (FERPA) and protect student privacy.",
-  "questions": [
+  "pages": [
     {
-      "id": "q1",
-      "type": "mcq",
-      "prompt": "A teacher receives an email from a parent that includes a doctor's note describing a student's medical condition and required classroom accommodations. Unsure how to handle the situation, the teacher copies the email (including the student's name and medical details) into an online AI tool or public teacher forum to ask for advice. What is the biggest problem with this action?",
-      "choices": [
-        { "id": 1, "text": "The teacher may receive too many opinions" },
-        { "id": 2, "text": "The AI tool might give incorrect advice" },
-        { "id": 3, "text": "The teacher disclosed confidential student information to an external third party without authorization" },
-        { "id": 4, "text": "Other teachers might disagree with the approach" }
-      ],
-      "correctId": 3,
-      "explanation": "Student records and health information are protected under FERPA. Copying identifiable student information into external AI tools or public forums shares data with unauthorized third parties and may constitute a serious confidentiality breach."
+      "type": "welcome",
+      "title": "Welcome to Keeping Student Health and Personal Info Safe",
+      "subtitle": "Learn how to protect student records, health-related information, and personal data in school settings."
     },
+
     {
-      "id": "q2",
-      "type": "mcq",
-      "prompt": "After realizing that identifiable student information was pasted into an online AI tool or public forum, what should the teacher do first?",
-      "choices": [
-        { "id": 1, "text": "Delete the post and take no further action" },
-        { "id": 2, "text": "Ignore it since the intention was to help the student" },
-        { "id": 3, "text": "Immediately report the incident to school administration or the designated privacy/contact officer according to school policy" },
-        { "id": 4, "text": "Ask the online community not to share the information further" }
-      ],
-      "correctId": 3,
-      "explanation": "Accidental disclosure of student information to external third parties may constitute a FERPA violation and must be reported immediately according to school policy. Prompt reporting allows the school to assess the scope of exposure and take appropriate mitigation steps."
+      "type": "textImage",
+      "title": "Why student privacy matters",
+      "text": "Schools handle sensitive information every day.\n\nThis may include <strong>student names, addresses, parent contact details, grades, schedules, disability accommodations, and health-related information</strong>.\n\nProtecting this information helps keep students safe, preserves trust, and supports compliance with privacy requirements such as <strong>FERPA</strong>.",
+      "image": {
+        "src": "IMAGE_URL_STUDENT_PRIVACY_OVERVIEW",
+        "alt": "Overview of student privacy protection"
+      }
     },
+
     {
-      "id": "q3",
-      "type": "mcq",
-      "prompt": "If you have a class list with student names, addresses, and parent phone numbers on your desk for attendance or parent contact, what should you do when you are done using it for the day?",
-      "choices": [
-        { "id": 1, "text": "Leave it face-up on my desk so I can grab it quickly tomorrow" },
-        { "id": 2, "text": "Take it home so I have it ready for parent calls" },
-        { "id": 3, "text": "Put it away in a locked drawer or folder so no one can see PII like names and addresses" },
-        { "id": 4, "text": "Leave it on the copier so the next teacher can use it" }
-      ],
-      "correctId": 3,
-      "explanation": "PII (names, addresses, etc.) should be secured when not in use, locking it away prevents accidental exposure and protects student privacy."
+      "type": "textImage",
+      "title": "What FERPA protects",
+      "text": "FERPA, the <strong>Family Educational Rights and Privacy Act</strong>, helps protect the privacy of student education records.\n\nIn a school setting, this can include information kept by the school that directly relates to a student.\n\nExamples may include:\n\n<ul><li>Student identification details</li><li>Grades and academic records</li><li>Attendance records</li><li>Parent or guardian contact information</li><li>Some records related to student support, accommodations, or health information kept by the school</li></ul>",
+      "image": {
+        "src": "IMAGE_URL_FERPA",
+        "alt": "FERPA and student records"
+      }
     },
+
     {
-      "id": "q4",
-      "type": "true_false",
-      "prompt": "It's okay to post a photo of my class activity or mention a student's first name on my personal social media or in a staff group chat to share something fun from the day.",
-      "choices": [
-        { "id": 1, "text": "True" },
-        { "id": 2, "text": "False" }
-      ],
-      "correctId": 2,
-      "explanation": "Posting student images without permission from the parents may violate FERPA or your school's privacy policy and can be dangerous for the child."
+      "type": "textImage",
+      "title": "Examples of sensitive student information",
+      "text": "Sensitive student information can appear in many everyday situations.\n\nExamples include:\n\n<ul><li>A class list with names, addresses, and parent phone numbers</li><li>A doctor's note describing a student's medical condition</li><li>Accommodation information for classroom support</li><li>Behavior, discipline, or counseling-related records</li><li>Emails discussing a student's personal situation</li></ul>\n\nEven when the goal is to help the student, this information should only be shared with authorized people and through approved channels.",
+      "image": {
+        "src": "IMAGE_URL_SENSITIVE_STUDENT_INFO",
+        "alt": "Examples of sensitive student information"
+      }
     },
+
     {
-      "id": "q5",
-      "type": "mcq",
-      "prompt": "A visitor asks to quickly use your school tablet to check something while you are still logged into your account. What is the most appropriate response?",
-      "choices": [
-        { "id": 1, "text": "Let them use it briefly while you supervise" },
-        { "id": 2, "text": "Log out first and then let them use it" },
-        { "id": 3, "text": "Politely decline and direct them to school administration or IT for proper access" },
-        { "id": 4, "text": "Share your login credentials so they can sign in themselves" }
-      ],
-      "correctId": 3,
-      "explanation": "School devices often provide access to student records and other sensitive information. Allowing unauthorized individuals to use a device—even temporarily—can expose confidential data. Access to school systems should only be granted through proper channels with authorized credentials."
+      "type": "textImage",
+      "title": "Only share with authorized people",
+      "text": "Student information should only be accessed or shared by people who are authorized and have a legitimate school-related need to know.\n\nThis does <strong>not</strong> mean it should be casually shared with:\n\n<ul><li>Other staff who do not need the information</li><li>Visitors</li><li>Friends or family</li><li>Public forums or online communities</li><li>External AI tools without school approval and proper safeguards</li></ul>\n\nWhen in doubt, follow school policy and ask the appropriate administrator before sharing.",
+      "image": {
+        "src": "IMAGE_URL_AUTHORIZED_ACCESS",
+        "alt": "Authorized access to student information"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Digital sharing risks",
+      "text": "Digital tools make it easy to accidentally expose student information.\n\nExamples of unsafe behavior include:\n\n<ul><li>Copying identifiable student information into a public forum</li><li>Pasting student details into an external AI tool without authorization</li><li>Forwarding student records through personal email or messaging apps</li><li>Leaving sensitive files open on a shared or unlocked device</li></ul>\n\nConvenience should never override student privacy requirements.",
+      "image": {
+        "src": "IMAGE_URL_DIGITAL_SHARING_RISK",
+        "alt": "Digital sharing risks for student information"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Paper records and physical privacy",
+      "text": "Student privacy is not only a digital issue.\n\nPrinted records should also be protected.\n\nExamples of safer handling include:\n\n<ul><li>Putting student lists away when not in use</li><li>Using locked drawers, cabinets, or folders</li><li>Not leaving records face-up on desks, printers, or copiers</li><li>Avoiding taking sensitive student records home unless school policy allows it</li></ul>",
+      "image": {
+        "src": "IMAGE_URL_PAPER_RECORDS",
+        "alt": "Protecting paper student records"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Social media, chats, and casual sharing",
+      "text": "It may feel harmless to post about a class activity or mention a student casually, but these actions can still create privacy risks.\n\nPhotos, names, health details, and personal situations should not be shared on <strong>personal social media, informal staff chats, or other unapproved channels</strong> unless school policy and permissions clearly allow it.\n\nEven partial information can reveal more than intended.",
+      "image": {
+        "src": "IMAGE_URL_SOCIAL_SHARING",
+        "alt": "Risks of social media and informal sharing"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "School devices and account access",
+      "text": "School devices and school accounts may provide access to student records, email, and internal systems.\n\nDo not allow unauthorized people to use a device while you are signed in.\n\nDo not share your credentials, and do not assume brief access is harmless.\n\nIf someone needs access, direct them through proper school administration or IT procedures.",
+      "image": {
+        "src": "IMAGE_URL_SCHOOL_DEVICE_ACCESS",
+        "alt": "Protecting school devices and signed-in accounts"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "What to do if student information is exposed",
+      "text": "If you think student information was shared or exposed improperly:\n\n<ol><li>Stop the exposure if possible</li><li>Do not try to hide the mistake</li><li>Report the incident immediately according to school policy</li><li>Notify the appropriate administrator, privacy contact, or designated school official</li></ol>\n\nQuick reporting helps the school assess the situation and reduce harm.",
+      "image": {
+        "src": "IMAGE_URL_REPORT_PRIVACY_INCIDENT",
+        "alt": "Reporting a student privacy incident"
+      }
+    },
+
+    {
+      "type": "quizWelcome",
+      "title": "Ready for the quiz?",
+      "subtitle": "This short quiz will test your understanding of FERPA awareness and safe handling of student information.",
+      "quizModulePath": "/learningModule/education_student_privacy.json",
+      "startButtonText": "Start Quiz"
+    },
+
+    {
+      "type": "quiz",
+      "quizModulePath": "/learningModule/education_student_privacy.json"
+    },
+
+    {
+      "type": "results",
+      "title": "Quiz Results",
+      "subtitle": "Here’s how you did.",
+      "showReview": true,
+      "buttons": {
+        "restartQuizText": "Restart Quiz",
+        "backToHomeText": "Back to Home"
+      }
     }
-    
   ]
 }

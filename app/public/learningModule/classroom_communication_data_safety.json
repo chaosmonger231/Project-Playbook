@@ -1,0 +1,123 @@
+{
+  "moduleId": "classroom_communication_data_safety",
+  "title": "Classroom Communication & Data Safety",
+  "description": "Test your understanding of safe communication practices, approved channels, and protecting sensitive student information.",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Why is classroom communication a cybersecurity concern?",
+      "choices": [
+        { "id": 1, "text": "Because teachers should never communicate with anyone" },
+        { "id": 2, "text": "Because communication often involves sensitive student information that can be exposed if handled incorrectly" },
+        { "id": 3, "text": "Because email is no longer used in schools" },
+        { "id": 4, "text": "Because only IT staff are allowed to discuss student issues" }
+      ],
+      "correctId": 2,
+      "explanation": "Classroom communication often includes sensitive student information, so mistakes can create privacy and data exposure risks."
+    },
+    {
+      "id": "q2",
+      "prompt": "Which of the following is the best communication principle when discussing student matters?",
+      "choices": [
+        { "id": 1, "text": "Share as much detail as possible to avoid confusion" },
+        { "id": 2, "text": "Share only the information necessary for the situation" },
+        { "id": 3, "text": "Always include every student detail in writing" },
+        { "id": 4, "text": "Use personal messaging apps to speed things up" }
+      ],
+      "correctId": 2,
+      "explanation": "Sharing only what is necessary reduces the risk of exposing private student information."
+    },
+    {
+      "id": "q3",
+      "prompt": "<strong>Scenario:</strong>\n\nA teacher is emailing a parent about a student's missing work and behavioral concerns. While typing the address, autocomplete selects the wrong parent with a similar last name, and the teacher sends the message before noticing.\n\n<strong>Question:</strong>\nWhat is the main problem in this situation?",
+      "choices": [
+        { "id": 1, "text": "The email was too short" },
+        { "id": 2, "text": "Sensitive student information was sent to the wrong recipient" },
+        { "id": 3, "text": "The parent may not like email" },
+        { "id": 4, "text": "The message should have included more attachments" }
+      ],
+      "correctId": 2,
+      "explanation": "Sending student information to the wrong recipient is a privacy and data exposure incident."
+    },
+    {
+      "id": "q4",
+      "prompt": "<strong>Scenario:</strong>\n\nA teacher is emailing a parent about a student's missing work and behavioral concerns. While typing the address, autocomplete selects the wrong parent with a similar last name, and the teacher sends the message before noticing.\n\n<strong>Question:</strong>\nWhat should the teacher do next?",
+      "choices": [
+        { "id": 1, "text": "Ignore it and hope no one notices" },
+        { "id": 2, "text": "Send the same message to more parents to make it less noticeable" },
+        { "id": 3, "text": "Report the mistake according to school policy and notify the appropriate administrator or privacy contact" },
+        { "id": 4, "text": "Delete the sent email from the inbox and assume the issue is solved" }
+      ],
+      "correctId": 3,
+      "explanation": "Communication mistakes involving student information should be reported promptly so the school can respond appropriately."
+    },
+    {
+      "id": "q5",
+      "prompt": "True or False: Using a personal email account is always acceptable if it is faster than the school system.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 2,
+      "explanation": "Student-related communication should go through approved school channels unless school policy clearly allows otherwise."
+    },
+    {
+      "id": "q6",
+      "prompt": "Which of the following is a safer communication practice?",
+      "choices": [
+        { "id": 1, "text": "Using approved school communication tools and checking recipients before sending" },
+        { "id": 2, "text": "Posting student details in a large informal chat for quick feedback" },
+        { "id": 3, "text": "Using social media direct messages for parent communication" },
+        { "id": 4, "text": "Sharing grade documents with open permissions for convenience" }
+      ],
+      "correctId": 1,
+      "explanation": "Approved tools and recipient verification help reduce privacy and data exposure risks."
+    },
+    {
+      "id": "q7",
+      "prompt": "<strong>Scenario:</strong>\n\nA teacher creates a spreadsheet containing student grades and comments, then shares it using a link set to <strong>Anyone with the link can view</strong>. The document link is later copied into a larger staff thread.\n\n<strong>Question:</strong>\nWhat is the biggest risk in this situation?",
+      "choices": [
+        { "id": 1, "text": "The spreadsheet may look unprofessional" },
+        { "id": 2, "text": "The document permissions may allow unauthorized people to access student information" },
+        { "id": 3, "text": "The file may take too long to load" },
+        { "id": 4, "text": "The comments may be too detailed for grading" }
+      ],
+      "correctId": 2,
+      "explanation": "Incorrect sharing permissions can expose student data to people who should not have access."
+    },
+    {
+      "id": "q8",
+      "prompt": "<strong>Scenario:</strong>\n\nA teacher creates a spreadsheet containing student grades and comments, then shares it using a link set to <strong>Anyone with the link can view</strong>. The document link is later copied into a larger staff thread.\n\n<strong>Question:</strong>\nWhat is the best prevention for this situation?",
+      "choices": [
+        { "id": 1, "text": "Avoid using documents altogether" },
+        { "id": 2, "text": "Set the document so only the intended authorized people can view or edit it before sharing" },
+        { "id": 3, "text": "Use more colors in the spreadsheet" },
+        { "id": 4, "text": "Send the same link to parents so everyone has equal access" }
+      ],
+      "correctId": 2,
+      "explanation": "Document permissions should be limited to the specific authorized audience before sharing."
+    },
+    {
+      "id": "q9",
+      "prompt": "True or False: Casual staff chats or conversations in public areas can still create student privacy risks.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 1,
+      "explanation": "Sensitive student information can be exposed through casual conversations, informal chats, or public settings."
+    },
+    {
+      "id": "q10",
+      "prompt": "What is the best response if you think you shared student information through the wrong communication channel?",
+      "choices": [
+        { "id": 1, "text": "Ignore it if your intentions were good" },
+        { "id": 2, "text": "Report the issue according to school policy and notify the appropriate staff" },
+        { "id": 3, "text": "Post a public explanation of what happened" },
+        { "id": 4, "text": "Continue using the same communication method but be more careful next time" }
+      ],
+      "correctId": 2,
+      "explanation": "Prompt reporting helps the school assess the situation and reduce further exposure."
+    }
+  ]
+}

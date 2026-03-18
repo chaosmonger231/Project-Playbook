@@ -1,0 +1,123 @@
+{
+  "moduleId": "ransomware_backup_awareness",
+  "title": "Ransomware & Backup Awareness",
+  "description": "Test your ability to recognize ransomware risks, understand the value of backups, and respond safely.",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What is ransomware?",
+      "choices": [
+        { "id": 1, "text": "A software update tool" },
+        { "id": 2, "text": "A cyberattack that locks, encrypts, or makes data and systems unusable" },
+        { "id": 3, "text": "A type of password manager" },
+        { "id": 4, "text": "A secure backup method" }
+      ],
+      "correctId": 2,
+      "explanation": "Ransomware is a cyberattack that can block access to files or systems and disrupt business operations."
+    },
+    {
+      "id": "q2",
+      "prompt": "Which of the following is a common way ransomware gets into an organization?",
+      "choices": [
+        { "id": 1, "text": "Clicking a phishing link or attachment" },
+        { "id": 2, "text": "Reading a printed invoice" },
+        { "id": 3, "text": "Restarting a computer" },
+        { "id": 4, "text": "Using a company-approved calendar" }
+      ],
+      "correctId": 1,
+      "explanation": "Phishing emails and unsafe attachments are common ways ransomware enters organizations."
+    },
+    {
+      "id": "q3",
+      "prompt": "It is safe to assume backups will always be available after a ransomware attack.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 2,
+      "explanation": "Backups may also be damaged, encrypted, deleted, or otherwise unavailable if they are not properly protected."
+    },
+    {
+      "id": "q4",
+      "prompt": "Why are backups important in a ransomware incident?",
+      "choices": [
+        { "id": 1, "text": "They make phishing emails easier to detect" },
+        { "id": 2, "text": "They can help the organization recover files and systems after disruption" },
+        { "id": 3, "text": "They automatically stop all malware" },
+        { "id": 4, "text": "They remove the need for reporting incidents" }
+      ],
+      "correctId": 2,
+      "explanation": "Backups can support recovery, but only if they are regularly maintained, tested, and protected."
+    },
+    {
+      "id": "q5",
+      "prompt": "Which statement best explains why ransomware is a business problem and not just an IT problem?",
+      "choices": [
+        { "id": 1, "text": "It only affects antivirus settings" },
+        { "id": 2, "text": "It can interrupt payroll, sales, scheduling, customer service, and normal operations" },
+        { "id": 3, "text": "It only matters for remote workers" },
+        { "id": 4, "text": "It only affects servers, not people" }
+      ],
+      "correctId": 2,
+      "explanation": "Ransomware can stop important business functions across the organization, not just technical systems."
+    },
+    {
+      "id": "q6",
+      "prompt": "A protected backup strategy is part of cybersecurity.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 1,
+      "explanation": "Backups are a key part of cyber resilience because they help reduce damage when prevention fails."
+    },
+    {
+      "id": "q7",
+      "prompt": "Scenario: You click a file from an unexpected email, and a shared folder suddenly becomes inaccessible. What should you do first?",
+      "choices": [
+        { "id": 1, "text": "Wait to see if the issue fixes itself" },
+        { "id": 2, "text": "Keep opening files to test what still works" },
+        { "id": 3, "text": "Report it immediately and follow your organization's response process" },
+        { "id": 4, "text": "Send the file to coworkers to ask if they can open it" }
+      ],
+      "correctId": 3,
+      "explanation": "Unusual file lockouts or sudden access problems should be reported immediately to reduce damage and spread."
+    },
+    {
+      "id": "q8",
+      "prompt": "Which of the following makes a backup strategy stronger?",
+      "choices": [
+        { "id": 1, "text": "Never testing the backups" },
+        { "id": 2, "text": "Keeping backups exposed to the same risks as the main system" },
+        { "id": 3, "text": "Regularly backing up data and protecting backup access" },
+        { "id": 4, "text": "Letting every employee change backup settings" }
+      ],
+      "correctId": 3,
+      "explanation": "Good backups are regular, protected, and tested so they can actually support recovery."
+    },
+    {
+    "id": "q9",
+    "prompt": "What lesson does the Ohio example in this module reinforce?",
+    "choices": [
+        { "id": 1, "text": "Ransomware only affects government offices" },
+        { "id": 2, "text": "Only very large national companies face ransomware risk" },
+        { "id": 3, "text": "Organizations in Ohio can face serious operational disruption from ransomware" },
+        { "id": 4, "text": "Backups always prevent service interruptions" }
+        ],
+        "correctId": 3,
+        "explanation": "The Ohio example shows that ransomware can seriously disrupt real organizations close to home, including their day-to-day operations and services."
+    },
+    {
+      "id": "q10",
+      "prompt": "What should an employee avoid doing during a suspected ransomware incident?",
+      "choices": [
+        { "id": 1, "text": "Reporting the problem quickly" },
+        { "id": 2, "text": "Following the organization's response instructions" },
+        { "id": 3, "text": "Hiding the issue or delaying reporting" },
+        { "id": 4, "text": "Stopping interaction with suspicious files" }
+      ],
+      "correctId": 3,
+      "explanation": "Hiding or delaying reports can allow ransomware to spread further and make recovery harder."
+    }
+  ]
+}

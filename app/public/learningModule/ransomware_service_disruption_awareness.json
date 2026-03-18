@@ -1,0 +1,149 @@
+{
+  "moduleId": "ransomware_service_disruption_awareness",
+  "title": "Ransomware & Service Disruption Awareness",
+  "description": "Test your understanding of ransomware risks, service disruption, reporting, and response steps for local government employees.",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "Why can ransomware be especially damaging for local governments?",
+      "choices": [
+        { "id": 1, "text": "Because it only affects personal devices" },
+        { "id": 2, "text": "Because it can disrupt public services, internal operations, and public trust" },
+        { "id": 3, "text": "Because governments never use backups" },
+        { "id": 4, "text": "Because ransomware only targets federal agencies" }
+      ],
+      "correctId": 2,
+      "explanation": "Ransomware can interrupt government services and create operational and public trust problems."
+    },
+    {
+      "id": "q2",
+      "prompt": "What did the Ohio Golf Manor example reinforce?",
+      "choices": [
+        { "id": 1, "text": "That backups are always safe during a ransomware attack" },
+        { "id": 2, "text": "That small local governments can suffer serious ransomware disruption, including loss of backups" },
+        { "id": 3, "text": "That ransomware only affects police departments" },
+        { "id": 4, "text": "That ransom payments always restore systems" }
+      ],
+      "correctId": 2,
+      "explanation": "The Golf Manor example shows that even small local governments can face major disruption and backup loss."
+    },
+    {
+      "id": "q3",
+      "prompt": "Which of the following is a common way ransomware gets into an organization?",
+      "choices": [
+        { "id": 1, "text": "Phishing emails or malicious attachments" },
+        { "id": 2, "text": "Approved payroll processing by itself" },
+        { "id": 3, "text": "Reading a printed memo" },
+        { "id": 4, "text": "Using a government website homepage" }
+      ],
+      "correctId": 1,
+      "explanation": "Phishing and malicious attachments are common ransomware entry points."
+    },
+    {
+      "id": "q4",
+      "prompt": "True or False: If a suspicious ransomware screen appears, employees should try to fix the system quietly before reporting it.",
+      "choices": [
+        { "id": 1, "text": "True" },
+        { "id": 2, "text": "False" }
+      ],
+      "correctId": 2,
+      "explanation": "Suspected ransomware should be reported immediately, not handled quietly by the employee."
+    },
+    {
+      "id": "q5",
+      "prompt": "Scenario: A clerk notices that several shared folders suddenly cannot be opened and one computer shows a ransom note. What is the best first response?",
+      "choices": [
+        { "id": 1, "text": "Delete the ransom note and continue working" },
+        { "id": 2, "text": "Report the incident immediately and follow agency instructions, including isolation if directed" },
+        { "id": 3, "text": "Transfer affected files to a personal laptop" },
+        { "id": 4, "text": "Wait until the end of the day to see if the problem clears up" }
+      ],
+      "correctId": 2,
+      "explanation": "Quick reporting and following agency instructions are the correct first steps."
+    },
+    {
+      "id": "q6",
+      "prompt": "Why are backups alone not enough?",
+      "choices": [
+        { "id": 1, "text": "Because backups never help at all" },
+        { "id": 2, "text": "Because backups may also be encrypted, deleted, or unavailable if not properly protected" },
+        { "id": 3, "text": "Because only state agencies may use backups" },
+        { "id": 4, "text": "Because continuity planning is unrelated to ransomware" }
+      ],
+      "correctId": 2,
+      "explanation": "Backups must be protected, tested, and separated well enough to be useful during recovery."
+    },
+    {
+      "id": "q7",
+      "prompt": "Scenario: A supervisor says not to report a suspected ransomware event yet because it might create panic. What is the best response?",
+      "choices": [
+        { "id": 1, "text": "Delay reporting until leadership feels ready" },
+        { "id": 2, "text": "Follow the agency's reporting process anyway because delay can increase damage" },
+        { "id": 3, "text": "Post online to warn the public first" },
+        { "id": 4, "text": "Delete any evidence to keep the issue private" }
+      ],
+      "correctId": 2,
+      "explanation": "Delaying reporting can let ransomware spread and make recovery harder."
+    },
+    {
+      "id": "q8",
+      "prompt": "Which outside partners may be involved in a ransomware response?",
+      "choices": [
+        { "id": 1, "text": "OCIC, Auditor of State, FBI, and IC3" },
+        { "id": 2, "text": "Only the office break room manager" },
+        { "id": 3, "text": "Only the internet provider" },
+        { "id": 4, "text": "No outside reporting is useful" }
+      ],
+      "correctId": 1,
+      "explanation": "State and federal partners may all play a role depending on the incident and agency procedures."
+    },
+    {
+      "id": "q9",
+      "prompt": "What is the U.S. Joint Ransomware Task Force?",
+      "choices": [
+        { "id": 1, "text": "A local government procurement group" },
+        { "id": 2, "text": "An interagency effort co-chaired by the FBI and CISA to combat ransomware" },
+        { "id": 3, "text": "A private insurance program" },
+        { "id": 4, "text": "A software patching schedule" }
+      ],
+      "correctId": 2,
+      "explanation": "The JRTF is a U.S. government interagency effort led by the FBI and CISA to coordinate against ransomware."
+    },
+    {
+      "id": "q10",
+      "prompt": "Scenario: During a ransomware incident, someone suggests paying immediately because that is the fastest way back online. Which statement is most accurate?",
+      "choices": [
+        { "id": 1, "text": "Payment always guarantees successful recovery" },
+        { "id": 2, "text": "Federal guidance says paying does not guarantee data recovery and may encourage more attacks" },
+        { "id": 3, "text": "Any employee can approve payment during an emergency" },
+        { "id": 4, "text": "Backups become unnecessary once payment is made" }
+      ],
+      "correctId": 2,
+      "explanation": "The FBI does not support paying a ransom because it does not guarantee recovery and may encourage future attacks."
+    },
+    {
+      "id": "q11",
+      "prompt": "Which of the following may be an early warning sign of ransomware?",
+      "choices": [
+        { "id": 1, "text": "Shared drives suddenly becoming unavailable" },
+        { "id": 2, "text": "Strange file extensions or ransom notes" },
+        { "id": 3, "text": "Unexpected account or security alerts" },
+        { "id": 4, "text": "All of the above" }
+      ],
+      "correctId": 4,
+      "explanation": "All of these can be signs that ransomware or related malicious activity is underway."
+    },
+    {
+      "id": "q12",
+      "prompt": "Scenario: Your office is recovering from ransomware, and another employee says backups are enough so no continuity planning is needed. What is the best response?",
+      "choices": [
+        { "id": 1, "text": "Agree, because recovery planning ends with backups" },
+        { "id": 2, "text": "Explain that continuity planning is still needed to keep critical services functioning during recovery" },
+        { "id": 3, "text": "Ignore the issue because only IT needs to care" },
+        { "id": 4, "text": "Move all recovery files to a personal account" }
+      ],
+      "correctId": 2,
+      "explanation": "Backups matter, but agencies also need continuity planning so essential services can continue during recovery."
+    }
+  ]
+}

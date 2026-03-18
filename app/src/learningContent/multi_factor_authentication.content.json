@@ -1,0 +1,125 @@
+{
+  "topic": "multi_factor_authentication",
+  "title": "Multi-Factor Authentication",
+  "pages": [
+    {
+      "type": "welcome",
+      "title": "Welcome to Multi-Factor Authentication",
+      "subtitle": "Learn how multi-factor authentication helps protect accounts even if a password is stolen."
+    },
+
+    {
+      "type": "textImage",
+      "title": "What is multi-factor authentication?",
+      "text": "Multi-factor authentication, or <strong>MFA</strong>, is a security measure that requires more than one form of verification before allowing access to an account.\n\nInstead of relying only on a password, MFA adds another layer of protection.\n\nThis helps reduce the risk of unauthorized access if a password is stolen, guessed, or reused.",
+      "image": {
+        "src": "IMAGE_URL_MFA_OVERVIEW",
+        "alt": "Overview of multi-factor authentication"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Why MFA matters",
+      "text": "Passwords alone are not always enough to protect an account.\n\nA password may be exposed through phishing, password reuse, data breaches, or social engineering.\n\n<strong>MFA helps stop attackers from logging in even if they know your password.</strong>",
+      "image": {
+        "src": "IMAGE_URL_MFA_IMPORTANCE",
+        "alt": "MFA blocking unauthorized access"
+      }
+    },
+
+    {
+    "type": "textImage",
+    "title": "Common MFA methods",
+    "text": "Common forms of MFA include:\n\n<ul><li><strong>Authenticator apps</strong> that generate temporary login codes</li><li><strong>Push notifications</strong> asking you to approve a login</li><li><strong>Hardware security keys</strong> that plug into a computer or phone</li><li><strong>Text message (SMS) codes</strong> sent to a phone</li></ul>\n\nExamples of commonly used authenticator apps include:\n\n<ul><li>Microsoft Authenticator</li><li>Google Authenticator</li><li>Duo Mobile</li><li>Okta Verify</li></ul>\n\nThese apps generate short codes that change every 30 seconds and are used along with your password during login.",
+    "image": {
+        "src": "IMAGE_URL_MFA_METHODS",
+        "alt": "Examples of common MFA methods"
+    }
+    },
+
+    {
+    "type": "textImage",
+    "title": "Stronger MFA methods",
+    "text": "Some MFA methods provide stronger protection than others.\n\n<ul><li><strong>Authenticator apps</strong> are generally safer than text messages because they do not rely on phone networks.</li><li><strong>Hardware security keys</strong> provide one of the strongest forms of MFA protection.</li></ul>\n\nText message codes are still helpful, but they can sometimes be intercepted through phone number attacks or SIM swapping.\n\nWhenever possible, organizations should prefer authenticator apps or hardware security keys.",
+    "image": {
+        "src": "IMAGE_URL_STRONG_MFA",
+        "alt": "Examples of stronger MFA methods"
+    }
+    },
+
+    {
+      "type": "textImage",
+      "title": "MFA adds protection beyond passwords",
+      "text": "A strong password is still important, but MFA provides a second layer of defense.\n\nIf an attacker steals a password, MFA can help stop them from accessing the account unless they also have the second factor.\n\nThis is why organizations often require MFA for email, remote access, and sensitive systems.",
+      "image": {
+        "src": "IMAGE_URL_PASSWORD_PLUS_MFA",
+        "alt": "Password plus MFA protection"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Unexpected MFA prompts",
+      "text": "If you receive an MFA prompt that you did not expect, it may be a warning sign.\n\nAn attacker could be trying to log in with your password and hoping you approve the request by mistake.\n\n<strong>Do not approve unexpected login requests.</strong>\n\nUnexpected MFA prompts should be treated seriously and reported according to your organization’s process.",
+      "image": {
+        "src": "IMAGE_URL_UNEXPECTED_PROMPT",
+        "alt": "Unexpected MFA approval request"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Push fatigue attacks",
+      "text": "A <strong>push fatigue attack</strong> happens when an attacker repeatedly triggers MFA approval requests, hoping the user becomes annoyed, confused, or accidentally approves one.\n\nThis is a form of social engineering.\n\nRepeated unexpected prompts are not normal and should never be approved just to make them stop.",
+      "image": {
+        "src": "IMAGE_URL_PUSH_FATIGUE",
+        "alt": "Repeated MFA push prompts"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Never share MFA codes",
+      "text": "MFA codes are meant to verify <strong>your</strong> identity.\n\nYou should never share MFA codes, approval prompts, or authentication requests with another person, even if they claim to be from IT, a bank, or another trusted organization.\n\nLegitimate support staff should not ask you to provide your MFA code for routine access.",
+      "image": {
+        "src": "IMAGE_URL_MFA_CODE_PROTECTION",
+        "alt": "Protecting MFA codes"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "What to do if something seems wrong",
+      "text": "If you receive an unexpected MFA prompt or think your account may be under attack:\n\n<ol><li>Do not approve the request</li><li>Change your password if needed</li><li>Report the incident using your organization’s process</li><li>Review your account activity if available</li></ol>\n\nQuick action helps reduce the risk of unauthorized access.",
+      "image": {
+        "src": "IMAGE_URL_MFA_RESPONSE",
+        "alt": "Safe response to suspicious MFA activity"
+      }
+    },
+
+    {
+      "type": "quizWelcome",
+      "title": "Ready for the quiz?",
+      "subtitle": "This short quiz will test your understanding of multi-factor authentication and safe MFA practices.",
+      "quizModulePath": "/learningModule/multi_factor_authentication.json",
+      "startButtonText": "Start Quiz"
+    },
+
+    {
+      "type": "quiz",
+      "quizModulePath": "/learningModule/multi_factor_authentication.json"
+    },
+
+    {
+      "type": "results",
+      "title": "Quiz Results",
+      "subtitle": "Here’s how you did.",
+      "showReview": true,
+      "buttons": {
+        "restartQuizText": "Restart Quiz",
+        "backToHomeText": "Back to Home"
+      }
+    }
+  ]
+}

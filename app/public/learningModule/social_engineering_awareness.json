@@ -1,0 +1,127 @@
+{
+  "moduleId": "social_engineering_awareness",
+  "title": "Social Engineering Awareness",
+  "description": "Test your ability to recognize manipulation tactics used to gain access to information, systems, or physical spaces.",
+  "questions": [
+    {
+      "id": "q1",
+      "prompt": "What is social engineering?",
+      "choices": [
+        { "id": 1, "text": "Installing software updates" },
+        { "id": 2, "text": "Manipulating people to reveal confidential information or take unsafe actions" },
+        { "id": 3, "text": "Encrypting files for backup" },
+        { "id": 4, "text": "Repairing damaged hardware" }
+      ],
+      "correctId": 2,
+      "explanation": "Social engineering relies on manipulating people rather than directly attacking technology."
+    },
+    {
+      "id": "q2",
+      "prompt": "Why do attackers often target people instead of systems?",
+      "choices": [
+        { "id": 1, "text": "People are often easier to manipulate than technical defenses" },
+        { "id": 2, "text": "Computers cannot store data" },
+        { "id": 3, "text": "Networks are never vulnerable" },
+        { "id": 4, "text": "Software updates stop all attacks" }
+      ],
+      "correctId": 1,
+      "explanation": "Attackers often exploit trust, urgency, or confusion because manipulating people can be easier than bypassing security controls."
+    },
+    {
+      "id": "q3",
+      "prompt": "Which of the following is an example of using false authority?",
+      "choices": [
+        { "id": 1, "text": "A caller claims to be from IT and asks for your password" },
+        { "id": 2, "text": "A coworker reminds you about lunch" },
+        { "id": 3, "text": "A calendar event shows your meeting time" },
+        { "id": 4, "text": "A printer runs out of paper" }
+      ],
+      "correctId": 1,
+      "explanation": "Attackers often pretend to be IT, HR, management, or vendors to pressure people into complying."
+    },
+    {
+      "id": "q4",
+      "prompt": "What should you do if someone claims to be IT and asks for your password?",
+      "choices": [
+        { "id": 1, "text": "Give it to them if they sound professional" },
+        { "id": 2, "text": "Verify the request through official channels first" },
+        { "id": 3, "text": "Write it down and leave it for them" },
+        { "id": 4, "text": "Text it to them later" }
+      ],
+      "correctId": 2,
+      "explanation": "Passwords and other sensitive information should never be shared without proper verification."
+    },
+    {
+      "id": "q5",
+      "prompt": "What is tailgating?",
+      "choices": [
+        { "id": 1, "text": "Sharing passwords with a teammate" },
+        { "id": 2, "text": "Following someone into a restricted area without authorization" },
+        { "id": 3, "text": "Sending a group email too quickly" },
+        { "id": 4, "text": "Backing up a device at the end of the day" }
+      ],
+      "correctId": 2,
+      "explanation": "Tailgating is a physical security issue where an unauthorized person gains entry by following an authorized person."
+    },
+    {
+      "id": "q6",
+      "prompt": "You see someone you do not recognize entering a secure area behind you. What is the best response?",
+      "choices": [
+        { "id": 1, "text": "Ignore it" },
+        { "id": 2, "text": "Assume they belong there" },
+        { "id": 3, "text": "Politely ask for identification or report it according to policy" },
+        { "id": 4, "text": "Hold the door open for them" }
+      ],
+      "correctId": 3,
+      "explanation": "Unknown people should not be allowed into secure areas without proper verification."
+    },
+    {
+      "id": "q7",
+      "prompt": "Which tactic tries to pressure you into acting immediately?",
+      "choices": [
+        { "id": 1, "text": "Urgency" },
+        { "id": 2, "text": "Encryption" },
+        { "id": 3, "text": "Compression" },
+        { "id": 4, "text": "Synchronization" }
+      ],
+      "correctId": 1,
+      "explanation": "Urgency is commonly used to stop people from slowing down and verifying a request."
+    },
+    {
+      "id": "q8",
+      "prompt": "Which of the following is an example of baiting?",
+      "choices": [
+        { "id": 1, "text": "An unknown USB drive labeled 'Payroll' left in the office" },
+        { "id": 2, "text": "A scheduled security training email from your organization" },
+        { "id": 3, "text": "A verified update notice in your system portal" },
+        { "id": 4, "text": "A badge scan at the front door" }
+      ],
+      "correctId": 1,
+      "explanation": "Baiting uses curiosity or temptation to get someone to interact with something unsafe."
+    },
+    {
+      "id": "q9",
+      "prompt": "What is the safest response when a request feels unusual or manipulative?",
+      "choices": [
+        { "id": 1, "text": "Respond quickly so the person is not delayed" },
+        { "id": 2, "text": "Pause and verify through official channels" },
+        { "id": 3, "text": "Share only part of the requested information" },
+        { "id": 4, "text": "Let someone else deal with it later" }
+      ],
+      "correctId": 2,
+      "explanation": "Pausing and verifying is one of the most effective defenses against social engineering."
+    },
+    {
+      "id": "q10",
+      "prompt": "Which of the following should never be shared in response to an unverified request?",
+      "choices": [
+        { "id": 1, "text": "Your password or MFA code" },
+        { "id": 2, "text": "A public website URL" },
+        { "id": 3, "text": "The office lunch menu" },
+        { "id": 4, "text": "A meeting room number already posted publicly" }
+      ],
+      "correctId": 1,
+      "explanation": "Passwords, MFA codes, and other sensitive credentials should never be shared in response to unverified requests."
+    }
+  ]
+}

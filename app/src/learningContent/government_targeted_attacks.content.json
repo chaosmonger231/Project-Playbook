@@ -1,0 +1,145 @@
+{
+  "topic": "government_targeted_attacks",
+  "title": "Government Systems & Targeted Attacks",
+  "pages": [
+    {
+      "type": "welcome",
+      "title": "Welcome to Government Systems & Targeted Attacks",
+      "subtitle": "Learn why local governments are attractive cyber targets and how employees can help reduce risk.",
+      "video": {
+        "videoId": "VIDEO_ID_GOV_WELCOME",
+        "caption": "Introduction to targeted attacks against government systems (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Why local governments are targeted",
+      "text": "Local governments may not seem like obvious cyber targets, but they often manage <b>essential public services</b> and sensitive operational data.\n\nThat can include public safety systems, water or utility operations, payroll, court or administrative records, finance systems, permits, citizen services, and internal communications.\n\nAttackers know that even a small government office may feel pressure to restore services quickly. That makes local agencies attractive targets for ransomware, account compromise, and other disruptive attacks.",
+      "video": {
+        "videoId": "VIDEO_ID_GOV_TARGETED",
+        "caption": "Why local governments are frequent cyberattack targets"
+      },
+      "image": {
+        "src": "IMAGE_URL_GOV_TARGETED",
+        "alt": "Local government systems and services illustration (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Not every attacker wants the same thing",
+      "text": "Government agencies can face different types of cyber threats.\n\nSome attackers want <b>money</b>, such as through ransomware or payment fraud.\n\nOthers want <b>access</b> to systems, sensitive information, or internal communications. Some highly organized groups may try to stay hidden for a long time and quietly collect information or wait for the right moment to cause disruption.\n\nYou may hear these groups described as <b>advanced persistent threats (APTs)</b>. Employees do not need to memorize that term, but it is important to understand that some attacks are planned, patient, and highly targeted.",
+      "video": {
+        "videoId": "VIDEO_ID_GOV_ATTACKER_TYPES",
+        "caption": "Different kinds of attackers and their goals"
+      },
+      "image": {
+        "src": "IMAGE_URL_GOV_ATTACKER_TYPES",
+        "alt": "Different government cyber threat actors (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Why this matters to everyday staff",
+      "text": "Cybersecurity is not only about servers and technical tools. Government employees can become targets through everyday work.\n\nAttackers may impersonate vendors, supervisors, agency partners, law enforcement, state officials, or IT support. They may use email, phone calls, text messages, fake login pages, or urgent requests to manipulate employees into sharing information or taking unsafe action.\n\nA single mistake can lead to account compromise, data exposure, service disruption, or a larger incident affecting the community.",
+      "video": {
+        "videoId": "VIDEO_ID_GOV_STAFF_ROLE",
+        "caption": "How everyday staff can become part of a targeted attack"
+      },
+      "image": {
+        "src": "IMAGE_URL_GOV_STAFF_ROLE",
+        "alt": "Government employee targeted by cyberattack illustration (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Did you know?",
+      "bullets": [
+        {
+          "title": "Small agencies can still be high-value targets",
+          "text": "Attackers do not only go after major cities or federal agencies. Smaller local governments may have fewer security resources and still run important services."
+        },
+        {
+          "title": "Disruption can damage public trust",
+          "text": "When systems go down, residents may lose access to services and confidence in the agency's ability to operate safely."
+        },
+        {
+          "title": "Social engineering is still one of the biggest risks",
+          "text": "Attackers often try to manipulate employees before using technical methods."
+        },
+        {
+          "title": "Early reporting can stop bigger problems",
+          "text": "Strange login alerts, unusual messages, missing files, or unexpected system behavior should be reported quickly."
+        }
+      ],
+      "image": {
+        "src": "IMAGE_URL_GOV_DID_YOU_KNOW",
+        "alt": "Government cybersecurity awareness facts graphic (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Common warning signs",
+      "text": "Some attacks begin with subtle signs before major damage is obvious.\n\nWatch for things like:\n\n• Unexpected password reset or MFA notifications\n• Suspicious messages pretending to be from agency leadership or IT\n• Files, folders, or shared drives behaving strangely\n• Login alerts from unfamiliar devices or locations\n• Requests for sensitive information that feel urgent or unusual\n• Systems suddenly slowing down, failing, or locking users out\n\nThese signs do not always prove an attack, but they should never be ignored.",
+      "video": {
+        "videoId": "VIDEO_ID_GOV_WARNING_SIGNS",
+        "caption": "How to recognize warning signs of targeted activity"
+      },
+      "image": {
+        "src": "IMAGE_URL_GOV_WARNING_SIGNS",
+        "alt": "Government cyber warning signs illustration (replace later)"
+      }
+    },
+
+    {
+      "type": "video",
+      "title": "Real-world government impact",
+      "video": {
+        "videoId": "VIDEO_ID_GOV_REAL_WORLD",
+        "caption": "Example of how a cyber incident can affect government operations and services (replace later)"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "What employees should do",
+      "text": "If you notice suspicious activity or receive an unusual request:\n\n1) <b>Pause before acting</b>\n2) <b>Do not share passwords, MFA codes, or sensitive data</b>\n3) <b>Verify unusual requests through trusted channels</b>\n4) <b>Report suspicious activity immediately</b> using your agency's reporting process\n5) <b>Follow guidance from IT, security, or leadership</b>\n\nFast reporting supports the agency's ability to detect, respond, and recover before a problem grows worse.",
+      "video": {
+        "videoId": "VIDEO_ID_GOV_EMPLOYEE_RESPONSE",
+        "caption": "How government employees should respond to suspicious activity"
+      },
+      "image": {
+        "src": "IMAGE_URL_GOV_EMPLOYEE_RESPONSE",
+        "alt": "Government incident reporting and response flow (replace later)"
+      }
+    },
+
+    {
+      "type": "quizWelcome",
+      "title": "Ready for the quiz?",
+      "subtitle": "This short quiz will test your understanding of targeted attacks against government systems.",
+      "quizModulePath": "/learningModule/government_targeted_attacks.json",
+      "startButtonText": "Start Quiz"
+    },
+
+    {
+      "type": "quiz",
+      "quizModulePath": "/learningModule/government_targeted_attacks.json"
+    },
+
+    {
+      "type": "results",
+      "title": "Quiz Results",
+      "subtitle": "Here’s how you did.",
+      "showReview": true,
+      "buttons": {
+        "restartQuizText": "Restart Quiz",
+        "backToHomeText": "Back to Home"
+      }
+    }
+  ]
+}

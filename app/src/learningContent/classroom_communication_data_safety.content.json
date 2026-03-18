@@ -1,0 +1,115 @@
+{
+  "topic": "classroom_communication_data_safety",
+  "title": "Classroom Communication & Data Safety",
+  "pages": [
+    {
+      "type": "welcome",
+      "title": "Welcome to Classroom Communication & Data Safety",
+      "subtitle": "Learn how to communicate about students safely while protecting sensitive information."
+    },
+
+    {
+      "type": "textImage",
+      "title": "Why this matters in education",
+      "text": "Part of an educator’s job is communicating with parents, administrators, counselors, and other staff about students.\n\nThese conversations often involve <strong>sensitive information</strong>, such as grades, behavior, accommodations, attendance, health-related details, or personal situations.\n\nBecause of this, communication mistakes can accidentally expose private student information.",
+      "image": {
+        "src": "IMAGE_URL_CLASSROOM_COMMUNICATION_OVERVIEW",
+        "alt": "Educator communicating with parents and staff"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Why communication mistakes matter",
+      "text": "When sensitive student information is shared incorrectly, several problems can happen:\n\n<ul><li><strong>Student harm</strong> – private information may be exposed to people who should not see it</li><li><strong>Loss of trust</strong> – families may lose confidence in the school’s ability to protect information</li><li><strong>Policy or legal consequences</strong> – privacy rules such as <strong>FERPA</strong> exist to protect student records</li></ul>\n\nMost privacy incidents in schools are not caused by hackers. They are often caused by everyday mistakes such as sending an email to the wrong person, sharing too much information, or using the wrong communication tool.",
+      "image": {
+        "src": "IMAGE_URL_COMMUNICATION_CONSEQUENCES",
+        "alt": "Consequences of mishandling sensitive student information"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Use approved school communication channels",
+      "text": "Student information should be shared only through <strong>approved school systems</strong>.\n\nExamples may include:\n\n<ul><li>School email</li><li>Official parent communication platforms</li><li>Approved learning management systems</li><li>District-approved messaging tools</li></ul>\n\nAvoid using personal email, informal group chats, social media, or unapproved apps for student-related communication unless school policy clearly allows it.",
+      "image": {
+        "src": "IMAGE_URL_APPROVED_CHANNELS",
+        "alt": "Approved school communication tools"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Share only what is necessary",
+      "text": "Good communication does not mean sharing every detail.\n\nA useful rule is: <strong>share only the information needed for the situation</strong>.\n\nFor example, a message may need to explain that a deadline changed, but it may <strong>not</strong> need to include a student's private health issue, family issue, or counseling detail.\n\nSharing more than necessary increases privacy risk.",
+      "image": {
+        "src": "IMAGE_URL_MINIMUM_NECESSARY",
+        "alt": "Sharing only the information necessary"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Email and messaging risks",
+      "text": "Email and messaging mistakes are common.\n\nExamples include:\n\n<ul><li>Sending a message to the wrong parent or guardian</li><li>Replying all when sensitive information should be private</li><li>Using autocomplete and selecting the wrong recipient</li><li>Including student details in an informal chat</li></ul>\n\nBefore sending, pause and verify who will receive the message and whether all included information is truly necessary.",
+      "image": {
+        "src": "IMAGE_URL_EMAIL_RISK",
+        "alt": "Email and messaging mistakes involving student information"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Shared documents and permissions",
+      "text": "Shared documents can also expose student information if permissions are not set correctly.\n\nRisks include:\n\n<ul><li>Sharing a grade sheet with the wrong people</li><li>Leaving a document set to <strong>Anyone with the link can view</strong></li><li>Including student names and private details in widely shared files</li></ul>\n\nAlways confirm who can open, view, or edit a document before sharing it.",
+      "image": {
+        "src": "IMAGE_URL_DOCUMENT_PERMISSIONS",
+        "alt": "Shared document permissions and student data safety"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Casual communication can still create risk",
+      "text": "Not every privacy incident happens in a formal report or official email.\n\nRisk can also come from:\n\n<ul><li>Informal staff chats</li><li>Text messages</li><li>Personal notes shared too widely</li><li>Conversations in public areas</li><li>Posting classroom details online</li></ul>\n\nEven if the intention is helpful, sensitive student information should not be casually shared where others may see or hear it.",
+      "image": {
+        "src": "IMAGE_URL_CASUAL_COMMUNICATION",
+        "alt": "Casual communication risks in school settings"
+      }
+    },
+
+    {
+      "type": "textImage",
+      "title": "What to do if you make a communication mistake",
+      "text": "If you think student information was sent, posted, or shared incorrectly:\n\n<ol><li>Do not ignore it</li><li>Stop further sharing if possible</li><li>Report the issue according to school policy</li><li>Notify the appropriate administrator, privacy contact, or designated staff member</li></ol>\n\nQuick reporting helps the school respond appropriately and reduce further exposure.",
+      "image": {
+        "src": "IMAGE_URL_REPORT_COMMUNICATION_ISSUE",
+        "alt": "Reporting a student communication privacy mistake"
+      }
+    },
+
+    {
+      "type": "quizWelcome",
+      "title": "Ready for the quiz?",
+      "subtitle": "This short quiz will test your understanding of safe classroom communication and student data handling.",
+      "quizModulePath": "/learningModule/classroom_communication_data_safety.json",
+      "startButtonText": "Start Quiz"
+    },
+
+    {
+      "type": "quiz",
+      "quizModulePath": "/learningModule/classroom_communication_data_safety.json"
+    },
+
+    {
+      "type": "results",
+      "title": "Quiz Results",
+      "subtitle": "Here’s how you did.",
+      "showReview": true,
+      "buttons": {
+        "restartQuizText": "Restart Quiz",
+        "backToHomeText": "Back to Home"
+      }
+    }
+  ]
+}
