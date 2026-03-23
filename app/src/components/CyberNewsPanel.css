@@ -1,0 +1,349 @@
+/* ============================================================
+   FEATURED CYBER NEWS
+   COMPONENT STYLING ONLY
+   ============================================================ */
+
+.cybernews-featured {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  background: linear-gradient(180deg, #f8fbff 0%, #eef4fb 100%);
+  border-radius: 18px;
+  border: 1px solid rgba(30, 41, 59, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+
+  padding: 8px 12px;
+}
+
+.cybernews-featured__head {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  margin-bottom: 6px;
+}
+
+.cybernews-featured__title {
+  margin: 0;
+  min-width: 0;
+
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  color: #0f172a;
+  line-height: 1.05;
+}
+
+.cybernews-featured__title-main {
+  font-size: 0.98rem;
+  font-weight: 900;
+  flex: 0 0 auto;
+}
+
+.cybernews-featured__title-divider {
+  color: #64748b;
+  opacity: 0.7;
+  font-weight: 800;
+  flex: 0 0 auto;
+}
+
+.cybernews-featured__title-sub {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
+  min-width: 0;
+}
+
+/* states */
+
+.cybernews-featured__state,
+.cybernews-featured__error {
+  font-size: 0.85rem;
+  line-height: 1.2;
+  padding: 2px 0 0;
+}
+
+.cybernews-featured__state {
+  color: #475569;
+}
+
+.cybernews-featured__error {
+  color: #dc2626;
+}
+
+/* ============================================================
+   VIEWPORT
+   ============================================================ */
+
+.cybernews-featured__viewport {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.cybernews-featured__viewport::before,
+.cybernews-featured__viewport::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 10px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cybernews-featured__viewport::before {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    #eef4fb 0%,
+    rgba(238, 244, 251, 0) 100%
+  );
+}
+
+.cybernews-featured__viewport::after {
+  right: 0;
+  background: linear-gradient(
+    to left,
+    #eef4fb 0%,
+    rgba(238, 244, 251, 0) 100%
+  );
+}
+
+.cybernews-featured__track {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  min-width: max-content;
+  will-change: transform;
+  animation: cybernews-scroll 140s linear infinite;
+}
+
+.cybernews-featured__viewport:hover .cybernews-featured__track {
+  animation-play-state: paused;
+}
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+
+.cybernews-featured__card {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 180px;
+  max-width: none;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+
+  padding: 6px 10px;
+
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border-radius: 16px;
+  border: 1px solid rgba(59, 130, 246, 0.12);
+  border-top: 4px solid #f97316;
+
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+  transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease;
+}
+
+.cybernews-featured__card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.1);
+  border-color: rgba(37, 99, 235, 0.22);
+}
+
+.cybernews-featured__card-title {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #0f172a;
+
+  white-space: nowrap;
+}
+
+.cybernews-featured__card-meta {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  font-size: 0.72rem;
+  line-height: 1;
+  color: #5b6472;
+
+  white-space: nowrap;
+}
+
+.cybernews-featured__meta-source,
+.cybernews-featured__meta-date,
+.cybernews-featured__meta-sep {
+  flex: 0 0 auto;
+}
+
+.cybernews-featured__between {
+  flex: 0 0 auto;
+  color: rgba(71, 85, 105, 0.55);
+  font-weight: 700;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+/* ============================================================
+   ANIMATION
+   ============================================================ */
+
+@keyframes cybernews-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ============================================================
+   LEGACY SIDEBAR PANEL
+   ============================================================ */
+
+.news-panel {
+  border-radius: 14px;
+  padding: 10px 14px;
+  background: linear-gradient(180deg, #eef4fb 0%, #e7eef7 100%);
+  border: 1px solid #1e293b;
+  max-height: 420px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  color: #475569;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+}
+
+.news-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.news-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.news-panel::-webkit-scrollbar-thumb {
+  background: rgba(249, 115, 22, 0.45);
+  border-radius: 999px;
+}
+
+.news-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(249, 115, 22, 0.7);
+}
+
+.news-title {
+  font-size: 1.08rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #f97316;
+  color: #0f172a;
+}
+
+.news-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.news-item + .news-item {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(31, 41, 51, 0.18);
+}
+
+.news-item-headline {
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.news-link {
+  color: #f97316;
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.news-link:hover {
+  text-decoration: underline;
+}
+
+.news-item-meta {
+  font-size: 0.76rem;
+  color: #64748b;
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .cybernews-featured {
+    padding: 8px 10px;
+  }
+
+  .cybernews-featured__title-main {
+    font-size: 0.94rem;
+  }
+
+  .cybernews-featured__title-sub {
+    font-size: 0.74rem;
+  }
+
+  .cybernews-featured__card {
+    min-width: 170px;
+    padding: 6px 9px;
+  }
+
+  .cybernews-featured__card-title {
+    font-size: 0.76rem;
+  }
+
+  .cybernews-featured__card-meta {
+    font-size: 0.68rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .cybernews-featured__viewport::before,
+  .cybernews-featured__viewport::after {
+    width: 6px;
+  }
+
+  .cybernews-featured__track {
+    gap: 6px;
+  }
+
+  .cybernews-featured__between {
+    display: none;
+  }
+}

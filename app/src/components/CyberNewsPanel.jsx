@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import { db } from "../auth/firebase";
 import { useUser } from "../auth/UserContext";
+import "./CyberNewsPanel.css";
 
-export default function CyberNewsPanel() {
-  // Rename context loading to authLoading locally
+export default function CyberNewsPanel({ variant = "default" }) {
   const { firebaseUser, loading: authLoading } = useUser();
 
   const [news, setNews] = useState([]);
@@ -15,10 +15,8 @@ export default function CyberNewsPanel() {
     let cancelled = false;
 
     async function loadNews() {
-      // Wait until auth/profile finishes initializing
       if (authLoading) return;
 
-      // If not signed in, don't query Firestore
       if (!firebaseUser) {
         if (!cancelled) {
           setLoading(false);
@@ -43,12 +41,18 @@ export default function CyberNewsPanel() {
           ...d.data(),
         }));
 
-        if (!cancelled) setNews(items);
+        if (!cancelled) {
+          setNews(items);
+        }
       } catch (e) {
         console.error(e);
-        if (!cancelled) setErr("Unable to load cyber news right now.");
+        if (!cancelled) {
+          setErr("Unable to load cyber news right now.");
+        }
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     }
 
@@ -59,29 +63,128 @@ export default function CyberNewsPanel() {
     };
   }, [authLoading, firebaseUser]);
 
+  const featuredLoopItems = useMemo(() => {
+    if (!news.length) return [];
+    return [...news, ...news];
+  }, [news]);
+
+  if (variant === "featured") {
+    return (
+      <section className="cybernews-featured">
+        <div className="cybernews-featured__head">
+          <h2 className="cybernews-featured__title">
+            <span className="cybernews-featured__title-main">Cybersecurity News</span>
+            <span className="cybernews-featured__title-divider">|</span>
+            <span className="cybernews-featured__title-sub">
+              Relevant Cybersecurity News. Updated Weekly
+            </span>
+          </h2>
+        </div>
+
+        {(authLoading || loading) && (
+          <div className="cybernews-featured__state">Loading news...</div>
+        )}
+
+        {!authLoading && !firebaseUser && (
+          <div className="cybernews-featured__state">
+            Sign in to view cyber news.
+          </div>
+        )}
+
+        {!authLoading && firebaseUser && !loading && err && (
+          <div className="cybernews-featured__error">{err}</div>
+        )}
+
+        {!authLoading && firebaseUser && !loading && !err && news.length > 0 && (
+          <div className="cybernews-featured__viewport">
+            <div className="cybernews-featured__track">
+              {featuredLoopItems.map((item, index) => {
+                const dateLabel = item.publishedAt
+                  ? new Date(item.publishedAt).toLocaleDateString()
+                  : "—";
+
+                const content = (
+                  <>
+                    <div
+                      className="cybernews-featured__card-title"
+                      title={item.title || "Untitled article"}
+                    >
+                      {item.title || "Untitled article"}
+                    </div>
+
+                    <div
+                      className="cybernews-featured__card-meta"
+                      title={`${item.source || "Unknown source"} • ${dateLabel}`}
+                    >
+                      <span className="cybernews-featured__meta-source">
+                        {item.source || "Unknown source"}
+                      </span>
+                      <span className="cybernews-featured__meta-sep">•</span>
+                      <span className="cybernews-featured__meta-date">
+                        {dateLabel}
+                      </span>
+                    </div>
+                  </>
+                );
+
+                return (
+                  <React.Fragment key={`${item.id}-${index}`}>
+                    {item.link ? (
+                      <a
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cybernews-featured__card"
+                        title={item.title || "Untitled article"}
+                      >
+                        {content}
+                      </a>
+                    ) : (
+                      <div
+                        className="cybernews-featured__card"
+                        title={item.title || "Untitled article"}
+                      >
+                        {content}
+                      </div>
+                    )}
+
+                    {index !== featuredLoopItems.length - 1 && (
+                      <span className="cybernews-featured__between" aria-hidden="true">
+                        |
+                      </span>
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {!authLoading &&
+          firebaseUser &&
+          !loading &&
+          !err &&
+          news.length === 0 && (
+            <div className="cybernews-featured__state">
+              No cyber news is available right now.
+            </div>
+          )}
+      </section>
+    );
+  }
+
   return (
     <aside className="news-panel">
-      <h3
-        className="news-title"
-        style={{
-          borderBottom: "2px solid #f97316",
-          paddingBottom: "4px",
-          marginBottom: "8px",
-        }}
-      >
-        Cybersecurity News
-      </h3>
+      <h3 className="news-title">Cybersecurity News</h3>
 
-      {(authLoading || loading) && <div style={{ opacity: 0.8 }}>Loading…</div>}
+      {(authLoading || loading) && <div className="news-state">Loading…</div>}
 
       {!authLoading && !firebaseUser && (
-        <div style={{ opacity: 0.8, fontSize: "0.9rem" }}>
-          Sign in to view cyber news.
-        </div>
+        <div className="news-state">Sign in to view cyber news.</div>
       )}
 
       {!authLoading && firebaseUser && !loading && err && (
-        <div style={{ color: "#f97316", fontSize: "0.9rem" }}>{err}</div>
+        <div className="news-error">{err}</div>
       )}
 
       {!authLoading && firebaseUser && !loading && !err && (
@@ -99,11 +202,7 @@ export default function CyberNewsPanel() {
                       href={item.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{
-                        color: "#f97316",
-                        textDecoration: "none",
-                        fontWeight: 700,
-                      }}
+                      className="news-link"
                     >
                       {item.title}
                     </a>
