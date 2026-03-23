@@ -8,6 +8,7 @@ import LearningModuleQuiz from "../components/LearningModuleQuiz";
 import moduleRegistry from "../learningContent/moduleRegistry.json";
 import { db } from "../auth/firebase";
 import { useUser } from "../auth/UserContext";
+import { getTrainingMode } from "../utils/trainingEngine";
 
 // content JSON imports
 import phishingContent from "../learningContent/phishing.content.json";
@@ -73,14 +74,39 @@ export default function LearningModuleContent() {
   const [retakeUsed, setRetakeUsed] = useState(false);
   const [accessChecked, setAccessChecked] = useState(false);
   const [progressError, setProgressError] = useState("");
+  const [trainingMode, setTrainingMode] = useState("open");
 
   const progressInitializedRef = useRef(false);
   const completionWriteRef = useRef(false);
 
-  const isAllowed = useMemo(
+  const isAllowedByOrgType = useMemo(
     () => canAccessModule(moduleMeta, orgType, role),
     [moduleMeta, orgType, role]
   );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadTrainingMode() {
+      if (loading) return;
+
+      if (!orgId) {
+        setTrainingMode("open");
+        return;
+      }
+
+      const mode = await getTrainingMode(orgId);
+      if (!cancelled) {
+        setTrainingMode(mode);
+      }
+    }
+
+    loadTrainingMode();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [loading, orgId]);
 
   useEffect(() => {
     if (loading) return;
@@ -90,21 +116,25 @@ export default function LearningModuleContent() {
       return;
     }
 
-    if (!isAllowed) {
+    if (!isAllowedByOrgType) {
       alert("You do not have access to this lesson.");
       navigate("/lessons", { replace: true });
       return;
     }
 
+    // For now:
+    // - open mode uses current behavior
+    // - controlled mode also temporarily allows access
+    // Later we will enforce active playbook checks here.
     setAccessChecked(true);
-  }, [loading, moduleMeta, moduleData, isAllowed, navigate]);
+  }, [loading, moduleMeta, moduleData, isAllowedByOrgType, trainingMode, navigate]);
 
   useEffect(() => {
     async function ensureTrainingProgressStarted() {
       if (
         loading ||
         !accessChecked ||
-        !isAllowed ||
+        !isAllowedByOrgType ||
         !uid ||
         !orgId ||
         !moduleMeta ||
@@ -149,14 +179,14 @@ export default function LearningModuleContent() {
     }
 
     ensureTrainingProgressStarted();
-  }, [loading, accessChecked, isAllowed, uid, orgId, moduleMeta]);
+  }, [loading, accessChecked, isAllowedByOrgType, uid, orgId, moduleMeta]);
 
   useEffect(() => {
     async function markCompleted() {
       if (
         loading ||
         !accessChecked ||
-        !isAllowed ||
+        !isAllowedByOrgType ||
         !uid ||
         !orgId ||
         !moduleMeta ||
@@ -196,7 +226,7 @@ export default function LearningModuleContent() {
     }
 
     markCompleted();
-  }, [quizResult, loading, accessChecked, isAllowed, uid, orgId, moduleMeta]);
+  }, [quizResult, loading, accessChecked, isAllowedByOrgType, uid, orgId, moduleMeta]);
 
   if (loading || !accessChecked) {
     return <div style={{ padding: 24 }}>Loading…</div>;
@@ -719,6 +749,10 @@ export default function LearningModuleContent() {
               Page {lessonPageNumber} / {lessonPageTotal}
             </div>
           )}
+
+          <div style={{ opacity: 0.65, marginTop: 8, fontSize: 14 }}>
+            Training Mode: {trainingMode === "controlled" ? "Controlled" : "Open"}
+          </div>
 
           {progressError && (
             <div

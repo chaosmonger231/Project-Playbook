@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   collection,
@@ -10,103 +10,20 @@ import {
 } from "firebase/firestore";
 import ContentPanel from "../components/ContentPanel";
 import AttestationsList from "../components/AttestationsList";
+import ParticipantTrainingPanel from "../components/ParticipantTrainingPanel";
 import { db } from "../auth/firebase";
 import { useUser } from "../auth/UserContext";
+import moduleRegistry from "../learningContent/moduleRegistry.json";
 import "./TeamManagement.css";
 
-const TABS = [
+const COORDINATOR_TABS = [
   { key: "members", label: "Members" },
   { key: "training", label: "Training" },
   { key: "attestations", label: "Attestations" },
   { key: "insights", label: "Insights" },
 ];
 
-const TRAINING_MODULES = [
-  {
-    id: "phishing-basics",
-    label: "Phishing Basics",
-    shortLabel: "Phishing",
-    category: "general",
-  },
-  {
-    id: "social-engineering-awareness",
-    label: "Social Engineering Awareness",
-    shortLabel: "Social",
-    category: "general",
-  },
-  {
-    id: "password-basics",
-    label: "Password Basics",
-    shortLabel: "Passwords",
-    category: "general",
-  },
-  {
-    id: "multi-factor-authentication",
-    label: "Multi-Factor Authentication",
-    shortLabel: "MFA",
-    category: "general",
-  },
-  {
-    id: "safe-internet-link-safety",
-    label: "Safe Internet & Link Safety",
-    shortLabel: "Browsing",
-    category: "general",
-  },
-  {
-    id: "student-privacy-ferpa",
-    label: "Keeping Student Health and Personal Info Safe",
-    shortLabel: "FERPA",
-    category: "education",
-  },
-  {
-    id: "student-device-safety",
-    label: "Student Device and Account Safety",
-    shortLabel: "Devices",
-    category: "education",
-  },
-  {
-    id: "classroom-communication-data-safety",
-    label: "Classroom Communication & Data Safety",
-    shortLabel: "Classroom",
-    category: "education",
-  },
-  {
-    id: "vendor-email-fraud",
-    label: "Vendor Invoice and Email Fraud",
-    shortLabel: "Vendors",
-    category: "small_business",
-  },
-  {
-    id: "customer-data-handling",
-    label: "Customer Data Handling Basics",
-    shortLabel: "Data",
-    category: "small_business",
-  },
-  {
-    id: "ransomware-backup-awareness",
-    label: "Ransomware & Backup Awareness",
-    shortLabel: "Backup",
-    category: "small_business",
-  },
-  {
-    id: "government-targeted-attacks",
-    label: "Government Systems & Targeted Attacks",
-    shortLabel: "Threats",
-    category: "local_government",
-  },
-  {
-    id: "incident-response-reporting-for-agencies",
-    label: "Incident Response & Reporting for Agencies",
-    shortLabel: "Response",
-    category: "local_government",
-  },
-  {
-    id: "ransomware-service-disruption-awareness",
-    label: "Ransomware & Service Disruption Awareness",
-    shortLabel: "Disruption",
-    category: "local_government",
-  },
-];
+const PARTICIPANT_TABS = [{ key: "training", label: "Training Dashboard" }];
 
 const CATEGORY_META = {
   general: {
@@ -121,21 +38,11 @@ const CATEGORY_META = {
     label: "Small Business",
     className: "tm-module-category-small-business",
   },
-  local_government: {
+  local_gov: {
     label: "Local Government",
     className: "tm-module-category-local-government",
   },
 };
-
-function isValidTabKey(key) {
-  return TABS.some((t) => t.key === key);
-}
-
-function getInitialTabFromSearchParams(searchParams) {
-  const raw = (searchParams.get("tab") || "").trim();
-  if (isValidTabKey(raw)) return raw;
-  return "members";
-}
 
 function csvEscape(value) {
   const s = String(value ?? "");
@@ -213,23 +120,6 @@ function getMatrixSummary(rows, modules) {
   return { completed, inProgress, notStarted };
 }
 
-function isModuleVisibleToOrgType(module, orgType) {
-  if (!module) return false;
-  if (module.category === "general") return true;
-
-  if (orgType === "education") return module.category === "education";
-  if (orgType === "small_business") return module.category === "small_business";
-  if (orgType === "local_gov") return module.category === "local_government";
-
-  return false;
-}
-
-function getVisibleTrainingModules(orgType) {
-  return TRAINING_MODULES.filter((module) =>
-    isModuleVisibleToOrgType(module, orgType)
-  );
-}
-
 function normalizeRole(rawRole) {
   return rawRole === "coordinator" ? "coordinator" : "participant";
 }
@@ -238,6 +128,43 @@ function normalizeStatus(rawStatus) {
   return rawStatus === "invited" || rawStatus === "disabled" || rawStatus === "active"
     ? rawStatus
     : "active";
+}
+
+function getAllRegistryModules() {
+  const registryModules = moduleRegistry.modules || [];
+
+  return registryModules.map((module) => ({
+    id: module.moduleId,
+    label: module.title,
+    shortLabel: module.shortLabel || module.title || module.moduleId,
+    description: module.synopsis || "",
+    category: module.category || "general",
+    allowedOrgTypes: module.allowedOrgTypes || ["all"],
+  }));
+}
+
+function canAccessByOrgType(module, orgType) {
+  const allowed = (module.allowedOrgTypes || []).map((value) =>
+    String(value).toLowerCase()
+  );
+  const normalizedOrgType = String(orgType || "").toLowerCase();
+
+  if (allowed.includes("all")) return true;
+  if (!normalizedOrgType) return false;
+
+  return allowed.includes(normalizedOrgType);
+}
+
+function getVisibleModulesForMode({ allModules, trainingMode, activeCampaign, orgType }) {
+  if (trainingMode === "controlled") {
+    const assignedIds = Array.isArray(activeCampaign?.moduleIds)
+      ? activeCampaign.moduleIds
+      : [];
+
+    return allModules.filter((module) => assignedIds.includes(module.id));
+  }
+
+  return allModules.filter((module) => canAccessByOrgType(module, orgType));
 }
 
 async function loadTrainingProgressForUser(userId, visibleModules) {
@@ -261,6 +188,14 @@ async function loadTrainingProgressForUser(userId, visibleModules) {
         return [module.id, rawStatus];
       }
 
+      if (progressData.completed === true) {
+        return [module.id, "completed"];
+      }
+
+      if ((progressData.percentComplete || 0) > 0) {
+        return [module.id, "in_progress"];
+      }
+
       return [module.id, "not_started"];
     })
   );
@@ -268,18 +203,84 @@ async function loadTrainingProgressForUser(userId, visibleModules) {
   return Object.fromEntries(progressEntries);
 }
 
+function getAllowedTabs(isCoordinator) {
+  return isCoordinator ? COORDINATOR_TABS : PARTICIPANT_TABS;
+}
+
+function getSafeTab(searchParams, isCoordinator) {
+  const allowedTabs = getAllowedTabs(isCoordinator);
+  const allowedKeys = allowedTabs.map((t) => t.key);
+  const raw = (searchParams.get("tab") || "").trim();
+
+  if (allowedKeys.includes(raw)) return raw;
+  return isCoordinator ? "members" : "training";
+}
+
+function getPreparednessLabel(percentCompleted) {
+  if (percentCompleted >= 85) {
+    return {
+      title: "Strong coverage",
+      description: "Most assigned training has been completed across your organization.",
+      tone: "good",
+    };
+  }
+
+  if (percentCompleted >= 60) {
+    return {
+      title: "Improving coverage",
+      description: "Training progress is moving in the right direction, but some gaps remain.",
+      tone: "medium",
+    };
+  }
+
+  if (percentCompleted >= 30) {
+    return {
+      title: "Moderate risk",
+      description: "A meaningful portion of the organization still needs training attention.",
+      tone: "warning",
+    };
+  }
+
+  return {
+    title: "Needs attention",
+    description: "Training coverage is currently low and follow-up is recommended.",
+    tone: "danger",
+  };
+}
+
 export default function TeamManagement() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { profile, role: contextRole } = useUser();
 
-  const [tab, setTab] = useState(() => getInitialTabFromSearchParams(searchParams));
+  const role = profile?.role || contextRole || "participant";
+  const isCoordinator = role === "coordinator";
+  const tabs = useMemo(() => getAllowedTabs(isCoordinator), [isCoordinator]);
+
+  const [tab, setTab] = useState(() => getSafeTab(searchParams, isCoordinator));
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
 
   useEffect(() => {
-    const next = getInitialTabFromSearchParams(searchParams);
+    const next = getSafeTab(searchParams, isCoordinator);
     setTab((prev) => (prev === next ? prev : next));
-  }, [searchParams]);
+  }, [searchParams, isCoordinator]);
+
+  useEffect(() => {
+    const safeTab = getSafeTab(searchParams, isCoordinator);
+    const currentParam = (searchParams.get("tab") || "").trim();
+
+    if (currentParam !== safeTab) {
+      setSearchParams({ tab: safeTab }, { replace: true });
+    }
+  }, [searchParams, setSearchParams, isCoordinator]);
+
+  useEffect(() => {
+    if (!isCoordinator && drawerOpen) {
+      setDrawerOpen(false);
+      setSelectedMember(null);
+    }
+  }, [isCoordinator, drawerOpen]);
 
   function handleTabChange(nextTab) {
     setTab(nextTab);
@@ -290,32 +291,40 @@ export default function TeamManagement() {
     <ContentPanel>
       <div className="tm-head">
         <div className="tm-head-left">
-          <h2 className="tm-title">Team Management</h2>
+          <h2 className="tm-title">
+            {isCoordinator ? "Team Management" : "Training Dashboard"}
+          </h2>
           <p className="tm-sub">
-            Manage members, view training progress, and review saved attestations.
+            {isCoordinator
+              ? "Manage members, view training progress, and review saved attestations."
+              : "View your assigned lessons and current progress."}
           </p>
         </div>
 
         <div className="tm-head-right">
-          <button
-            type="button"
-            className="tm-btn tm-btn-primary"
-            onClick={() =>
-              alert(
-                "Under construction: for now, share the Join Code from Account to add members."
-              )
-            }
-          >
-            + Invite Member
-          </button>
+          {isCoordinator && (
+            <>
+              <button
+                type="button"
+                className="tm-btn tm-btn-primary"
+                onClick={() =>
+                  alert(
+                    "Under construction: for now, share the Join Code from Account to add members."
+                  )
+                }
+              >
+                + Invite Member
+              </button>
 
-          <button
-            type="button"
-            className="tm-btn tm-btn-ghost"
-            onClick={() => navigate("/account")}
-          >
-            Get Join Code
-          </button>
+              <button
+                type="button"
+                className="tm-btn tm-btn-ghost"
+                onClick={() => navigate("/account")}
+              >
+                Get Join Code
+              </button>
+            </>
+          )}
 
           <button
             type="button"
@@ -328,7 +337,7 @@ export default function TeamManagement() {
       </div>
 
       <div className="tm-tabs">
-        {TABS.map((t) => (
+        {tabs.map((t) => (
           <button
             key={t.key}
             type="button"
@@ -341,7 +350,7 @@ export default function TeamManagement() {
       </div>
 
       <div className="tm-panel">
-        {tab === "members" && (
+        {tab === "members" && isCoordinator && (
           <MembersPanel
             onManage={(member) => {
               setSelectedMember(member);
@@ -350,18 +359,22 @@ export default function TeamManagement() {
           />
         )}
 
-        {tab === "training" && <TrainingPanel />}
-        {tab === "attestations" && <AttestationsList />}
-        {tab === "insights" && <InsightsPanel />}
+        {tab === "training" &&
+          (isCoordinator ? <TrainingPanel /> : <ParticipantTrainingPanel />)}
+
+        {tab === "attestations" && isCoordinator && <AttestationsList />}
+        {tab === "insights" && isCoordinator && <InsightsPanel />}
       </div>
 
-      <RightDrawer
-        open={drawerOpen}
-        title="Member Details"
-        onClose={() => setDrawerOpen(false)}
-      >
-        <MemberDetails member={selectedMember} />
-      </RightDrawer>
+      {isCoordinator && (
+        <RightDrawer
+          open={drawerOpen}
+          title="Member Details"
+          onClose={() => setDrawerOpen(false)}
+        >
+          <MemberDetails member={selectedMember} />
+        </RightDrawer>
+      )}
     </ContentPanel>
   );
 }
@@ -608,32 +621,85 @@ function TrainingPanel() {
   const [rows, setRows] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState("");
+  const [trainingMode, setTrainingMode] = React.useState("organization");
+  const [activeCampaign, setActiveCampaign] = React.useState(null);
+
+  const allModules = React.useMemo(() => getAllRegistryModules(), []);
 
   const visibleModules = React.useMemo(() => {
-    return getVisibleTrainingModules(orgType);
-  }, [orgType]);
+    return getVisibleModulesForMode({
+      allModules,
+      trainingMode,
+      activeCampaign,
+      orgType,
+    });
+  }, [allModules, trainingMode, activeCampaign, orgType]);
 
   useEffect(() => {
+    let isMounted = true;
+
     async function loadTrainingRows() {
       if (!orgId) {
-        setRows([]);
-        setLoading(false);
+        if (isMounted) {
+          setRows([]);
+          setLoading(false);
+        }
         return;
       }
 
       try {
-        setLoading(true);
-        setError("");
+        if (isMounted) {
+          setLoading(true);
+          setError("");
+        }
+
+        const settingsRef = doc(db, "orgs", orgId, "settings", "training");
+        const settingsSnap = await getDoc(settingsRef);
+
+        let mode = "organization";
+
+        if (settingsSnap.exists()) {
+          const settingsData = settingsSnap.data() || {};
+          mode = settingsData.trainingMode || "organization";
+        }
+
+        let campaign = null;
+
+        if (mode === "controlled") {
+          const playbooksRef = collection(db, "orgs", orgId, "playbooks");
+          const playbooksQuery = query(playbooksRef, where("isActive", "==", true));
+          const playbooksSnap = await getDocs(playbooksQuery);
+
+          if (!playbooksSnap.empty) {
+            const campaignDoc = playbooksSnap.docs[0];
+            campaign = {
+              id: campaignDoc.id,
+              ...campaignDoc.data(),
+            };
+          }
+        }
+
+        const modulesForRows = getVisibleModulesForMode({
+          allModules,
+          trainingMode: mode,
+          activeCampaign: campaign,
+          orgType,
+        });
 
         const usersQuery = query(collection(db, "users"), where("orgId", "==", orgId));
         const usersSnap = await getDocs(usersQuery);
 
-        const loadedRows = await Promise.all(
-          usersSnap.docs.map(async (userDoc) => {
-            const d = userDoc.data();
-            const statuses = await loadTrainingProgressForUser(userDoc.id, visibleModules);
+        const participantDocs = usersSnap.docs.filter((userDoc) => {
+          const d = userDoc.data() || {};
+          return normalizeRole(d.role) === "participant";
+        });
 
-            const completed = visibleModules.filter(
+        const loadedRows = await Promise.all(
+          participantDocs.map(async (userDoc) => {
+            const d = userDoc.data();
+            const statuses = await loadTrainingProgressForUser(userDoc.id, modulesForRows);
+
+            const completed = modulesForRows.filter(
               (module) => statuses[module.id] === "completed"
             ).length;
 
@@ -643,7 +709,7 @@ function TrainingPanel() {
               email: d.email || "—",
               role: normalizeRole(d.role),
               status: normalizeStatus(d.status),
-              assigned: visibleModules.length,
+              assigned: modulesForRows.length,
               completed,
               statuses,
             };
@@ -656,18 +722,32 @@ function TrainingPanel() {
           return nameA.localeCompare(nameB);
         });
 
+        if (!isMounted) return;
+
+        setTrainingMode(mode);
+        setActiveCampaign(campaign);
         setRows(loadedRows);
       } catch (err) {
         console.error("Failed to load training progress", err);
+
+        if (!isMounted) return;
+
         setError("Could not load training progress.");
         setRows([]);
+        setActiveCampaign(null);
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     }
 
     loadTrainingRows();
-  }, [orgId, visibleModules]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [orgId, orgType, allModules]);
 
   const filteredRows = React.useMemo(() => {
     const q = queryText.trim().toLowerCase();
@@ -872,8 +952,9 @@ function TrainingPanel() {
           </div>
 
           <div className="tm-hint">
-            Default lessons come from the lesson catalog for this org type. Progress
-            appears as soon as a matching training record exists under the user.
+            The Training tab follows the same assignment logic as Lessons:
+            organization-based mode shows general plus org-specific lessons, and
+            controlled mode shows only the active campaign’s selected modules.
           </div>
         </>
       )}
@@ -882,20 +963,449 @@ function TrainingPanel() {
 }
 
 function InsightsPanel() {
+  const { orgId, orgType = "education" } = useUser();
+
+  const [rows, setRows] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState("");
+  const [trainingMode, setTrainingMode] = React.useState("organization");
+  const [activeCampaign, setActiveCampaign] = React.useState(null);
+
+  const allModules = React.useMemo(() => getAllRegistryModules(), []);
+
+  const visibleModules = React.useMemo(() => {
+    return getVisibleModulesForMode({
+      allModules,
+      trainingMode,
+      activeCampaign,
+      orgType,
+    });
+  }, [allModules, trainingMode, activeCampaign, orgType]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadInsightsRows() {
+      if (!orgId) {
+        if (isMounted) {
+          setRows([]);
+          setLoading(false);
+          setError("No organization found.");
+        }
+        return;
+      }
+
+      try {
+        if (isMounted) {
+          setLoading(true);
+          setError("");
+        }
+
+        const settingsRef = doc(db, "orgs", orgId, "settings", "training");
+        const settingsSnap = await getDoc(settingsRef);
+
+        let mode = "organization";
+
+        if (settingsSnap.exists()) {
+          const settingsData = settingsSnap.data() || {};
+          mode = settingsData.trainingMode || "organization";
+        }
+
+        let campaign = null;
+
+        if (mode === "controlled") {
+          const playbooksRef = collection(db, "orgs", orgId, "playbooks");
+          const playbooksQuery = query(playbooksRef, where("isActive", "==", true));
+          const playbooksSnap = await getDocs(playbooksQuery);
+
+          if (!playbooksSnap.empty) {
+            const campaignDoc = playbooksSnap.docs[0];
+            campaign = {
+              id: campaignDoc.id,
+              ...campaignDoc.data(),
+            };
+          }
+        }
+
+        const modulesForRows = getVisibleModulesForMode({
+          allModules,
+          trainingMode: mode,
+          activeCampaign: campaign,
+          orgType,
+        });
+
+        const usersQuery = query(collection(db, "users"), where("orgId", "==", orgId));
+        const usersSnap = await getDocs(usersQuery);
+
+        const participantDocs = usersSnap.docs.filter((userDoc) => {
+          const d = userDoc.data() || {};
+          return normalizeRole(d.role) === "participant";
+        });
+
+        const loadedRows = await Promise.all(
+          participantDocs.map(async (userDoc) => {
+            const d = userDoc.data();
+            const statuses = await loadTrainingProgressForUser(userDoc.id, modulesForRows);
+
+            const completed = modulesForRows.filter(
+              (module) => statuses[module.id] === "completed"
+            ).length;
+
+            const inProgress = modulesForRows.filter(
+              (module) => statuses[module.id] === "in_progress"
+            ).length;
+
+            const notStarted = Math.max(
+              modulesForRows.length - completed - inProgress,
+              0
+            );
+
+            return {
+              id: userDoc.id,
+              name: d.displayName || d.name || "—",
+              email: d.email || "—",
+              assigned: modulesForRows.length,
+              completed,
+              inProgress,
+              notStarted,
+              statuses,
+            };
+          })
+        );
+
+        loadedRows.sort((a, b) => {
+          const nameA = (a.name || "").toLowerCase();
+          const nameB = (b.name || "").toLowerCase();
+          return nameA.localeCompare(nameB);
+        });
+
+        if (!isMounted) return;
+
+        setTrainingMode(mode);
+        setActiveCampaign(campaign);
+        setRows(loadedRows);
+      } catch (err) {
+        console.error("Failed to load insights", err);
+
+        if (!isMounted) return;
+
+        setError("Could not load insights.");
+        setRows([]);
+        setActiveCampaign(null);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadInsightsRows();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [orgId, orgType, allModules]);
+
+  const totalLearners = rows.length;
+  const totalModules = visibleModules.length;
+  const totalAssignedCells = totalLearners * totalModules;
+
+  const completionSummary = useMemo(
+    () => getMatrixSummary(rows, visibleModules),
+    [rows, visibleModules]
+  );
+
+  const percentCompleted =
+    totalAssignedCells > 0
+      ? Math.round((completionSummary.completed / totalAssignedCells) * 100)
+      : 0;
+
+  const percentInProgress =
+    totalAssignedCells > 0
+      ? Math.round((completionSummary.inProgress / totalAssignedCells) * 100)
+      : 0;
+
+  const percentNotStarted =
+    totalAssignedCells > 0
+      ? Math.max(100 - percentCompleted - percentInProgress, 0)
+      : 0;
+
+  const preparedness = getPreparednessLabel(percentCompleted);
+
+  const learnerNeedsSupport = useMemo(() => {
+    return [...rows]
+      .sort((a, b) => {
+        const aPercent = a.assigned > 0 ? a.completed / a.assigned : 0;
+        const bPercent = b.assigned > 0 ? b.completed / b.assigned : 0;
+
+        if (aPercent !== bPercent) return aPercent - bPercent;
+        return a.name.localeCompare(b.name);
+      })
+      .slice(0, 5)
+      .map((row) => ({
+        ...row,
+        completionPercent:
+          row.assigned > 0 ? Math.round((row.completed / row.assigned) * 100) : 0,
+      }));
+  }, [rows]);
+
+  const moduleAttention = useMemo(() => {
+    const items = visibleModules.map((module) => {
+      let completed = 0;
+      let inProgress = 0;
+      let notStarted = 0;
+
+      rows.forEach((row) => {
+        const status = row.statuses?.[module.id] || "not_started";
+        if (status === "completed") completed += 1;
+        else if (status === "in_progress") inProgress += 1;
+        else notStarted += 1;
+      });
+
+      const total = rows.length;
+      const completionPercent = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+      return {
+        id: module.id,
+        label: module.label,
+        completed,
+        inProgress,
+        notStarted,
+        total,
+        completionPercent,
+      };
+    });
+
+    return items
+      .sort((a, b) => {
+        if (a.completionPercent !== b.completionPercent) {
+          return a.completionPercent - b.completionPercent;
+        }
+        return a.label.localeCompare(b.label);
+      })
+      .slice(0, 6);
+  }, [visibleModules, rows]);
+
+  const campaignModeLabel =
+    trainingMode === "controlled" ? "Controlled" : "Organization-Based";
+
   return (
-    <div className="tm-card">
+    <div className="tm-card tm-insights-card">
       <div className="tm-card-head">
         <div>
           <div className="tm-card-title">Insights</div>
           <div className="tm-card-sub">
-            Dashboard view of training adoption and compliance activity.
+            A question-driven view of your organization’s training readiness.
           </div>
         </div>
       </div>
 
-      <div className="tm-empty">
-        Placeholder: charts + summary stats will appear here once data is connected.
-      </div>
+      {loading && <div className="tm-empty">Loading insights...</div>}
+      {!loading && error && <div className="tm-empty">{error}</div>}
+
+      {!loading && !error && (
+        <div className="tm-insights-layout">
+          <section className="tm-insight-section">
+            <div className="tm-insight-question-row">
+              <div>
+                <h3 className="tm-insight-question">How prepared are we?</h3>
+                <p className="tm-insight-answer">
+                  Based on assigned training completion, your organization is currently in
+                  <strong> {preparedness.title.toLowerCase()}</strong>.
+                </p>
+              </div>
+
+              <div className={`tm-readiness-chip tm-readiness-chip--${preparedness.tone}`}>
+                {preparedness.title}
+              </div>
+            </div>
+
+            <div className="tm-insight-summary-line">
+              <span>Training Mode: {campaignModeLabel}</span>
+              <span>•</span>
+              <span>Learners: {totalLearners}</span>
+              <span>•</span>
+              <span>Modules: {totalModules}</span>
+              <span>•</span>
+              <span>Assigned training cells: {totalAssignedCells}</span>
+            </div>
+
+            <div className="tm-insight-kpis">
+              <div className="tm-insight-kpi">
+                <div className="tm-insight-kpi-value">{percentCompleted}%</div>
+                <div className="tm-insight-kpi-label">Completed</div>
+              </div>
+
+              <div className="tm-insight-kpi">
+                <div className="tm-insight-kpi-value">{completionSummary.completed}</div>
+                <div className="tm-insight-kpi-label">Completed Cells</div>
+              </div>
+
+              <div className="tm-insight-kpi">
+                <div className="tm-insight-kpi-value">{completionSummary.inProgress}</div>
+                <div className="tm-insight-kpi-label">In Progress</div>
+              </div>
+
+              <div className="tm-insight-kpi">
+                <div className="tm-insight-kpi-value">{completionSummary.notStarted}</div>
+                <div className="tm-insight-kpi-label">Not Started</div>
+              </div>
+            </div>
+
+            <div className="tm-insight-panel-grid tm-insight-panel-grid--two">
+              <div className="tm-insight-panel">
+                <div className="tm-insight-panel-title">Training Coverage</div>
+                <div className="tm-insight-panel-sub">
+                  A simple breakdown of completed, in-progress, and not-started training.
+                </div>
+
+                <div className="tm-insight-stacked-bar" aria-label="Training coverage">
+                  <div
+                    className="tm-insight-stacked-segment tm-segment-completed"
+                    style={{ width: `${percentCompleted}%` }}
+                    title={`Completed: ${percentCompleted}%`}
+                  />
+                  <div
+                    className="tm-insight-stacked-segment tm-segment-in-progress"
+                    style={{ width: `${percentInProgress}%` }}
+                    title={`In Progress: ${percentInProgress}%`}
+                  />
+                  <div
+                    className="tm-insight-stacked-segment tm-segment-not-started"
+                    style={{ width: `${percentNotStarted}%` }}
+                    title={`Not Started: ${percentNotStarted}%`}
+                  />
+                </div>
+
+                <div className="tm-insight-legend">
+                  <span className="tm-insight-legend-item">
+                    <span className="tm-insight-legend-dot tm-segment-completed" />
+                    Completed ({percentCompleted}%)
+                  </span>
+                  <span className="tm-insight-legend-item">
+                    <span className="tm-insight-legend-dot tm-segment-in-progress" />
+                    In Progress ({percentInProgress}%)
+                  </span>
+                  <span className="tm-insight-legend-item">
+                    <span className="tm-insight-legend-dot tm-segment-not-started" />
+                    Not Started ({percentNotStarted}%)
+                  </span>
+                </div>
+              </div>
+
+              <div className="tm-insight-panel">
+                <div className="tm-insight-panel-title">What this means</div>
+                <div className="tm-insight-panel-sub">
+                  Training completion is a readiness signal, not a guarantee of security.
+                </div>
+
+                <div className="tm-insight-callout">
+                  <strong>{preparedness.title}:</strong> {preparedness.description}
+                </div>
+
+                <div className="tm-insight-mini-list">
+                  <div className="tm-insight-mini-item">
+                    <span className="tm-insight-mini-label">Completed percentage</span>
+                    <span className="tm-insight-mini-value">{percentCompleted}%</span>
+                  </div>
+                  <div className="tm-insight-mini-item">
+                    <span className="tm-insight-mini-label">Learners tracked</span>
+                    <span className="tm-insight-mini-value">{totalLearners}</span>
+                  </div>
+                  <div className="tm-insight-mini-item">
+                    <span className="tm-insight-mini-label">Visible modules</span>
+                    <span className="tm-insight-mini-value">{totalModules}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="tm-insight-section">
+            <h3 className="tm-insight-question">Who needs more training?</h3>
+            <p className="tm-insight-answer">
+              These learners currently have the lowest completion rates among assigned
+              modules.
+            </p>
+
+            <div className="tm-insight-panel">
+              <div className="tm-insight-bar-list">
+                {learnerNeedsSupport.length === 0 ? (
+                  <div className="tm-empty">No learner data available yet.</div>
+                ) : (
+                  learnerNeedsSupport.map((learner) => (
+                    <div key={learner.id} className="tm-insight-bar-row">
+                      <div className="tm-insight-bar-head">
+                        <span className="tm-insight-bar-title">{learner.name}</span>
+                        <span className="tm-insight-bar-value">
+                          {learner.completed}/{learner.assigned} ({learner.completionPercent}%)
+                        </span>
+                      </div>
+
+                      <div className="tm-insight-bar-track">
+                        <div
+                          className="tm-insight-bar-fill"
+                          style={{ width: `${learner.completionPercent}%` }}
+                        />
+                      </div>
+
+                      <div className="tm-insight-bar-meta">
+                        <span>In Progress: {learner.inProgress}</span>
+                        <span>Not Started: {learner.notStarted}</span>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </section>
+
+          <section className="tm-insight-section">
+            <h3 className="tm-insight-question">Which modules need attention?</h3>
+            <p className="tm-insight-answer">
+              These are the modules with the lowest completion rates across your learners.
+            </p>
+
+            <div className="tm-insight-panel">
+              <div className="tm-insight-bar-list">
+                {moduleAttention.length === 0 ? (
+                  <div className="tm-empty">No module data available yet.</div>
+                ) : (
+                  moduleAttention.map((module) => (
+                    <div key={module.id} className="tm-insight-bar-row">
+                      <div className="tm-insight-bar-head">
+                        <span className="tm-insight-bar-title">{module.label}</span>
+                        <span className="tm-insight-bar-value">
+                          {module.completed}/{module.total} ({module.completionPercent}%)
+                        </span>
+                      </div>
+
+                      <div className="tm-insight-bar-track">
+                        <div
+                          className="tm-insight-bar-fill tm-insight-bar-fill--module"
+                          style={{ width: `${module.completionPercent}%` }}
+                        />
+                      </div>
+
+                      <div className="tm-insight-bar-meta">
+                        <span>In Progress: {module.inProgress}</span>
+                        <span>Not Started: {module.notStarted}</span>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </section>
+
+          <section className="tm-insight-section">
+            <h3 className="tm-insight-question">Detailed reference</h3>
+            <p className="tm-insight-answer">
+              Use the Training tab for the full learner-by-module matrix and status table.
+            </p>
+          </section>
+        </div>
+      )}
     </div>
   );
 }

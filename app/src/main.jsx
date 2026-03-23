@@ -16,14 +16,19 @@ import Home from "./pages/Home";
 import Lessons from "./pages/Lessons.jsx";
 import Playbooks from "./pages/Playbooks.jsx";
 import TeamManagament from "./pages/TeamManagement.jsx";
+import TrainingCampaign from "./pages/TrainingCampaign";
 
 import SecurityReadiness from "./pages/SecurityReadiness.jsx";
 import Playbook2 from "./pages/Playbook2.jsx";
 import Playbook3 from "./pages/Playbook3.jsx";
 import Playbook4 from "./pages/Playbook4.jsx";
-import Playbook5 from "./pages/Playbook5.jsx";
+// import Playbook5 from "./pages/Playbook5.jsx";
 
 import LearningModuleContent from "./pages/LearningModuleContent";
+
+import SecurityTools from "./pages/SecurityTools";
+
+import PolicyGuide from "./pages/PolicyGuide";
 
 const router = createBrowserRouter([
   // Public route
@@ -66,16 +71,19 @@ const router = createBrowserRouter([
       { path: "/", element: <Home /> },
       { path: "/lessons", element: <Lessons /> },
 
-      // ✅ Playbooks hub
+      // Playbooks hub
       { path: "/playbooks", element: <Playbooks /> },
       { path: "/organization", element: <TeamManagament/>},
+      
+      { path: "/securitytools", element: <SecurityTools />},
+      { path: "/policyguide", element: <PolicyGuide/> },
 
       // Playbook detail pages
       { path: "/securityreadiness", element: <SecurityReadiness /> },
       { path: "/playbook2", element: <Playbook2 /> },
       { path: "/playbook3", element: <Playbook3 /> },
       { path: "/playbook4", element: <Playbook4 /> },
-      { path: "/playbook5", element: <Playbook5 /> },
+      { path: "/playbook5", element: <TrainingCampaign /> },
     ],
   },
 ]);
