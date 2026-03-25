@@ -78,21 +78,20 @@ export default function Home() {
               <button
                 type="button"
                 className="action-card action-card--green"
-                onClick={() => navigate("/organization")}
+                onClick={() => navigate("/about")}
               >
                 <div className="action-card__head">
                   <div className="action-card__title">About Project Playbook</div>
                 </div>
                 <div className="action-card__divider" />
+                
                 <div className="action-card__body">
-                  Invite members, manage roles, and view participation across
-                  your organization.
-                  <div className="showcase-grid">
-                    <img src="/images/networking.png" alt="Networking" />
-                    <img src="/images/column.png" alt="Column" />
-                    <img src="/images/piechart.png" alt="Pie Chart" />
-                    <img src="/images/management.png" alt="Management" />
-                  </div>
+                  <p>
+                    Project Playbook delivers guided training, playbooks, and practical tools to help organizations improve cybersecurity readiness. 
+                    Following the passage of <strong>Ohio HB96</strong>, many public organizations are now required to adopt cybersecurity programs. Project Playbook 
+                    helps meet these requirements while also supporting small businesses and other organizations working to strengthen their security posture. 
+                  </p>
+                  <p>Click this card to learn more.</p>
                 </div>
               </button>
 

@@ -17,8 +17,10 @@ import Lessons from "./pages/Lessons.jsx";
 import Playbooks from "./pages/Playbooks.jsx";
 import TeamManagament from "./pages/TeamManagement.jsx";
 import TrainingCampaign from "./pages/TrainingCampaign";
+import About from "./pages/About";
 
 import SecurityReadiness from "./pages/SecurityReadiness.jsx";
+import Playbook1 from "./pages/Playbook1";
 import Playbook2 from "./pages/Playbook2.jsx";
 import Playbook3 from "./pages/Playbook3.jsx";
 import Playbook4 from "./pages/Playbook4.jsx";
@@ -77,9 +79,11 @@ const router = createBrowserRouter([
       
       { path: "/securitytools", element: <SecurityTools />},
       { path: "/policyguide", element: <PolicyGuide/> },
+      { path: "/about", element: <About/>},
 
       // Playbook detail pages
       { path: "/securityreadiness", element: <SecurityReadiness /> },
+      { path: "/playbook1", element: <Playbook1 /> },
       { path: "/playbook2", element: <Playbook2 /> },
       { path: "/playbook3", element: <Playbook3 /> },
       { path: "/playbook4", element: <Playbook4 /> },

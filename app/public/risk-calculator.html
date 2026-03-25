@@ -166,18 +166,54 @@
 <body>
 
 <h1>Impact Calculator</h1>
-  <p> Impact analysis in ISO 31000 focuses on the severity of consequences to organizational objectives across operational, financial, safety, legal, and reputational areas. This calculator allows for grading of consequences and impacts for your goals. </p>
+  <p>
+    Impact analysis is the process of estimating how seriously an incident,
+    disruption, or failure could affect an organization. It looks beyond the
+    immediate technical problem and focuses on the consequences to daily
+    operations, finances, safety, legal or regulatory obligations, and
+    reputation.
+    <a
+      href="https://en.wikipedia.org/wiki/ISO_31000"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      ISO 31000
+    </a>
+    is a widely used risk management framework that encourages organizations to
+    assess these consequences in a structured and practical way. This calculator
+    helps your team apply that approach by scoring impact across key categories.
+    Within Project Playbook, this tool helps organizations think through the
+    real-world effects of a cyber incident or operational disruption before an
+    emergency happens. Rather than focusing only on technical damage, it helps
+    teams evaluate mission impact, service disruption, regulatory concerns, and
+    reputational consequences.
+  </p>
 <br>
 <section id="help-text">
   <h2>How this calculator works</h2>
-  <p> 
-    1. For each failure point, enter a description and optional notes.<br>
-    2. Choose an impact score (1–5) for each category: Operational, Financial, Safety,
-       Legal/Regulatory, and Reputational.<br>
-    3. The calculator sums the category scores to produce an <strong>Overall Impact Score</strong> (1–25).<br>
-    4. The Overall Impact Score is mapped to an <strong>Impact Level</strong> (Low, Moderate, High, Critical).<br>
-    5. Click <strong>Download PDF</strong> to export a report with your entries, overall scores, highest impact area, and impact levels.
-  </p>
+    <p>
+      Follow the steps below to assess the potential impact of a failure or incident:
+    </p>
+    <ol>
+      <li>
+        For each failure point, enter a description and optional notes.
+      </li>
+      <li>
+        For each category (Operational, Financial, Safety, Legal/Regulatory, and Reputational), assign an impact score from 1 to 5. A score of 1 indicates minimal impact, while a score of 5 indicates a significant or critical impact requiring immediate attention.
+      </li>
+      <li>
+        The calculator sums the category scores to produce an <strong>Overall Impact Score</strong> (range: 1–25).
+      </li>
+      <li>
+        The Overall Impact Score is mapped to an <strong>Impact Level</strong> (Low, Moderate, High, or Critical).
+      </li>
+      <li>
+        Click <strong>Download PDF</strong> or <strong> Download CSV</strong> to export a report including your entries, overall scores, highest impact area, and assigned impact levels.
+      </li>
+    </ol>
+<p style="font-size: 13px; color: #b45309;">
+  <strong>Note:</strong> All data entered into the calculator is temporary. Refreshing or leaving the page will reset your inputs. To retain your results, download the PDF or CSV copy before exiting.
+</p>
 <p> Examples of impact sheets are seen below.</p>
 
 <p> <a href="Playbook 2 - Impact Sheet\examples\Business.pdf" target="_blank" download>Business (PDF)</a> </p>
@@ -200,11 +236,11 @@
       <tr>
         <th>Failure Point</th>
         <th>Notes</th>
-        <th>Op Impact</th>
-        <th>Fin Impact</th>
+        <th>Operational Impact</th>
+        <th>Financial Impact</th>
         <th>Safety Impact</th>
         <th>Legal/Reg Impact</th>
-        <th>Reput. Impact</th>
+        <th>Reputation Impact</th>
         <th>Overall Impact Score</th>
         <th>Impact Level</th>
         <th>Delete</th>
@@ -573,17 +609,26 @@
 
   /* Seed example rows and timestamp */
   addRow({
-    failurePoint: "Badge scanner",
+    failurePoint: "Badge scanner example",
     notes: "Door security compromised.",
     op: 4, fin: 4, saf: 3, leg: 4, rep: 4
   });
   addRow({
-    failurePoint: "Point-of-Sale (POS) Outage",
+    failurePoint: "Point-of-Sale (POS) Outage example",
     notes: "Retail locations unable to clear transactions.",
     op: 4, fin: 5, saf: 2, leg: 4, rep: 5
   });
   updateTimestamp();
 </script>
 
+<details style="max-width:900px; margin-top:12px; background:#e5e7eb; padding:10px 14px; border-radius:12px; font-size:0.85rem;">
+  <summary style="font-weight:600; cursor:pointer;">
+    Code Attibution and Sourcing
+  </summary>
+  <p style="margin-top:8px; color:#374151;">
+     Creation of code and function integration was assisted via ChatGPT; OpenAI, 2025.
+  </p>
+</details>
 </body>
 </html>
+

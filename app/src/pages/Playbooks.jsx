@@ -68,6 +68,14 @@ const PLAYBOOK_ZONES = [
         type: "main",
         status: "not-started",
       },
+      {
+        id: "impact-calculator",
+        title: "Impact Calculator",
+        path: "/playbook1",
+        icon: "/images/playbookImage2.png",
+        type: "main",
+        status: "not-started",
+      },
     ],
   },
   {
