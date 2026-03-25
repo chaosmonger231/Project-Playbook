@@ -25,14 +25,15 @@ const TEAM_MEMBERS = [
 ];
 
 const QUICK_LINKS = [
-  { label: "Open Lessons", href: "/lessons", external: false },
-  { label: "Open Playbooks", href: "/playbooks", external: false },
-  { label: "Security Readiness", href: "/securityreadiness", external: false },
   {
     label: "Ohio House Bill 96",
     href: "https://codes.ohio.gov/ohio-revised-code/section-9.64",
     external: true,
-  },
+  },  
+  { label: "Open Lessons", href: "/lessons", external: false },
+  { label: "Open Playbooks", href: "/playbooks", external: false },
+  { label: "Security Readiness", href: "/securityreadiness", external: false },
+  
 ];
 
 export default function About() {
