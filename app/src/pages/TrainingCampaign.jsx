@@ -316,7 +316,7 @@ export default function TrainingCampaign() {
 
       const titleToUse = campaignName.trim() || defaultCampaignName;
 
-      const docRef = await addDoc(collection(db, "orgs", orgId, "playbooks"), {
+      const campaignPayload = {
         title: titleToUse,
         orgId,
         moduleIds: selectedModuleIds,
@@ -324,9 +324,15 @@ export default function TrainingCampaign() {
         startAt,
         endAt,
         isActive: true,
+        endedEarly: false,
+        completedNaturally: false,
+        endedAt: null,
+        endedBy: null,
         createdBy: uid,
         createdAt: serverTimestamp(),
-      });
+      };
+
+      const docRef = await addDoc(collection(db, "orgs", orgId, "playbooks"), campaignPayload);
 
       const newPlaybook = {
         id: docRef.id,
@@ -337,6 +343,10 @@ export default function TrainingCampaign() {
         startAt,
         endAt,
         isActive: true,
+        endedEarly: false,
+        completedNaturally: false,
+        endedAt: null,
+        endedBy: null,
         createdBy: uid,
         createdAt: null,
       };
@@ -371,6 +381,8 @@ export default function TrainingCampaign() {
 
       await updateDoc(doc(db, "orgs", orgId, "playbooks", playbookId), {
         isActive: false,
+        endedEarly: true,
+        completedNaturally: false,
         endedAt: serverTimestamp(),
         endedBy: uid || null,
         updatedAt: serverTimestamp(),
@@ -407,31 +419,31 @@ export default function TrainingCampaign() {
 
   return (
     <ContentPanel>
-        <div className="training-campaign-topline">
-            <span className="training-campaign-topline-title">
-            Training Campaign Playbook
-            </span>
-            <span className="training-campaign-topline-sep">|</span>
-            <span className="training-campaign-topline-sub">
-            Launch a guided training campaign for your organization.
-            </span>
+      <div className="training-campaign-topline">
+        <span className="training-campaign-topline-title">
+          Training Campaign Playbook
+        </span>
+        <span className="training-campaign-topline-sep">|</span>
+        <span className="training-campaign-topline-sub">
+          Launch a guided training campaign for your organization.
+        </span>
+      </div>
+
+      {(error || successMessage) && (
+        <div className="training-campaign-toast-wrap">
+          {error && (
+            <div className="training-campaign-toast training-campaign-toast--error">
+              {error}
+            </div>
+          )}
+
+          {successMessage && (
+            <div className="training-campaign-toast training-campaign-toast--success">
+              {successMessage}
+            </div>
+          )}
         </div>
-
-                  {(error || successMessage) && (
-                    <div className="training-campaign-toast-wrap">
-                    {error && (
-                        <div className="training-campaign-toast training-campaign-toast--error">
-                        {error}
-                        </div>
-                    )}
-
-                    {successMessage && (
-                        <div className="training-campaign-toast training-campaign-toast--success">
-                        {successMessage}
-                        </div>
-                    )}
-                    </div>
-                )}
+      )}
 
       {step === 0 && (
         <section className="training-campaign-section">

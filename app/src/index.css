@@ -201,11 +201,16 @@ body {
   max-height: 360px;
   appearance: none;
   -webkit-appearance: none;
-  transition: transform 0.12s ease-out;
+  transition: transform 0.12s ease-out, box-shadow 0.2s ease;
 }
 
 .action-card:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow:
+  0 12px 30px rgba(0, 0, 0, 0.12),
+    0 0 10px rgba(255, 215, 0, 0.6),
+    0 0 20px rgba(255, 215, 0, 0.45),
+    0 0 30px rgba(255, 200, 0, 0.35);
 }
 
 .action-card:focus {
@@ -1823,3 +1828,4 @@ body {
     white-space: normal;
   }
 }
+

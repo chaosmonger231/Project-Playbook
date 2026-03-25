@@ -38,7 +38,7 @@ const CATEGORY_META = {
     label: "Small Business",
     className: "tm-module-category-small-business",
   },
-  local_gov: {
+  local_government: {
     label: "Local Government",
     className: "tm-module-category-local-government",
   },
@@ -65,30 +65,6 @@ function downloadCsv(filename, rows) {
   document.body.removeChild(link);
 
   URL.revokeObjectURL(url);
-}
-
-function getTrainingCounts(userData) {
-  const completed =
-    userData?.trainingCompletedCount ??
-    userData?.training?.completedCount ??
-    userData?.training?.completed ??
-    0;
-
-  const total =
-    userData?.trainingTotalCount ??
-    userData?.training?.totalCount ??
-    userData?.training?.total ??
-    0;
-
-  return {
-    completed: Number.isFinite(Number(completed)) ? Number(completed) : 0,
-    total: Number.isFinite(Number(total)) ? Number(total) : 0,
-  };
-}
-
-function formatTrainingSummary(userData) {
-  const { completed, total } = getTrainingCounts(userData);
-  return `${completed} / ${total} complete`;
 }
 
 function getStatusMeta(status) {
@@ -130,6 +106,10 @@ function normalizeStatus(rawStatus) {
     : "active";
 }
 
+function normalizeTrainingMode(rawMode) {
+  return rawMode === "controlled" ? "controlled" : "organization";
+}
+
 function getAllRegistryModules() {
   const registryModules = moduleRegistry.modules || [];
 
@@ -167,10 +147,65 @@ function getVisibleModulesForMode({ allModules, trainingMode, activeCampaign, or
   return allModules.filter((module) => canAccessByOrgType(module, orgType));
 }
 
-async function loadTrainingProgressForUser(userId, visibleModules) {
+function getSortableTime(campaign) {
+  const endedAt =
+    typeof campaign?.endedAt?.toMillis === "function" ? campaign.endedAt.toMillis() : 0;
+  const createdAt =
+    typeof campaign?.createdAt?.toMillis === "function" ? campaign.createdAt.toMillis() : 0;
+  const startAt =
+    typeof campaign?.startAt?.toDate === "function"
+      ? campaign.startAt.toDate().getTime()
+      : campaign?.startAt instanceof Date
+      ? campaign.startAt.getTime()
+      : 0;
+
+  return Math.max(endedAt, createdAt, startAt, 0);
+}
+
+async function getCampaignContextForOrg(orgId) {
+  const settingsRef = doc(db, "orgs", orgId, "settings", "training");
+  const settingsSnap = await getDoc(settingsRef);
+
+  let mode = "organization";
+
+  if (settingsSnap.exists()) {
+    const settingsData = settingsSnap.data() || {};
+    mode = normalizeTrainingMode(settingsData.trainingMode);
+  }
+
+  const playbooksSnap = await getDocs(collection(db, "orgs", orgId, "playbooks"));
+  const playbooks = playbooksSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+
+  const activeCampaign = playbooks.find((pb) => pb.isActive === true) || null;
+
+  const latestCompletedCampaign =
+    [...playbooks]
+      .filter((pb) => pb.isActive !== true && pb.endedEarly !== true)
+      .sort((a, b) => getSortableTime(b) - getSortableTime(a))[0] || null;
+
+  return {
+    trainingMode: mode,
+    activeCampaign,
+    campaignContext: activeCampaign || latestCompletedCampaign || null,
+  };
+}
+
+async function loadCampaignProgressForUser(userId, visibleModules, campaignId) {
+  if (!campaignId || visibleModules.length === 0) {
+    return {};
+  }
+
   const progressEntries = await Promise.all(
     visibleModules.map(async (module) => {
-      const progressRef = doc(db, "users", userId, "trainingProgress", module.id);
+      const progressRef = doc(
+        db,
+        "users",
+        userId,
+        "campaignProgress",
+        campaignId,
+        "modules",
+        module.id
+      );
       const progressSnap = await getDoc(progressRef);
 
       if (!progressSnap.exists()) {
@@ -188,11 +223,14 @@ async function loadTrainingProgressForUser(userId, visibleModules) {
         return [module.id, rawStatus];
       }
 
-      if (progressData.completed === true) {
+      if (progressData.passed === true || progressData.completed === true) {
         return [module.id, "completed"];
       }
 
-      if ((progressData.percentComplete || 0) > 0) {
+      if (
+        Number(progressData.attempts || 0) > 0 ||
+        Number(progressData.percentComplete || 0) > 0
+      ) {
         return [module.id, "in_progress"];
       }
 
@@ -380,7 +418,7 @@ export default function TeamManagement() {
 }
 
 function MembersPanel({ onManage }) {
-  const { orgId, role, orgName } = useUser();
+  const { orgId, role, orgName, orgType = "education" } = useUser();
 
   const [queryText, setQueryText] = React.useState("");
   const [roleFilter, setRoleFilter] = React.useState("all");
@@ -402,31 +440,48 @@ function MembersPanel({ onManage }) {
         setLoading(true);
         setError("");
 
-        const q = query(collection(db, "users"), where("orgId", "==", orgId));
-        const snap = await getDocs(q);
+        const [{ trainingMode, activeCampaign, campaignContext }, snap] = await Promise.all([
+          getCampaignContextForOrg(orgId),
+          getDocs(query(collection(db, "users"), where("orgId", "==", orgId))),
+        ]);
 
-        const members = snap.docs.map((memberDoc) => {
-          const d = memberDoc.data();
-
-          return {
-            id: memberDoc.id,
-            name: d.displayName || d.name || "—",
-            email: d.email || "—",
-            role: normalizeRole(d.role),
-            status: normalizeStatus(d.status),
-            training: formatTrainingSummary(d),
-            trainingCompleted:
-              d?.trainingCompletedCount ??
-              d?.training?.completedCount ??
-              d?.training?.completed ??
-              0,
-            trainingTotal:
-              d?.trainingTotalCount ??
-              d?.training?.totalCount ??
-              d?.training?.total ??
-              0,
-          };
+        const visibleModules = getVisibleModulesForMode({
+          allModules: getAllRegistryModules(),
+          trainingMode,
+          activeCampaign,
+          orgType,
         });
+
+        const campaignId = campaignContext?.id || null;
+
+        const members = await Promise.all(
+          snap.docs.map(async (memberDoc) => {
+            const d = memberDoc.data();
+            const normalizedRole = normalizeRole(d.role);
+
+            const statuses = await loadCampaignProgressForUser(
+              memberDoc.id,
+              visibleModules,
+              campaignId
+            );
+
+            const total = visibleModules.length;
+            const completed = visibleModules.filter(
+              (module) => statuses[module.id] === "completed"
+            ).length;
+
+            return {
+              id: memberDoc.id,
+              name: d.displayName || d.name || "—",
+              email: d.email || "—",
+              role: normalizedRole,
+              status: normalizeStatus(d.status),
+              training: `${completed} / ${total} complete`,
+              trainingCompleted: completed,
+              trainingTotal: total,
+            };
+          })
+        );
 
         members.sort((a, b) => {
           const nameA = (a.name || "").toLowerCase();
@@ -445,7 +500,7 @@ function MembersPanel({ onManage }) {
     }
 
     loadMembers();
-  }, [orgId]);
+  }, [orgId, orgType]);
 
   const filtered = rows.filter((r) => {
     const q = queryText.trim().toLowerCase();
@@ -623,6 +678,7 @@ function TrainingPanel() {
   const [error, setError] = React.useState("");
   const [trainingMode, setTrainingMode] = React.useState("organization");
   const [activeCampaign, setActiveCampaign] = React.useState(null);
+  const [campaignContext, setCampaignContext] = React.useState(null);
 
   const allModules = React.useMemo(() => getAllRegistryModules(), []);
 
@@ -653,51 +709,35 @@ function TrainingPanel() {
           setError("");
         }
 
-        const settingsRef = doc(db, "orgs", orgId, "settings", "training");
-        const settingsSnap = await getDoc(settingsRef);
-
-        let mode = "organization";
-
-        if (settingsSnap.exists()) {
-          const settingsData = settingsSnap.data() || {};
-          mode = settingsData.trainingMode || "organization";
-        }
-
-        let campaign = null;
-
-        if (mode === "controlled") {
-          const playbooksRef = collection(db, "orgs", orgId, "playbooks");
-          const playbooksQuery = query(playbooksRef, where("isActive", "==", true));
-          const playbooksSnap = await getDocs(playbooksQuery);
-
-          if (!playbooksSnap.empty) {
-            const campaignDoc = playbooksSnap.docs[0];
-            campaign = {
-              id: campaignDoc.id,
-              ...campaignDoc.data(),
-            };
-          }
-        }
+        const { trainingMode: mode, activeCampaign: active, campaignContext: context } =
+          await getCampaignContextForOrg(orgId);
 
         const modulesForRows = getVisibleModulesForMode({
           allModules,
           trainingMode: mode,
-          activeCampaign: campaign,
+          activeCampaign: active,
           orgType,
         });
+
+        const campaignId = context?.id || null;
 
         const usersQuery = query(collection(db, "users"), where("orgId", "==", orgId));
         const usersSnap = await getDocs(usersQuery);
 
-        const participantDocs = usersSnap.docs.filter((userDoc) => {
+        const memberDocs = usersSnap.docs.filter((userDoc) => {
           const d = userDoc.data() || {};
-          return normalizeRole(d.role) === "participant";
+          const normalizedRole = normalizeRole(d.role);
+          return normalizedRole === "participant" || normalizedRole === "coordinator";
         });
 
         const loadedRows = await Promise.all(
-          participantDocs.map(async (userDoc) => {
+          memberDocs.map(async (userDoc) => {
             const d = userDoc.data();
-            const statuses = await loadTrainingProgressForUser(userDoc.id, modulesForRows);
+            const statuses = await loadCampaignProgressForUser(
+              userDoc.id,
+              modulesForRows,
+              campaignId
+            );
 
             const completed = modulesForRows.filter(
               (module) => statuses[module.id] === "completed"
@@ -725,7 +765,8 @@ function TrainingPanel() {
         if (!isMounted) return;
 
         setTrainingMode(mode);
-        setActiveCampaign(campaign);
+        setActiveCampaign(active);
+        setCampaignContext(context);
         setRows(loadedRows);
       } catch (err) {
         console.error("Failed to load training progress", err);
@@ -735,6 +776,7 @@ function TrainingPanel() {
         setError("Could not load training progress.");
         setRows([]);
         setActiveCampaign(null);
+        setCampaignContext(null);
       } finally {
         if (isMounted) {
           setLoading(false);
@@ -919,7 +961,12 @@ function TrainingPanel() {
                         className="tm-training-learner-cell tm-training-td-sticky-left-1"
                         title={row.name}
                       >
-                        <div className="tm-training-learner-name">{row.name}</div>
+                        <div className="tm-training-learner-name">
+                          {row.name}
+                          <span style={{ marginLeft: 8, opacity: 0.65, fontWeight: 500 }}>
+                            ({row.role})
+                          </span>
+                        </div>
                       </td>
 
                       <td className="tm-training-progress-cell tm-training-td-sticky-left-2">
@@ -956,6 +1003,12 @@ function TrainingPanel() {
             organization-based mode shows general plus org-specific lessons, and
             controlled mode shows only the active campaign’s selected modules.
           </div>
+
+          {!activeCampaign && campaignContext && (
+            <div className="tm-hint">
+              Showing the most recent completed campaign because there is no active campaign.
+            </div>
+          )}
         </>
       )}
     </div>
@@ -970,6 +1023,7 @@ function InsightsPanel() {
   const [error, setError] = React.useState("");
   const [trainingMode, setTrainingMode] = React.useState("organization");
   const [activeCampaign, setActiveCampaign] = React.useState(null);
+  const [campaignContext, setCampaignContext] = React.useState(null);
 
   const allModules = React.useMemo(() => getAllRegistryModules(), []);
 
@@ -1001,51 +1055,35 @@ function InsightsPanel() {
           setError("");
         }
 
-        const settingsRef = doc(db, "orgs", orgId, "settings", "training");
-        const settingsSnap = await getDoc(settingsRef);
-
-        let mode = "organization";
-
-        if (settingsSnap.exists()) {
-          const settingsData = settingsSnap.data() || {};
-          mode = settingsData.trainingMode || "organization";
-        }
-
-        let campaign = null;
-
-        if (mode === "controlled") {
-          const playbooksRef = collection(db, "orgs", orgId, "playbooks");
-          const playbooksQuery = query(playbooksRef, where("isActive", "==", true));
-          const playbooksSnap = await getDocs(playbooksQuery);
-
-          if (!playbooksSnap.empty) {
-            const campaignDoc = playbooksSnap.docs[0];
-            campaign = {
-              id: campaignDoc.id,
-              ...campaignDoc.data(),
-            };
-          }
-        }
+        const { trainingMode: mode, activeCampaign: active, campaignContext: context } =
+          await getCampaignContextForOrg(orgId);
 
         const modulesForRows = getVisibleModulesForMode({
           allModules,
           trainingMode: mode,
-          activeCampaign: campaign,
+          activeCampaign: active,
           orgType,
         });
+
+        const campaignId = context?.id || null;
 
         const usersQuery = query(collection(db, "users"), where("orgId", "==", orgId));
         const usersSnap = await getDocs(usersQuery);
 
-        const participantDocs = usersSnap.docs.filter((userDoc) => {
+        const memberDocs = usersSnap.docs.filter((userDoc) => {
           const d = userDoc.data() || {};
-          return normalizeRole(d.role) === "participant";
+          const normalizedRole = normalizeRole(d.role);
+          return normalizedRole === "participant" || normalizedRole === "coordinator";
         });
 
         const loadedRows = await Promise.all(
-          participantDocs.map(async (userDoc) => {
+          memberDocs.map(async (userDoc) => {
             const d = userDoc.data();
-            const statuses = await loadTrainingProgressForUser(userDoc.id, modulesForRows);
+            const statuses = await loadCampaignProgressForUser(
+              userDoc.id,
+              modulesForRows,
+              campaignId
+            );
 
             const completed = modulesForRows.filter(
               (module) => statuses[module.id] === "completed"
@@ -1064,6 +1102,7 @@ function InsightsPanel() {
               id: userDoc.id,
               name: d.displayName || d.name || "—",
               email: d.email || "—",
+              role: normalizeRole(d.role),
               assigned: modulesForRows.length,
               completed,
               inProgress,
@@ -1082,7 +1121,8 @@ function InsightsPanel() {
         if (!isMounted) return;
 
         setTrainingMode(mode);
-        setActiveCampaign(campaign);
+        setActiveCampaign(active);
+        setCampaignContext(context);
         setRows(loadedRows);
       } catch (err) {
         console.error("Failed to load insights", err);
@@ -1092,6 +1132,7 @@ function InsightsPanel() {
         setError("Could not load insights.");
         setRows([]);
         setActiveCampaign(null);
+        setCampaignContext(null);
       } finally {
         if (isMounted) {
           setLoading(false);
@@ -1336,7 +1377,9 @@ function InsightsPanel() {
                   learnerNeedsSupport.map((learner) => (
                     <div key={learner.id} className="tm-insight-bar-row">
                       <div className="tm-insight-bar-head">
-                        <span className="tm-insight-bar-title">{learner.name}</span>
+                        <span className="tm-insight-bar-title">
+                          {learner.name} ({learner.role})
+                        </span>
                         <span className="tm-insight-bar-value">
                           {learner.completed}/{learner.assigned} ({learner.completionPercent}%)
                         </span>
@@ -1404,6 +1447,14 @@ function InsightsPanel() {
               Use the Training tab for the full learner-by-module matrix and status table.
             </p>
           </section>
+
+          {!activeCampaign && campaignContext && (
+            <section className="tm-insight-section">
+              <div className="tm-hint">
+                Showing the most recent completed campaign because there is no active campaign.
+              </div>
+            </section>
+          )}
         </div>
       )}
     </div>

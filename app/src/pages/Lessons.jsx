@@ -1,6 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, doc, getDoc, getDocs, limit, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+} from "firebase/firestore";
 import { useUser } from "../auth/UserContext";
 import { db } from "../auth/firebase";
 import moduleRegistry from "../learningContent/moduleRegistry.json";
@@ -53,15 +58,32 @@ function formatCampaignEndDate(endAt) {
   }
 }
 
+function getSortableTime(campaign) {
+  const endedAt =
+    typeof campaign?.endedAt?.toMillis === "function" ? campaign.endedAt.toMillis() : 0;
+  const createdAt =
+    typeof campaign?.createdAt?.toMillis === "function" ? campaign.createdAt.toMillis() : 0;
+  const startAt =
+    typeof campaign?.startAt?.getTime === "function"
+      ? campaign.startAt.getTime()
+      : campaign?.startAt instanceof Date
+      ? campaign.startAt.getTime()
+      : 0;
+
+  return Math.max(endedAt, createdAt, startAt, 0);
+}
+
 export default function Lessons() {
   const navigate = useNavigate();
-  const { role, orgType, orgId, loading } = useUser();
+  const { uid, role, orgType, orgId, loading } = useUser();
 
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [campaignLoading, setCampaignLoading] = useState(true);
   const [campaignError, setCampaignError] = useState("");
   const [activeCampaign, setActiveCampaign] = useState(null);
+  const [campaignContext, setCampaignContext] = useState(null);
   const [trainingMode, setTrainingMode] = useState("open");
+  const [progressMap, setProgressMap] = useState({});
 
   const modules = moduleRegistry.modules || [];
   const isCoordinator = role === "coordinator";
@@ -73,6 +95,7 @@ export default function Lessons() {
       if (!orgId) {
         setCampaignLoading(false);
         setActiveCampaign(null);
+        setCampaignContext(null);
         setCampaignError("No organization found for this user.");
         setTrainingMode("open");
         return;
@@ -94,31 +117,27 @@ export default function Lessons() {
 
         setTrainingMode(mode);
 
-        if (mode === "controlled") {
-          const playbooksRef = collection(db, "orgs", orgId, "playbooks");
-          const playbooksQuery = query(
-            playbooksRef,
-            where("isActive", "==", true),
-            limit(1)
-          );
+        const playbooksRef = collection(db, "orgs", orgId, "playbooks");
+        const playbooksSnapshot = await getDocs(playbooksRef);
+        const playbooks = playbooksSnapshot.docs.map((d) => ({
+          id: d.id,
+          ...d.data(),
+        }));
 
-          const playbooksSnapshot = await getDocs(playbooksQuery);
+        const active = playbooks.find((pb) => pb.isActive === true) || null;
 
-          if (playbooksSnapshot.empty) {
-            setActiveCampaign(null);
-          } else {
-            const docSnap = playbooksSnapshot.docs[0];
-            setActiveCampaign({
-              id: docSnap.id,
-              ...docSnap.data(),
-            });
-          }
-        } else {
-          setActiveCampaign(null);
-        }
+        const latestEnded =
+          [...playbooks]
+            .filter((pb) => pb.isActive !== true)
+            .sort((a, b) => getSortableTime(b) - getSortableTime(a))[0] || null;
+
+        setActiveCampaign(active);
+        setCampaignContext(active || latestEnded || null);
       } catch (error) {
         console.error("Failed to load training data:", error);
         setCampaignError(error.message || "Unable to load the active training campaign.");
+        setActiveCampaign(null);
+        setCampaignContext(null);
       } finally {
         setCampaignLoading(false);
       }
@@ -126,6 +145,45 @@ export default function Lessons() {
 
     fetchTrainingData();
   }, [loading, orgId]);
+
+  useEffect(() => {
+    async function loadProgress() {
+      if (!uid) {
+        setProgressMap({});
+        return;
+      }
+
+      const campaignId = campaignContext?.id;
+      if (!campaignId) {
+        setProgressMap({});
+        return;
+      }
+
+      try {
+        const progressRef = collection(
+          db,
+          "users",
+          uid,
+          "campaignProgress",
+          campaignId,
+          "modules"
+        );
+        const progressSnap = await getDocs(progressRef);
+
+        const nextMap = {};
+        progressSnap.forEach((docSnap) => {
+          nextMap[docSnap.id] = docSnap.data();
+        });
+
+        setProgressMap(nextMap);
+      } catch (error) {
+        console.error("Failed to load lesson progress:", error);
+        setProgressMap({});
+      }
+    }
+
+    loadProgress();
+  }, [uid, campaignContext?.id]);
 
   const canAccessByOrgType = (module) => {
     if (!module.allowedOrgTypes || module.allowedOrgTypes.includes("all")) {
@@ -141,30 +199,20 @@ export default function Lessons() {
   }, [activeCampaign]);
 
   const baseVisibleModules = useMemo(() => {
-    let filtered = modules;
-
-    if (isCoordinator) {
-      return filtered;
-    }
-
     if (trainingMode === "controlled") {
-      return filtered.filter((module) => assignedModuleIds.includes(module.moduleId));
+      return modules.filter((module) => assignedModuleIds.includes(module.moduleId));
     }
 
-    return filtered.filter((module) => canAccessByOrgType(module));
-  }, [modules, isCoordinator, trainingMode, assignedModuleIds, orgType]);
+    return modules.filter((module) => canAccessByOrgType(module));
+  }, [modules, trainingMode, assignedModuleIds, orgType]);
 
   const visibleFilters = useMemo(() => {
-    if (isCoordinator) {
-      return ["all", "general", "education", "small_business", "local_government"];
-    }
-
     const categoriesFromVisibleModules = baseVisibleModules
       .map((module) => module.category)
       .filter(Boolean);
 
     return ["all", ...new Set(categoriesFromVisibleModules)];
-  }, [isCoordinator, baseVisibleModules]);
+  }, [baseVisibleModules]);
 
   useEffect(() => {
     if (!visibleFilters.includes(selectedCategory)) {
@@ -200,10 +248,13 @@ export default function Lessons() {
   return (
     <div className="lessons-page">
       <div className="lessons-header">
-        <h1 className="lessons-title">Learning Modules</h1>
-        <p className="lessons-subtitle">
-          Browse cybersecurity lessons by category and open each module on its own page.
-        </p>
+        <h1 className="lessons-title">
+          Learning Modules
+          <span className="lessons-divider"> | </span>
+          <span className="lessons-subtitle-inline">
+            Browse cybersecurity lessons by category and open each module on its own page.
+          </span>
+        </h1>
       </div>
 
       <div className="lessons-active-campaign-banner">
@@ -277,58 +328,88 @@ export default function Lessons() {
             </div>
           ) : (
             <div className="lessons-grid">
-              {visibleModules.map((module) => (
-                <article key={module.moduleId} className="lesson-card">
-                  <div className="lesson-card__media-wrap">
-                    <div className="lesson-card__media">
-                      {module.image ? (
-                        <img
-                          src={module.image}
-                          alt=""
-                          className="lesson-card__image"
-                        />
-                      ) : (
-                        <div className="lesson-card__image-placeholder">
-                          {getPlaceholderLabel(module)}
+              {visibleModules.map((module) => {
+                const progress = progressMap[module.moduleId] || {};
+                const passed = progress.passed === true;
+                const failed = progress.status === "failed";
+                const isLocked = passed || failed;
+
+                const hasScore =
+                  typeof progress.correctAnswers === "number" &&
+                  typeof progress.totalQuestions === "number";
+
+                return (
+                  <article key={module.moduleId} className="lesson-card">
+                    <div className="lesson-card__media-wrap">
+                      <div className="lesson-card__media">
+                        {module.image ? (
+                          <img
+                            src={module.image}
+                            alt=""
+                            className="lesson-card__image"
+                          />
+                        ) : (
+                          <div className="lesson-card__image-placeholder">
+                            {getPlaceholderLabel(module)}
+                          </div>
+                        )}
+                      </div>
+
+                      {(passed || failed) && (
+                        <div
+                          className={`lesson-card__status-badge ${
+                            passed
+                              ? "lesson-card__status-badge--passed"
+                              : "lesson-card__status-badge--failed"
+                          }`}
+                          aria-label={passed ? "Lesson completed" : "Lesson failed"}
+                          title={passed ? "Completed" : "Failed"}
+                        >
+                          {passed ? "✓" : "✕"}
                         </div>
                       )}
                     </div>
 
-                    {isCoordinator && (
+                    <div className="lesson-card__divider" />
+
+                    <div className="lesson-card__body">
+                      <h2 className="lesson-card__title">{module.title}</h2>
+                      <p className="lesson-card__description">{module.synopsis}</p>
+                      <p className="lesson-card__time">
+                        {formatEstimatedTime(module.estimatedMinutes)}
+                      </p>
+
+                      {hasScore && (
+                        <p className="lesson-card__score">
+                          Score: {progress.correctAnswers} / {progress.totalQuestions}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="lesson-card__divider lesson-card__divider--lower" />
+
+                    <div className="lesson-card__footer">
                       <button
                         type="button"
-                        className="lesson-card__menu"
-                        aria-label={`Lesson actions for ${module.title}`}
-                        title="Lesson actions"
+                        className={`lesson-card__button ${
+                          passed
+                            ? "lesson-card__button--completed"
+                            : failed
+                            ? "lesson-card__button--failed"
+                            : ""
+                        }`}
+                        onClick={() => {
+                          if (isLocked) return;
+                          navigate(`/learning/${module.moduleId}`);
+                        }}
+                        disabled={isLocked}
                       >
-                        ⋯
+                        {passed ? "Completed" : failed ? "Failed" : "Start Lesson"}
                       </button>
-                    )}
-                  </div>
-
-                  <div className="lesson-card__divider" />
-
-                  <div className="lesson-card__body">
-                    <h2 className="lesson-card__title">{module.title}</h2>
-                    <p className="lesson-card__description">{module.synopsis}</p>
-                    <p className="lesson-card__time">
-                      {formatEstimatedTime(module.estimatedMinutes)}
-                    </p>
-                  </div>
-
-                  <div className="lesson-card__divider lesson-card__divider--lower" />
-
-                  <div className="lesson-card__footer">
-                    <button
-                      type="button"
-                      className="lesson-card__button"
-                      onClick={() => navigate(`/learning/${module.moduleId}`)}
-                    >
-                      Start Lesson
-                    </button>
-                  </div>
-                </article>
-              ))}
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           )}
         </>

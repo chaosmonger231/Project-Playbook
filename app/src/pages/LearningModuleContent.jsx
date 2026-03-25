@@ -1,6 +1,14 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 
 import ModuleVideo from "../components/ModuleVideo";
 import LearningModuleQuiz from "../components/LearningModuleQuiz";
@@ -47,15 +55,29 @@ const REGISTRY_BY_ID = Object.fromEntries(
   (moduleRegistry.modules || []).map((m) => [m.moduleId, m])
 );
 
-function canAccessModule(moduleMeta, orgType, role) {
+function canAccessModuleByOrgType(moduleMeta, orgType) {
   if (!moduleMeta) return false;
-  if (role === "coordinator") return true;
 
   const allowedOrgTypes = moduleMeta.allowedOrgTypes || [];
   if (allowedOrgTypes.includes("all")) return true;
   if (!orgType) return false;
 
   return allowedOrgTypes.includes(orgType);
+}
+
+function getSortableTime(campaign) {
+  const endedAt =
+    typeof campaign?.endedAt?.toMillis === "function" ? campaign.endedAt.toMillis() : 0;
+  const createdAt =
+    typeof campaign?.createdAt?.toMillis === "function" ? campaign.createdAt.toMillis() : 0;
+  const startAt =
+    typeof campaign?.startAt?.getTime === "function"
+      ? campaign.startAt.getTime()
+      : campaign?.startAt instanceof Date
+      ? campaign.startAt.getTime()
+      : 0;
+
+  return Math.max(endedAt, createdAt, startAt, 0);
 }
 
 export default function LearningModuleContent() {
@@ -71,18 +93,23 @@ export default function LearningModuleContent() {
 
   const [pageIndex, setPageIndex] = useState(0);
   const [quizResult, setQuizResult] = useState(null);
-  const [retakeUsed, setRetakeUsed] = useState(false);
+  const [attempts, setAttempts] = useState(0);
+  const [storedProgress, setStoredProgress] = useState(null);
   const [accessChecked, setAccessChecked] = useState(false);
   const [progressError, setProgressError] = useState("");
   const [trainingMode, setTrainingMode] = useState("open");
 
+  const [campaignChecked, setCampaignChecked] = useState(false);
+  const [activeCampaign, setActiveCampaign] = useState(null);
+  const [campaignContext, setCampaignContext] = useState(null);
+
   const progressInitializedRef = useRef(false);
   const completionWriteRef = useRef(false);
 
-  const isAllowedByOrgType = useMemo(
-    () => canAccessModule(moduleMeta, orgType, role),
-    [moduleMeta, orgType, role]
-  );
+  const hasActiveCampaign = !!activeCampaign?.id;
+  const campaignId = campaignContext?.id || null;
+  const noActiveCampaign = campaignChecked && !hasActiveCampaign;
+  const isCoordinator = role === "coordinator";
 
   useEffect(() => {
     let cancelled = false;
@@ -109,32 +136,119 @@ export default function LearningModuleContent() {
   }, [loading, orgId]);
 
   useEffect(() => {
-    if (loading) return;
+    let cancelled = false;
+
+    async function loadCampaignContext() {
+      if (loading) return;
+
+      if (!orgId) {
+        if (!cancelled) {
+          setActiveCampaign(null);
+          setCampaignContext(null);
+          setCampaignChecked(true);
+        }
+        return;
+      }
+
+      try {
+        setCampaignChecked(false);
+
+        const playbooksSnap = await getDocs(collection(db, "orgs", orgId, "playbooks"));
+        const rows = playbooksSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+
+        const active = rows.find((pb) => pb.isActive === true) || null;
+
+        const latestEnded =
+          [...rows]
+            .filter((pb) => pb.isActive !== true)
+            .sort((a, b) => getSortableTime(b) - getSortableTime(a))[0] || null;
+
+        if (!cancelled) {
+          setActiveCampaign(active);
+          setCampaignContext(active || latestEnded || null);
+          setCampaignChecked(true);
+        }
+      } catch (err) {
+        console.error("Failed to load campaign context", err);
+        if (!cancelled) {
+          setActiveCampaign(null);
+          setCampaignContext(null);
+          setCampaignChecked(true);
+          setProgressError("We could not load campaign information right now.");
+        }
+      }
+    }
+
+    loadCampaignContext();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [loading, orgId]);
+
+  useEffect(() => {
+    progressInitializedRef.current = false;
+    completionWriteRef.current = false;
+    setQuizResult(null);
+    setStoredProgress(null);
+    setAttempts(0);
+  }, [moduleId, campaignId]);
+
+  useEffect(() => {
+    if (loading || !campaignChecked) return;
 
     if (!moduleMeta || !moduleData) {
       setAccessChecked(true);
       return;
     }
 
-    if (!isAllowedByOrgType) {
+    let hasAccess = false;
+
+    if (isCoordinator) {
+      if (trainingMode === "controlled") {
+        hasAccess =
+          !!activeCampaign &&
+          Array.isArray(activeCampaign.moduleIds) &&
+          activeCampaign.moduleIds.includes(moduleMeta.moduleId);
+      } else {
+        hasAccess = canAccessModuleByOrgType(moduleMeta, orgType);
+      }
+    } else {
+      if (trainingMode === "controlled") {
+        hasAccess =
+          !!activeCampaign &&
+          Array.isArray(activeCampaign.moduleIds) &&
+          activeCampaign.moduleIds.includes(moduleMeta.moduleId);
+      } else {
+        hasAccess = canAccessModuleByOrgType(moduleMeta, orgType);
+      }
+    }
+
+    if (!hasAccess) {
       alert("You do not have access to this lesson.");
       navigate("/lessons", { replace: true });
       return;
     }
 
-    // For now:
-    // - open mode uses current behavior
-    // - controlled mode also temporarily allows access
-    // Later we will enforce active playbook checks here.
     setAccessChecked(true);
-  }, [loading, moduleMeta, moduleData, isAllowedByOrgType, trainingMode, navigate]);
+  }, [
+    loading,
+    campaignChecked,
+    moduleMeta,
+    moduleData,
+    trainingMode,
+    activeCampaign,
+    orgType,
+    isCoordinator,
+    navigate,
+  ]);
 
   useEffect(() => {
-    async function ensureTrainingProgressStarted() {
+    async function loadCampaignProgress() {
       if (
         loading ||
+        !campaignChecked ||
         !accessChecked ||
-        !isAllowedByOrgType ||
         !uid ||
         !orgId ||
         !moduleMeta ||
@@ -146,25 +260,76 @@ export default function LearningModuleContent() {
       try {
         progressInitializedRef.current = true;
 
-        const progressRef = doc(db, "users", uid, "trainingProgress", moduleMeta.moduleId);
+        if (!campaignId) {
+          setStoredProgress(null);
+          setAttempts(0);
+          return;
+        }
+
+        const progressRef = doc(
+          db,
+          "users",
+          uid,
+          "campaignProgress",
+          campaignId,
+          "modules",
+          moduleMeta.moduleId
+        );
+
         const progressSnap = await getDoc(progressRef);
 
         if (!progressSnap.exists()) {
-          await setDoc(progressRef, {
+          if (!hasActiveCampaign) {
+            setStoredProgress(null);
+            setAttempts(0);
+            return;
+          }
+
+          const initialProgress = {
+            campaignId,
             moduleId: moduleMeta.moduleId,
             orgId,
             assigned: true,
             status: "in_progress",
+            attempts: 0,
+            score: null,
+            totalQuestions: null,
+            correctAnswers: null,
+            passed: false,
             assignedAt: serverTimestamp(),
             startedAt: serverTimestamp(),
             completedAt: null,
             updatedAt: serverTimestamp(),
+          };
+
+          await setDoc(progressRef, initialProgress);
+
+          setStoredProgress({
+            campaignId,
+            moduleId: moduleMeta.moduleId,
+            orgId,
+            assigned: true,
+            status: "in_progress",
+            attempts: 0,
+            score: null,
+            totalQuestions: null,
+            correctAnswers: null,
+            passed: false,
+            completedAt: null,
           });
+          setAttempts(0);
           return;
         }
 
         const existing = progressSnap.data() || {};
-        if (existing.status !== "completed") {
+        setStoredProgress(existing);
+        setAttempts(Number(existing.attempts) || 0);
+
+        if (
+          hasActiveCampaign &&
+          existing.status !== "completed" &&
+          existing.status !== "failed"
+        ) {
           await updateDoc(progressRef, {
             assigned: true,
             status: "in_progress",
@@ -173,23 +338,34 @@ export default function LearningModuleContent() {
           });
         }
       } catch (err) {
-        console.error("Failed to initialize training progress", err);
+        console.error("Failed to initialize campaign progress", err);
         setProgressError("We could not save your lesson progress right now.");
       }
     }
 
-    ensureTrainingProgressStarted();
-  }, [loading, accessChecked, isAllowedByOrgType, uid, orgId, moduleMeta]);
+    loadCampaignProgress();
+  }, [
+    loading,
+    campaignChecked,
+    accessChecked,
+    uid,
+    orgId,
+    moduleMeta,
+    campaignId,
+    hasActiveCampaign,
+  ]);
 
   useEffect(() => {
-    async function markCompleted() {
+    async function saveQuizProgress() {
       if (
         loading ||
+        !campaignChecked ||
+        !hasActiveCampaign ||
         !accessChecked ||
-        !isAllowedByOrgType ||
         !uid ||
         !orgId ||
         !moduleMeta ||
+        !campaignId ||
         !quizResult ||
         completionWriteRef.current
       ) {
@@ -199,36 +375,74 @@ export default function LearningModuleContent() {
       const total = Number(quizResult.total) || 0;
       const score = Number(quizResult.score) || 0;
       const passed = total > 0 && score / total >= 0.5;
-
-      if (!passed) return;
+      const failed = attempts >= 2 && !passed;
 
       try {
         completionWriteRef.current = true;
 
-        const progressRef = doc(db, "users", uid, "trainingProgress", moduleMeta.moduleId);
+        const progressRef = doc(
+          db,
+          "users",
+          uid,
+          "campaignProgress",
+          campaignId,
+          "modules",
+          moduleMeta.moduleId
+        );
 
         await setDoc(
           progressRef,
           {
+            campaignId,
             moduleId: moduleMeta.moduleId,
             orgId,
             assigned: true,
-            status: "completed",
-            completedAt: serverTimestamp(),
+            attempts,
+            score,
+            totalQuestions: total,
+            correctAnswers: score,
+            passed,
+            status: passed ? "completed" : failed ? "failed" : "in_progress",
+            completedAt: passed ? serverTimestamp() : null,
             updatedAt: serverTimestamp(),
           },
           { merge: true }
         );
+
+        setStoredProgress((prev) => ({
+          ...(prev || {}),
+          campaignId,
+          moduleId: moduleMeta.moduleId,
+          orgId,
+          assigned: true,
+          attempts,
+          score,
+          totalQuestions: total,
+          correctAnswers: score,
+          passed,
+          status: passed ? "completed" : failed ? "failed" : "in_progress",
+        }));
       } catch (err) {
-        console.error("Failed to mark lesson completed", err);
+        console.error("Failed to save quiz progress", err);
         setProgressError("We could not save your quiz completion right now.");
       }
     }
 
-    markCompleted();
-  }, [quizResult, loading, accessChecked, isAllowedByOrgType, uid, orgId, moduleMeta]);
+    saveQuizProgress();
+  }, [
+    quizResult,
+    attempts,
+    loading,
+    campaignChecked,
+    hasActiveCampaign,
+    accessChecked,
+    uid,
+    orgId,
+    moduleMeta,
+    campaignId,
+  ]);
 
-  if (loading || !accessChecked) {
+  if (loading || !campaignChecked || !accessChecked) {
     return <div style={{ padding: 24 }}>Loading…</div>;
   }
 
@@ -295,17 +509,24 @@ export default function LearningModuleContent() {
   const showLessonPageCount = !isQuizPage && !isResultsPage && lessonPageNumber != null;
   const showTopLessonNav = !isQuizPage && !isResultsPage && !isQuizWelcome;
 
-  const hasQuizResult = !!quizResult && Number(quizResult.total) > 0;
-  const passed =
-    hasQuizResult &&
+  const liveHasQuizResult = !!quizResult && Number(quizResult.total) > 0;
+  const livePassed =
+    liveHasQuizResult &&
     Number(quizResult.score) / Number(quizResult.total) >= 0.5;
+
+  const storedPassed = storedProgress?.passed === true;
+  const storedFailed = storedProgress?.status === "failed";
+
+  const passed = liveHasQuizResult ? livePassed : storedPassed;
+  const failed = liveHasQuizResult ? attempts >= 2 && !livePassed : storedFailed;
 
   const hasPerfectScore =
     !!quizResult &&
     Number(quizResult.total) > 0 &&
     Number(quizResult.score) === Number(quizResult.total);
 
-  const restartDisabled = retakeUsed || passed;
+  const isLocked = noActiveCampaign || passed || failed;
+  const restartDisabled = noActiveCampaign || attempts >= 2 || passed;
 
   const goNext = () => {
     const currentPos = lessonPageIndexes.indexOf(pageIndex);
@@ -338,7 +559,6 @@ export default function LearningModuleContent() {
     if (restartDisabled) return;
 
     setQuizResult(null);
-    setRetakeUsed(true);
     completionWriteRef.current = false;
 
     const quizWelcomeIndex = pages.findIndex((p) => p.type === "quizWelcome");
@@ -456,20 +676,29 @@ export default function LearningModuleContent() {
 
         <button
           onClick={() => {
+            if (isLocked) return;
             const quizIndex = pages.findIndex((p) => p.type === "quiz");
             setPageIndex(quizIndex >= 0 ? quizIndex : pageIndex);
           }}
+          disabled={isLocked}
           style={{
             padding: "12px 18px",
             borderRadius: 12,
             border: "1px solid #1d4ed8",
-            background: "#2563eb",
+            background: isLocked ? "#9ca3af" : "#2563eb",
             color: "#fff",
-            cursor: "pointer",
+            cursor: isLocked ? "not-allowed" : "pointer",
             fontWeight: 600,
+            opacity: isLocked ? 0.7 : 1,
           }}
         >
-          {page.startButtonText || "Start Quiz"}
+          {noActiveCampaign
+            ? "No Active Campaign"
+            : passed
+            ? "Completed"
+            : failed
+            ? "Failed"
+            : page.startButtonText || "Start Quiz"}
         </button>
       </div>
     );
@@ -586,16 +815,113 @@ export default function LearningModuleContent() {
               <p style={{ maxWidth: 720, lineHeight: 1.6 }}>{page.subtitle}</p>
             )}
 
+            {noActiveCampaign && (
+              <div
+                style={{
+                  marginTop: 16,
+                  padding: "12px 14px",
+                  borderRadius: 12,
+                  background: "#f8fafc",
+                  border: "1px solid #cbd5e1",
+                  color: "#334155",
+                  fontWeight: 700,
+                }}
+              >
+                There is no active campaign right now. You can review previous results, but you
+                cannot continue this quiz.
+              </div>
+            )}
+
+            {!noActiveCampaign && isLocked && (
+              <div
+                style={{
+                  marginTop: 16,
+                  padding: "12px 14px",
+                  borderRadius: 12,
+                  background: passed ? "#ecfdf5" : "#fef2f2",
+                  border: passed ? "1px solid #86efac" : "1px solid #fca5a5",
+                  color: passed ? "#166534" : "#991b1b",
+                  fontWeight: 700,
+                }}
+              >
+                {passed
+                  ? "This quiz has already been completed for this lesson."
+                  : "This quiz is locked because no attempts remain."}
+              </div>
+            )}
+
             {renderQuizWelcomeActions()}
           </div>
         );
 
       case "quiz":
+        if (noActiveCampaign) {
+          return (
+            <div>
+              <h2>No Active Campaign</h2>
+              <p>You cannot take this quiz because there is no active campaign right now.</p>
+              <button
+                onClick={() => {
+                  const resultsIndex = pages.findIndex((p) => p.type === "results");
+                  if (resultsIndex >= 0) {
+                    setPageIndex(resultsIndex);
+                  } else {
+                    navigate("/lessons");
+                  }
+                }}
+                style={{
+                  padding: "12px 16px",
+                  borderRadius: 12,
+                  border: "1px solid #333",
+                  background: "#fff",
+                  cursor: "pointer",
+                }}
+              >
+                View Previous Results
+              </button>
+            </div>
+          );
+        }
+
+        if (isLocked) {
+          return (
+            <div>
+              <h2>Quiz Locked</h2>
+              <p>
+                {passed
+                  ? "You have already completed this quiz."
+                  : "You have used both attempts for this quiz."}
+              </p>
+              <button
+                onClick={() => {
+                  const resultsIndex = pages.findIndex((p) => p.type === "results");
+                  if (resultsIndex >= 0) {
+                    setPageIndex(resultsIndex);
+                  } else {
+                    navigate("/lessons");
+                  }
+                }}
+                style={{
+                  padding: "12px 16px",
+                  borderRadius: 12,
+                  border: "1px solid #333",
+                  background: "#fff",
+                  cursor: "pointer",
+                }}
+              >
+                View Results
+              </button>
+            </div>
+          );
+        }
+
         return (
           <LearningModuleQuiz
             modulePath={page.quizModulePath}
             onComplete={(result) => {
+              completionWriteRef.current = false;
               setQuizResult(result);
+              setAttempts((prev) => prev + 1);
 
               const resultsIndex = pages.findIndex((p) => p.type === "results");
               setPageIndex(resultsIndex >= 0 ? resultsIndex : pageIndex);
@@ -624,6 +950,8 @@ export default function LearningModuleContent() {
                 >
                   {passed
                     ? "Congratulations! You passed the quiz."
+                    : failed
+                    ? "You did not pass and no attempts remain."
                     : "You did not reach the passing score. Please review the lesson and try again."}
                 </div>
 
@@ -669,6 +997,36 @@ export default function LearningModuleContent() {
                   </div>
                 )}
               </div>
+            ) : storedProgress &&
+              typeof storedProgress.correctAnswers === "number" &&
+              typeof storedProgress.totalQuestions === "number" ? (
+              <div style={{ marginTop: 12 }}>
+                <div
+                  style={{
+                    marginBottom: 14,
+                    padding: "12px 14px",
+                    borderRadius: 12,
+                    background: storedPassed ? "#ecfdf5" : "#fef2f2",
+                    border: storedPassed ? "1px solid #86efac" : "1px solid #fca5a5",
+                    color: storedPassed ? "#166534" : "#991b1b",
+                    fontWeight: 700,
+                  }}
+                >
+                  {storedPassed
+                    ? "You have already passed this quiz."
+                    : storedFailed
+                    ? "This quiz is locked because no attempts remain."
+                    : noActiveCampaign
+                    ? "There is no active campaign right now. Showing your most recent saved result."
+                    : "No quiz result found yet."}
+                </div>
+
+                <p>
+                  <b>Score:</b> {storedProgress.correctAnswers} / {storedProgress.totalQuestions}
+                </p>
+              </div>
+            ) : noActiveCampaign ? (
+              <p>There is no active campaign right now, and no saved result exists for this lesson.</p>
             ) : (
               <p>No quiz result found yet.</p>
             )}
@@ -693,10 +1051,16 @@ export default function LearningModuleContent() {
                   opacity: restartDisabled ? 0.5 : 1,
                 }}
               >
-                {hasPerfectScore
+                {noActiveCampaign
+                  ? "No Active Campaign"
+                  : hasPerfectScore
                   ? "Perfect Score Achieved"
-                  : retakeUsed
-                  ? "Restart Used"
+                  : passed
+                  ? "Completed"
+                  : failed
+                  ? "No Attempts Left"
+                  : attempts === 1
+                  ? "Restart Quiz (Last Attempt)"
                   : page.buttons?.restartQuizText || "Restart Quiz (1 retry)"}
               </button>
 
@@ -752,6 +1116,10 @@ export default function LearningModuleContent() {
 
           <div style={{ opacity: 0.65, marginTop: 8, fontSize: 14 }}>
             Training Mode: {trainingMode === "controlled" ? "Controlled" : "Open"}
+          </div>
+
+          <div style={{ opacity: 0.65, marginTop: 6, fontSize: 14 }}>
+            Campaign View: {hasActiveCampaign ? "Active Campaign" : campaignContext ? "Most Recent Campaign" : "No Campaign"}
           </div>
 
           {progressError && (
