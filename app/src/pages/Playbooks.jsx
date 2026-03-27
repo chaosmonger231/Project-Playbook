@@ -62,16 +62,8 @@ const PLAYBOOK_ZONES = [
       },
       {
         id: "risk-tools",
-        title: "Risk & Planning Tools",
+        title: "Risk & Impact Planning Tools",
         path: "/riskplanningtools",
-        icon: "/images/playbookImage2.png",
-        type: "main",
-        status: "not-started",
-      },
-      {
-        id: "impact-calculator",
-        title: "Impact Calculator",
-        path: "/playbook1",
         icon: "/images/playbookImage2.png",
         type: "main",
         status: "not-started",
@@ -344,9 +336,6 @@ export default function Playbooks() {
       );
     } catch (error) {
       console.error("Failed to save reviewed state:", error);
-
-      // keep local fallback so glow stays even if Firestore rules/blocking fail
-      // if you want hard rollback instead, replace this with previous state restore
     } finally {
       setReviewSavingId(null);
     }

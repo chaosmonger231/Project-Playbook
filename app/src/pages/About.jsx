@@ -4,17 +4,17 @@ import ContentPanel from "../components/ContentPanel";
 const TEAM_MEMBERS = [
   {
     name: "Nick Capozzi",
-    image: "/images/person1.jpg",
+    image: "/images/capozzi.jpg",
     link: "https://www.linkedin.com/in/nicholas-capozzi-a20332224/",
   },
   {
     name: "Vedika Amin",
-    image: "/images/person2.jpg",
+    image: "/images/genericImage.png",
     link: "https://www.linkedin.com/in/vedikaamin/",
   },
   {
     name: "James Halsey",
-    image: "/images/person3.jpg",
+    image: "/images/genericImage2.png",
     link: "https://www.linkedin.com/in/example3",
   },
   {

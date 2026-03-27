@@ -33,6 +33,10 @@ import SecurityTools from "./pages/SecurityTools";
 
 import PolicyGuide from "./pages/PolicyGuide";
 
+import RiskPlanningTools from "./pages/RiskPlanningTools";
+import ImpactCalculator from "./pages/ImpactCalculator";
+import RiskCalculator from "./pages/RiskCalculator";
+
 const router = createBrowserRouter([
   // Public route
   { path: "/login", element: <Login /> },
@@ -82,7 +86,9 @@ const router = createBrowserRouter([
 
       { path: "/securitytools", element: <SecurityTools />},
       { path: "/policyguide", element: <PolicyGuide/> },
-      
+      { path: "/riskplanningtools", element: <RiskPlanningTools /> },
+      { path: "/impactcalculator", element: <ImpactCalculator /> },
+      { path: "/riskcalculator", element: <RiskCalculator /> },
 
       // Playbook detail pages
       { path: "/securityreadiness", element: <SecurityReadiness /> },

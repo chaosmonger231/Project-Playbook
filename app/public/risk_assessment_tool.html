@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NIST-Aligned Risk Assessment Tool</title>
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --panel: #ffffff;
+      --panel-soft: #e5e7eb;
+      --border: #d1d5db;
+      --text: #111827;
+      --muted: #4b5563;
+      --muted-2: #6b7280;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --low: #dcfce7;
+      --moderate: #fef9c3;
+      --high: #fde68a;
+      --critical: #fecaca;
+      --shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      --radius: 0.75rem;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding: 1.5rem;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    h1, h2, h3 { margin: 0 0 0.4rem; }
+    p { margin: 0 0 0.7rem; }
+    ol { margin-top: 0.5rem; }
+
+    .page-wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .intro {
+      margin-bottom: 1rem;
+      line-height: 1.55;
+    }
+
+    .help-box,
+    .details-box,
+    .summary-strip {
+      max-width: 100%;
+      background: var(--panel-soft);
+      border-radius: var(--radius);
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .summary-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(180px, 1fr));
+      gap: 0.75rem;
+      background: transparent;
+      padding: 0;
+    }
+
+    .summary-card {
+      background: var(--panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 0.85rem 1rem;
+      border: 1px solid #eef2f7;
+    }
+
+    .summary-card__label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .summary-card__value {
+      font-size: 1.45rem;
+      font-weight: 700;
+    }
+
+    .summary-card__sub {
+      font-size: 0.8rem;
+      color: var(--muted-2);
+      margin-top: 0.2rem;
+    }
+
+    .framework-note {
+      font-size: 0.85rem;
+      color: #1f2937;
+      background: var(--accent-soft);
+      border-left: 4px solid var(--accent);
+      padding: 0.75rem 0.9rem;
+      border-radius: 0.65rem;
+      margin-bottom: 1rem;
+    }
+
+    .controls {
+      margin: 1rem 0;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border-radius: 999px;
+      padding: 0.5rem 0.95rem;
+      border: none;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.08);
+    }
+
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-secondary { background: var(--panel-soft); color: var(--text); }
+    .btn-danger { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+    #timestamp {
+      font-size: 0.8rem;
+      color: var(--muted-2);
+      margin-bottom: 0.7rem;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      background: var(--panel);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel);
+      min-width: 1300px;
+      font-size: 0.76rem;
+    }
+
+    thead {
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    th, td {
+      padding: 0.4rem 0.45rem;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    input[type="text"],
+    textarea,
+    select,
+    input[type="date"] {
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 0.76rem;
+      padding: 0.28rem 0.32rem;
+      border-radius: 0.4rem;
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      color: var(--text);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 2.35rem;
+      overflow: hidden;
+      white-space: pre-wrap;
+    }
+
+    select { text-align: center; }
+
+    .score-cell,
+    .level-cell {
+      text-align: center;
+      font-weight: 700;
+      border-radius: 0.45rem;
+    }
+
+    .level-low { background: var(--low); }
+    .level-moderate { background: var(--moderate); }
+    .level-high { background: var(--high); }
+    .level-critical { background: var(--critical); }
+
+    .pill {
+      display: inline-block;
+      padding: 0.18rem 0.45rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: #eef2ff;
+      color: #3730a3;
+    }
+
+    #pdf-container {
+      display: none;
+      margin-top: 1rem;
+      background: #fff;
+      padding: 0.5rem;
+    }
+
+    #pdf-container table {
+      min-width: auto;
+      box-shadow: none;
+      border-radius: 0;
+      font-size: 0.72rem;
+    }
+
+    #pdf-legend {
+      margin-top: 0.75rem;
+      font-size: 0.76rem;
+      color: #374151;
+      line-height: 1.45;
+    }
+
+    #pdf-legend ul {
+      margin: 0.35rem 0 0 1rem;
+      padding: 0;
+    }
+
+    .pdf-mode #pdf-container {
+      transform: scale(0.92);
+      transform-origin: top left;
+      width: 1220px;
+    }
+
+    details {
+      margin-top: 1rem;
+      background: var(--panel-soft);
+      padding: 0.8rem 0.95rem;
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+    }
+
+    summary {
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .muted-note {
+      font-size: 0.83rem;
+      color: #92400e;
+      margin-top: 0.75rem;
+    }
+
+    @media (max-width: 900px) {
+      body { padding: 1rem; }
+      .summary-strip {
+        grid-template-columns: repeat(2, minmax(160px, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .summary-strip {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrap">
+    <h1>NIST-Aligned Risk Assessment Tool</h1>
+    <p class="intro">
+      Risk assessment helps an organization identify what could go wrong, estimate how likely it is,
+      understand how serious the consequences could be, and decide what to do next. This no-backend
+      tool uses a simple risk register format inspired by the NIST Cybersecurity Framework (CSF) 2.0
+      and NIST SP 800-30 concepts such as threat events, control gaps, likelihood, impact, and treatment.
+    </p>
+
+    <div class="framework-note">
+      <strong>Framework basis:</strong> Use <span class="pill">NIST CSF 2.0</span> for the on-screen function categories
+      and a simple <span class="pill">Likelihood × Impact</span> scoring model for prioritization.
+    </div>
+
+    <section class="help-box">
+      <h2>How this calculator works</h2>
+      <p>Follow the steps below to create a quick, structured cybersecurity risk assessment:</p>
+      <ol>
+        <li>Enter a short risk statement and optional notes for each row.</li>
+        <li>Select the NIST CSF function that best fits the risk: Govern, Identify, Protect, Detect, Respond, or Recover.</li>
+        <li>Optionally describe the threat event and control gap to make the risk easier to understand later.</li>
+        <li>Assign a <strong>Likelihood</strong> score from 1 to 5 and an <strong>Impact</strong> score from 1 to 5.</li>
+        <li>The tool calculates an <strong>Overall Risk Score</strong> by multiplying likelihood and impact.</li>
+        <li>Choose a treatment approach such as Mitigate, Transfer, Accept, or Avoid.</li>
+        <li>Use <strong>Download CSV</strong> or <strong>Download PDF</strong> to save your results before leaving the page.</li>
+      </ol>
+      <p class="muted-note">
+        <strong>Note:</strong> All data entered here is temporary and stays in the browser only for the current page session.
+        Refreshing or leaving the page resets the entries unless you export them first.
+      </p>
+    </section>
+
+    <div class="summary-strip">
+      <div class="summary-card">
+        <div class="summary-card__label">Total Risks</div>
+        <div class="summary-card__value" id="summary-total">0</div>
+        <div class="summary-card__sub">Rows with at least one meaningful entry</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-card__label">Critical Risks</div>
+        <div class="summary-card__value" id="summary-critical">0</div>
+        <div class="summary-card__sub">Scores from 17 to 25</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-card__label">Highest Score</div>
+        <div class="summary-card__value" id="summary-highest">0</div>
+        <div class="summary-card__sub">Largest current row score</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-card__label">Most Used Function</div>
+        <div class="summary-card__value" id="summary-function">—</div>
+        <div class="summary-card__sub">Most common CSF function selected</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn-primary" onclick="addRow()">+ Add Row</button>
+      <button class="btn-secondary" onclick="exportCSV()">⬇ Download CSV</button>
+      <button class="btn-secondary" onclick="downloadPDF()">📄 Download PDF</button>
+    </div>
+
+    <section id="risk-report">
+      <h2>Risk Register Report</h2>
+      <p id="timestamp"></p>
+
+      <div class="table-wrap">
+        <table id="riskTable">
+          <thead>
+            <tr>
+              <th>Risk Statement</th>
+              <th>Notes</th>
+              <th>CSF Function</th>
+              <th>Threat Event</th>
+              <th>Control Gap</th>
+              <th>Likelihood</th>
+              <th>Impact</th>
+              <th>Risk Score</th>
+              <th>Risk Level</th>
+              <th>Treatment</th>
+              <th>Owner</th>
+              <th>Review Date</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <div id="pdf-container"></div>
+
+    <details>
+      <summary>Code Attribution and Sourcing</summary>
+      <p style="margin-top: 0.6rem; color: #374151;">
+        This front-end-only calculator was adapted as a custom Project Playbook-style tool. It uses client-side JavaScript
+        for scoring and export behavior and does not require a backend service.
+      </p>
+    </details>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    const CSF_FUNCTIONS = ["Govern", "Identify", "Protect", "Detect", "Respond", "Recover"];
+    const TREATMENTS = ["Mitigate", "Transfer", "Accept", "Avoid", "Monitor"];
+
+    function updateTimestamp() {
+      const ts = new Date().toLocaleString();
+      document.getElementById('timestamp').textContent = 'Generated: ' + ts;
+    }
+
+    function autoResizeTextarea(el) {
+      if (!el) return;
+      el.style.height = 'auto';
+      el.style.height = (el.scrollHeight || 40) + 'px';
+    }
+
+    function createScoreSelect() {
+      const sel = document.createElement('select');
+      const empty = document.createElement('option');
+      empty.value = '';
+      empty.textContent = '-';
+      sel.appendChild(empty);
+
+      for (let i = 1; i <= 5; i++) {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = i;
+        sel.appendChild(opt);
+      }
+
+      sel.addEventListener('change', recalcAll);
+      return sel;
+    }
+
+    function createOptionSelect(options, placeholder) {
+      const sel = document.createElement('select');
+      const empty = document.createElement('option');
+      empty.value = '';
+      empty.textContent = placeholder || '-';
+      sel.appendChild(empty);
+
+      options.forEach(function(optText) {
+        const opt = document.createElement('option');
+        opt.value = optText;
+        opt.textContent = optText;
+        sel.appendChild(opt);
+      });
+
+      sel.addEventListener('change', recalcAll);
+      return sel;
+    }
+
+    function setRiskLevelCell(cell, score) {
+      cell.classList.remove('level-low', 'level-moderate', 'level-high', 'level-critical');
+
+      if (!score) {
+        cell.textContent = '';
+        return;
+      }
+
+      let level = '';
+      if (score <= 4) {
+        level = 'Low';
+        cell.classList.add('level-low');
+      } else if (score <= 9) {
+        level = 'Moderate';
+        cell.classList.add('level-moderate');
+      } else if (score <= 16) {
+        level = 'High';
+        cell.classList.add('level-high');
+      } else {
+        level = 'Critical';
+        cell.classList.add('level-critical');
+      }
+      cell.textContent = level;
+    }
+
+    function addTextCell(tr, value, onInputHandler, textarea) {
+      const td = document.createElement('td');
+      const el = textarea ? document.createElement('textarea') : document.createElement('input');
+      if (!textarea) el.type = 'text';
+      el.value = value || '';
+      el.oninput = onInputHandler;
+      td.appendChild(el);
+      tr.appendChild(td);
+      if (textarea) autoResizeTextarea(el);
+      return el;
+    }
+
+    function addRow(prefill) {
+      prefill = prefill || {};
+      const tbody = document.querySelector('#riskTable tbody');
+      const tr = document.createElement('tr');
+
+      addTextCell(tr, prefill.riskStatement || '', recalcAll, false);
+      addTextCell(tr, prefill.notes || '', function(e) { autoResizeTextarea(e.target); recalcAll(); }, true);
+
+      const tdFunction = document.createElement('td');
+      const functionSel = createOptionSelect(CSF_FUNCTIONS, '-');
+      functionSel.value = prefill.csfFunction || '';
+      tdFunction.appendChild(functionSel);
+      tr.appendChild(tdFunction);
+
+      addTextCell(tr, prefill.threatEvent || '', recalcAll, true);
+      addTextCell(tr, prefill.controlGap || '', recalcAll, true);
+
+      const tdLikelihood = document.createElement('td');
+      const likelihoodSel = createScoreSelect();
+      likelihoodSel.value = prefill.likelihood || '';
+      tdLikelihood.appendChild(likelihoodSel);
+      tr.appendChild(tdLikelihood);
+
+      const tdImpact = document.createElement('td');
+      const impactSel = createScoreSelect();
+      impactSel.value = prefill.impact || '';
+      tdImpact.appendChild(impactSel);
+      tr.appendChild(tdImpact);
+
+      const tdScore = document.createElement('td');
+      tdScore.className = 'score-cell';
+      tr.appendChild(tdScore);
+
+      const tdLevel = document.createElement('td');
+      tdLevel.className = 'level-cell';
+      tr.appendChild(tdLevel);
+
+      const tdTreatment = document.createElement('td');
+      const treatmentSel = createOptionSelect(TREATMENTS, '-');
+      treatmentSel.value = prefill.treatment || '';
+      tdTreatment.appendChild(treatmentSel);
+      tr.appendChild(tdTreatment);
+
+      addTextCell(tr, prefill.owner || '', recalcAll, false);
+
+      const tdDate = document.createElement('td');
+      const dateInput = document.createElement('input');
+      dateInput.type = 'date';
+      dateInput.value = prefill.reviewDate || '';
+      dateInput.oninput = recalcAll;
+      tdDate.appendChild(dateInput);
+      tr.appendChild(tdDate);
+
+      const tdDelete = document.createElement('td');
+      const btn = document.createElement('button');
+      btn.className = 'btn-danger';
+      btn.textContent = '✖';
+      btn.onclick = function() {
+        tr.remove();
+        recalcAll();
+      };
+      tdDelete.appendChild(btn);
+      tr.appendChild(tdDelete);
+
+      tbody.appendChild(tr);
+      recalcAll();
+    }
+
+    function getRowData(row) {
+      const cells = row.getElementsByTagName('td');
+      if (cells.length < 12) return null;
+
+      const data = {
+        riskStatement: (cells[0].querySelector('input') || {}).value || '',
+        notes: (cells[1].querySelector('textarea') || {}).value || '',
+        csfFunction: (cells[2].querySelector('select') || {}).value || '',
+        threatEvent: (cells[3].querySelector('textarea') || {}).value || '',
+        controlGap: (cells[4].querySelector('textarea') || {}).value || '',
+        likelihood: parseInt((cells[5].querySelector('select') || {}).value || 0, 10),
+        impact: parseInt((cells[6].querySelector('select') || {}).value || 0, 10),
+        treatment: (cells[9].querySelector('select') || {}).value || '',
+        owner: (cells[10].querySelector('input') || {}).value || '',
+        reviewDate: (cells[11].querySelector('input') || {}).value || ''
+      };
+
+      data.score = data.likelihood && data.impact ? data.likelihood * data.impact : 0;
+      data.hasData = Boolean(
+        data.riskStatement || data.notes || data.csfFunction || data.threatEvent || data.controlGap ||
+        data.likelihood || data.impact || data.treatment || data.owner || data.reviewDate
+      );
+
+      return data;
+    }
+
+    function recalcAll() {
+      const rows = document.querySelectorAll('#riskTable tbody tr');
+      let total = 0;
+      let critical = 0;
+      let highest = 0;
+      const functionCounts = {};
+
+      rows.forEach(function(row) {
+        const data = getRowData(row);
+        if (!data) return;
+
+        const cells = row.getElementsByTagName('td');
+        const scoreCell = cells[7];
+        const levelCell = cells[8];
+
+        scoreCell.textContent = data.score || '';
+        setRiskLevelCell(levelCell, data.score);
+
+        if (data.hasData) {
+          total += 1;
+          highest = Math.max(highest, data.score || 0);
+          if (data.score >= 17) critical += 1;
+          if (data.csfFunction) {
+            functionCounts[data.csfFunction] = (functionCounts[data.csfFunction] || 0) + 1;
+          }
+        }
+      });
+
+      let mostUsedFunction = '—';
+      let maxCount = 0;
+      Object.keys(functionCounts).forEach(function(fn) {
+        if (functionCounts[fn] > maxCount) {
+          maxCount = functionCounts[fn];
+          mostUsedFunction = fn;
+        }
+      });
+
+      document.getElementById('summary-total').textContent = total;
+      document.getElementById('summary-critical').textContent = critical;
+      document.getElementById('summary-highest').textContent = highest;
+      document.getElementById('summary-function').textContent = mostUsedFunction;
+      updateTimestamp();
+    }
+
+    function csvEscape(value) {
+      value = String(value == null ? '' : value);
+      if (value.includes('"') || value.includes(',') || value.includes('\n')) {
+        return '"' + value.replace(/"/g, '""') + '"';
+      }
+      return value;
+    }
+
+    function exportCSV() {
+      const rows = document.querySelectorAll('#riskTable tr');
+      const csv = [];
+
+      rows.forEach(function(row) {
+        const cols = row.querySelectorAll('th, td');
+        const rowData = [];
+        cols.forEach(function(col, index) {
+          if (index === cols.length - 1) return;
+          const input = col.querySelector('input, textarea, select');
+          const text = input ? input.value : col.textContent.trim();
+          rowData.push(csvEscape(text));
+        });
+        csv.push(rowData.join(','));
+      });
+
+      const blob = new Blob([csv.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'risk_assessment_export.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function riskLevelText(score) {
+      if (!score) return '';
+      if (score <= 4) return 'Low';
+      if (score <= 9) return 'Moderate';
+      if (score <= 16) return 'High';
+      return 'Critical';
+    }
+
+    function riskLevelClass(score) {
+      if (!score) return '';
+      if (score <= 4) return 'level-low';
+      if (score <= 9) return 'level-moderate';
+      if (score <= 16) return 'level-high';
+      return 'level-critical';
+    }
+
+    function buildPdfTable() {
+      const sourceRows = document.querySelectorAll('#riskTable tbody tr');
+      const pdfContainer = document.getElementById('pdf-container');
+      pdfContainer.innerHTML = '';
+
+      const h2 = document.createElement('h2');
+      h2.textContent = 'Risk Register Report';
+      pdfContainer.appendChild(h2);
+
+      const ts = document.createElement('p');
+      ts.textContent = document.getElementById('timestamp').textContent;
+      pdfContainer.appendChild(ts);
+
+      const summary = document.createElement('p');
+      summary.innerHTML =
+        '<strong>Total Risks:</strong> ' + document.getElementById('summary-total').textContent +
+        ' &nbsp; | &nbsp; <strong>Critical Risks:</strong> ' + document.getElementById('summary-critical').textContent +
+        ' &nbsp; | &nbsp; <strong>Highest Score:</strong> ' + document.getElementById('summary-highest').textContent +
+        ' &nbsp; | &nbsp; <strong>Most Used Function:</strong> ' + document.getElementById('summary-function').textContent;
+      pdfContainer.appendChild(summary);
+
+      const table = document.createElement('table');
+      const thead = document.createElement('thead');
+      const headRow = document.createElement('tr');
+      [
+        'Risk Statement', 'CSF Function', 'Threat Event', 'Control Gap',
+        'Likelihood', 'Impact', 'Risk Score', 'Risk Level', 'Treatment', 'Owner', 'Review Date'
+      ].forEach(function(header) {
+        const th = document.createElement('th');
+        th.textContent = header;
+        headRow.appendChild(th);
+      });
+      thead.appendChild(headRow);
+      table.appendChild(thead);
+
+      const tbody = document.createElement('tbody');
+
+      sourceRows.forEach(function(row) {
+        const data = getRowData(row);
+        if (!data || !data.hasData) return;
+
+        const tr = document.createElement('tr');
+        const values = [
+          data.riskStatement || data.notes,
+          data.csfFunction,
+          data.threatEvent,
+          data.controlGap,
+          data.likelihood || '',
+          data.impact || '',
+          data.score || '',
+          riskLevelText(data.score),
+          data.treatment,
+          data.owner,
+          data.reviewDate
+        ];
+
+        values.forEach(function(value, index) {
+          const td = document.createElement('td');
+          td.textContent = value;
+          if (index === 6) td.classList.add('score-cell');
+          if (index === 7 && data.score) {
+            td.classList.add('level-cell');
+            td.classList.add(riskLevelClass(data.score));
+          }
+          tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+      });
+
+      table.appendChild(tbody);
+      pdfContainer.appendChild(table);
+
+      const legend = document.createElement('div');
+      legend.id = 'pdf-legend';
+      legend.innerHTML =
+        '<strong>Legend</strong><br>' +
+        '<em>Risk Score</em> = Likelihood × Impact, where each is rated from 1 to 5.<br>' +
+        '<em>Risk Levels</em>:' +
+        '<ul>' +
+        '<li>1–4: Low</li>' +
+        '<li>5–9: Moderate</li>' +
+        '<li>10–16: High</li>' +
+        '<li>17–25: Critical</li>' +
+        '</ul>' +
+        '<em>Suggested use:</em> Keep this as a lightweight planning and prioritization worksheet for Project Playbook users.';
+      pdfContainer.appendChild(legend);
+    }
+
+    function downloadPDF() {
+      document.querySelectorAll('textarea').forEach(autoResizeTextarea);
+      buildPdfTable();
+
+      const element = document.getElementById('pdf-container');
+      element.style.display = 'block';
+      document.body.classList.add('pdf-mode');
+
+      const opt = {
+        margin: 10,
+        filename: 'risk_assessment_report.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+      };
+
+      html2pdf().set(opt).from(element).save()
+        .then(function() {
+          document.body.classList.remove('pdf-mode');
+          element.style.display = 'none';
+        })
+        .catch(function() {
+          document.body.classList.remove('pdf-mode');
+          element.style.display = 'none';
+        });
+    }
+
+    addRow({
+      riskStatement: 'Privileged accounts do not require MFA',
+      notes: 'Administrative access could be exposed through phishing or password reuse.',
+      csfFunction: 'Protect',
+      threatEvent: 'Account compromise through phishing or stolen credentials',
+      controlGap: 'No enforced MFA policy for administrators',
+      likelihood: '4',
+      impact: '5',
+      treatment: 'Mitigate',
+      owner: 'IT Coordinator'
+    });
+
+    addRow({
+      riskStatement: 'Backups are not tested regularly',
+      notes: 'Recovery capability is uncertain during a ransomware or service outage event.',
+      csfFunction: 'Recover',
+      threatEvent: 'Ransomware encrypts production systems and data',
+      controlGap: 'No recurring backup restore validation',
+      likelihood: '3',
+      impact: '5',
+      treatment: 'Mitigate',
+      owner: 'Operations Lead'
+    });
+
+    updateTimestamp();
+  </script>
+</body>
+</html>

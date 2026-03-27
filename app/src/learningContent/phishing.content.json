@@ -7,7 +7,7 @@
       "title": "Welcome to Phishing & Email Safety",
       "subtitle": "Learn how phishing works and how to spot it before damage happens.",
       "video": {
-        "videoId": "VIDEO_ID_WELCOME",
+        "videoId": "xIQOLK_GeUo",
         "caption": "Introduction to phishing (replace later)"
       }
     },
@@ -21,7 +21,7 @@
         "caption": "Short explanation of phishing attacks"
       },
       "image": {
-        "src": "IMAGE_URL_PHISHING_EXAMPLE",
+        "src": "/images/phishing_example1.png",
         "alt": "Example of a phishing email (replace later)"
       }
     },
@@ -29,13 +29,13 @@
     {
       "type": "textImage",
       "title": "Types of phishing",
-      "text": "Phishing can happen through multiple communication channels.\n\nSome common types include:\n\n• <b>Email phishing</b> – Fake emails pretending to be from companies, coworkers, or vendors.\n• <b>Smishing</b> – Phishing messages sent through SMS or text messages.\n• <b>Vishing</b> – Phone calls where attackers impersonate IT staff, banks, or government agencies.\n\nEven if the message seems legitimate, always verify before responding or clicking anything.",
+      "text": "Phishing can happen through multiple communication channels.\n\nSome common types include:\n\n• <b>Email phishing</b> – Fake emails pretending to be from companies, coworkers, or vendors.\n• <b>Smishing</b> – Phishing messages sent through SMS or text messages.\n• <b>Vishing</b> – Phone calls where attackers impersonate IT staff, banks, or government agencies.\n\nEven if the message seems legitimate, always verify before responding or clicking anything. \n\nSmishing Example impersonating IRS. ",
       "video": {
         "videoId": "VIDEO_ID_PHISHING_TYPES",
         "caption": "Overview of different phishing methods"
       },
       "image": {
-        "src": "IMAGE_URL_PHISHING_TYPES",
+        "src": "/images/smishing_example1.png",
         "alt": "Examples of email, SMS, and phone phishing"
       }
     },
@@ -59,10 +59,14 @@
         {
           "title": "Urgency is a major red flag",
           "text": "Messages like \"act now\" or \"final notice\" are designed to pressure you into mistakes."
+        },
+        {
+          "title": "Did you know?",
+          "text": "According to research data by Statista, the number of phishing sites has more than doubled during the Pandemic and while it has come down from top, recent indicates that the numbers are rising again."
         }
       ],
       "image": {
-        "src": "IMAGE_URL_DID_YOU_KNOW",
+        "src": "/images/phishing_example2.png",
         "alt": "Did you know graphic (replace later)"
       }
     },
@@ -85,7 +89,7 @@
       "type": "video",
       "title": "Real-world phishing example",
       "video": {
-        "videoId": "VIDEO_ID_REAL_WORLD",
+        "videoId": "V_oukGUTacg",
         "caption": "Breakdown of a realistic phishing attempt (replace later)"
       }
     },
