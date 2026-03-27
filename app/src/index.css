@@ -247,6 +247,14 @@ body {
    CARD ACCENT COLORS
    ============================================================ */
 
+.action-card--about {
+  border-left: 6px solid #41460a;
+}
+
+.action-card--about .action-card__divider {
+  background: #41460a;
+}
+
 .action-card--blue {
   border-left: 6px solid #2563eb;
 }
@@ -965,6 +973,7 @@ body {
   padding: 0;
   cursor: pointer;
   min-height: 320px;
+  transition: all 0.25s ease;
 }
 
 .security-tool-card-inner {

@@ -18,6 +18,7 @@ import Playbooks from "./pages/Playbooks.jsx";
 import TeamManagament from "./pages/TeamManagement.jsx";
 import TrainingCampaign from "./pages/TrainingCampaign";
 import About from "./pages/About";
+import IncidentResponse from "./pages/IncidentResponse.jsx";
 
 import SecurityReadiness from "./pages/SecurityReadiness.jsx";
 import Playbook1 from "./pages/Playbook1";
@@ -76,10 +77,12 @@ const router = createBrowserRouter([
       // Playbooks hub
       { path: "/playbooks", element: <Playbooks /> },
       { path: "/organization", element: <TeamManagament/>},
-      
+      { path: "/about", element: <About/>},
+      { path: "/incidentresponse", element: <IncidentResponse/> },
+
       { path: "/securitytools", element: <SecurityTools />},
       { path: "/policyguide", element: <PolicyGuide/> },
-      { path: "/about", element: <About/>},
+      
 
       // Playbook detail pages
       { path: "/securityreadiness", element: <SecurityReadiness /> },

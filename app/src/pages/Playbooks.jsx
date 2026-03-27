@@ -367,7 +367,7 @@ export default function Playbooks() {
 
         <button
           type="button"
-          className="playbooks-back"
+          className="security-tools-back"
           onClick={() => navigate("/")}
         >
           ← Back to Home
@@ -452,7 +452,7 @@ export default function Playbooks() {
 
                 <button
                   type="button"
-                  className="playbooks-zone-collapse"
+                  className="security-tools-back"
                   onClick={handleCollapseExpanded}
                 >
                   Collapse

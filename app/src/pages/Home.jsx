@@ -77,7 +77,7 @@ export default function Home() {
 
               <button
                 type="button"
-                className="action-card action-card--green"
+                className="action-card action-card--about"
                 onClick={() => navigate("/about")}
               >
                 <div className="action-card__head">
@@ -90,8 +90,10 @@ export default function Home() {
                     Project Playbook delivers guided training, playbooks, and practical tools to help organizations improve cybersecurity readiness. 
                     Following the passage of <strong>Ohio HB96</strong>, many public organizations are now required to adopt cybersecurity programs. Project Playbook 
                     helps meet these requirements while also supporting small businesses and other organizations working to strengthen their security posture. 
+                  <br/>
+                  <br/>
+                    Click this card to learn more.
                   </p>
-                  <p>Click this card to learn more.</p>
                 </div>
               </button>
 
@@ -143,7 +145,7 @@ export default function Home() {
               <button
                 type="button"
                 className="action-card action-card--red"
-                onClick={() => navigate("/incident")}
+                onClick={() => navigate("/incidentresponse")}
               >
                 <div className="action-card__head">
                   <div className="action-card__title">Incident Response</div>
