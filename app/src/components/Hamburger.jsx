@@ -45,7 +45,6 @@ export default function HamburgerMenu() {
       {open && (
         <div className="menu-sheet" role="menu" ref={sheetRef}>
           <Link role="menuitem" className="menu-item" to="/account"  onClick={() => setOpen(false)}>Account</Link>
-          <Link role="menuitem" className="menu-item" to="/settings" onClick={() => setOpen(false)}>Settings</Link>
           <Link role="menuitem" className="menu-item" to="/help"     onClick={() => setOpen(false)}>Help / Docs</Link>
         </div>
       )}

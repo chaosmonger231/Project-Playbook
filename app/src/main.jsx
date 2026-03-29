@@ -11,6 +11,9 @@ import Shell from "./components/Shell";
 import Login from "./pages/Login";
 import Onboarding from "./pages/Onboarding";
 import AccountPage from "./pages/AccountPage.jsx";
+import UserAgreement from "./pages/UserAgreement";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Help from "./pages/Help";
 
 import Home from "./pages/Home";
 import Lessons from "./pages/Lessons.jsx";
@@ -77,6 +80,10 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       { path: "/lessons", element: <Lessons /> },
+      { path: "/user-agreement", element: <UserAgreement /> },
+      { path: "/privacy-policy", element: <PrivacyPolicy /> },
+      { path: "/help", element: <Help /> },
+      
 
       // Playbooks hub
       { path: "/playbooks", element: <Playbooks /> },

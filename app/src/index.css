@@ -207,7 +207,7 @@ body {
 .action-card:hover {
   transform: translateY(-2px);
   box-shadow:
-  0 12px 30px rgba(0, 0, 0, 0.12),
+    0 12px 30px rgba(0, 0, 0, 0.12),
     0 0 10px rgba(255, 215, 0, 0.6),
     0 0 20px rgba(255, 215, 0, 0.45),
     0 0 30px rgba(255, 200, 0, 0.35);
@@ -314,7 +314,7 @@ body {
 }
 
 /* ============================================================
-   PLAYBOOK HUB - HYBRID FLOW VERSION (FULL)
+   PLAYBOOK HUB - 3 STEP FLOW BOARD
    ============================================================ */
 
 .playbooks-hub-head {
@@ -325,15 +325,111 @@ body {
   margin-bottom: 18px;
 }
 
-.playbooks-hub-layout--diagram {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
-  gap: 18px;
-  align-items: start;
+.playbooks-title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 900;
 }
 
-.playbooks-hub-main {
+.playbooks-sub {
+  margin: 8px 0 0;
+  color: rgba(0, 0, 0, 0.72);
+  line-height: 1.45;
+}
+
+.playbooks-flow-board {
+  display: grid;
+  gap: 20px;
+}
+
+.playbooks-step-band {
+  position: relative;
+  border-radius: 22px;
+  border: 2px solid rgba(15, 23, 42, 0.14);
+  padding: 22px;
+  box-shadow:
+    0 14px 34px rgba(15, 23, 42, 0.1),
+    0 3px 10px rgba(15, 23, 42, 0.05);
+}
+
+.playbooks-step-band--start {
+  background: linear-gradient(180deg, #eaf4ff, #f8fbff);
+}
+
+.playbooks-step-band--work {
+  background: linear-gradient(180deg, #f5f8ff, #f7f9fc);
+}
+
+.playbooks-step-band--finish {
+  background: linear-gradient(180deg, #fff5df, #fffdf7);
+}
+
+.playbooks-step-band__header {
+  margin-bottom: 18px;
+}
+
+.playbooks-step-band__header--finish {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.playbooks-step-band__header-main {
   min-width: 0;
+}
+
+.playbooks-step-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.35),
+    0 0 14px rgba(255, 255, 255, 0.18);
+}
+
+.playbooks-step-pill--start {
+  background: linear-gradient(135deg, #2563eb, #60a5fa);
+  color: #ffffff;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.28),
+    0 0 18px rgba(37, 99, 235, 0.25);
+}
+
+.playbooks-step-pill--work {
+  background: linear-gradient(135deg, #0f766e, #34d399);
+  color: #ffffff;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.28),
+    0 0 18px rgba(16, 185, 129, 0.24);
+}
+
+.playbooks-step-pill--finish {
+  background: linear-gradient(135deg, #b45309, #f59e0b);
+  color: #ffffff;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.28),
+    0 0 18px rgba(245, 158, 11, 0.25);
+}
+
+.playbooks-step-heading {
+  margin: 0;
+  font-size: 1.32rem;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.playbooks-step-copy {
+  margin: 8px 0 0;
+  max-width: 760px;
+  color: rgba(0, 0, 0, 0.72);
+  line-height: 1.5;
 }
 
 /* =========================
@@ -343,63 +439,76 @@ body {
 .playbooks-start-wrap {
   display: flex;
   justify-content: center;
-  margin-bottom: 22px;
 }
 
 .playbooks-start-card {
-  width: 240px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 14px 12px;
+  width: 320px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: linear-gradient(180deg, #ffffff, #f8fbff);
+  border-radius: 20px;
+  padding: 18px 16px;
   cursor: pointer;
   text-align: center;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.09);
   transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
 }
 
 .playbooks-start-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.14);
 }
 
 .playbooks-start-icon {
-  width: 86px;
+  width: 94px;
   height: auto;
   display: block;
-  margin: 0 auto 8px;
+  margin: 0 auto 10px;
 }
 
 .playbooks-start-label {
-  font-size: 0.95rem;
-  font-weight: 800;
+  font-size: 1rem;
+  font-weight: 900;
+  color: #111827;
+}
+
+.playbooks-start-sub {
+  margin-top: 6px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #475569;
+  line-height: 1.4;
 }
 
 /* =========================
-   Collapsed Categories
+   Categories
 ========================= */
+
+.playbooks-categories-wrap {
+  display: grid;
+  gap: 14px;
+}
 
 .playbooks-collapsed-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
-  margin-bottom: 20px;
 }
 
 .playbooks-collapsed-card {
   position: relative;
-  min-height: 140px;
-  border-radius: 18px;
+  min-height: 168px;
+  border-radius: 20px;
   padding: 18px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.12);
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
   transition: all 0.15s ease;
+  text-align: left;
 }
 
 .playbooks-collapsed-card:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.14);
 }
 
 .playbooks-collapsed-card:disabled {
@@ -407,11 +516,11 @@ body {
 }
 
 .playbooks-collapsed-card.is-expanded {
-  outline: 3px solid rgba(37, 99, 235, 0.2);
+  outline: 3px solid rgba(37, 99, 235, 0.22);
 }
 
 .playbooks-collapsed-card.is-locked {
-  opacity: 0.5;
+  opacity: 0.52;
 }
 
 .playbooks-collapsed--training {
@@ -419,17 +528,18 @@ body {
 }
 
 .playbooks-collapsed--policies {
-  background: linear-gradient(135deg, #99df58, #c2e45b);
+  background: linear-gradient(135deg, #d9efaa, #c2e45b);
 }
 
 .playbooks-collapsed--response {
-  background: linear-gradient(135deg, #ffd7d7, #ffb4b4);
+  background: linear-gradient(135deg, #ffe1d6, #ffb4b4);
 }
 
 .playbooks-collapsed-title {
-  font-size: 1.2rem;
-  font-weight: 800;
+  font-size: 1.14rem;
+  font-weight: 900;
   margin-bottom: 10px;
+  line-height: 1.25;
 }
 
 .playbooks-collapsed-progress {
@@ -463,15 +573,15 @@ body {
 }
 
 /* =========================
-   Expanded Section
+   Expanded Zone
 ========================= */
 
 .playbooks-zone-expanded {
   border-radius: 20px;
   padding: 22px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
-  margin-bottom: 20px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
+  margin-top: 4px;
 }
 
 .playbooks-zone--training {
@@ -479,22 +589,23 @@ body {
 }
 
 .playbooks-zone--policies {
-  background: linear-gradient(135deg, #99df58, #c2e45b);
+  background: linear-gradient(135deg, #d9efaa, #c2e45b);
 }
 
 .playbooks-zone--response {
-  background: linear-gradient(135deg, #ffd7d7, #ffb4b4);
+  background: linear-gradient(135deg, #ffe1d6, #ffb4b4);
 }
 
 .playbooks-zone-expanded-head {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 20px;
   gap: 12px;
 }
 
 .playbooks-zone-expanded-title {
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   font-weight: 900;
   margin: 0;
 }
@@ -512,34 +623,33 @@ body {
   color: rgba(0, 0, 0, 0.6);
 }
 
-.playbooks-zone-collapse {
-  background: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 10px;
-  padding: 8px 14px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
 /* =========================
    Nodes (Playbooks)
 ========================= */
 
 .playbooks-zone-expanded-items {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
+}
+
+.playbooks-zone-expanded-items--response {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .playbooks-node-card {
   position: relative;
   background: #ffffff;
-  border-radius: 16px;
+  border-radius: 18px;
   padding: 16px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
   transition: all 0.15s ease;
   text-align: center;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .playbooks-node-card--support {
@@ -560,8 +670,8 @@ body {
 }
 
 .playbooks-node-icon {
-  width: 80px;
-  margin: 20px auto 10px;
+  width: 82px;
+  margin: 22px auto 12px;
   display: block;
 }
 
@@ -600,10 +710,10 @@ body {
 /* Reviewed button + glow */
 
 .playbook-review-btn {
-  margin-top: 12px;
-  padding: 8px 12px;
+  margin-top: 14px;
+  padding: 9px 12px;
   border-radius: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(15, 23, 42, 0.1);
   background: #f8fafc;
   font-size: 0.78rem;
   font-weight: 800;
@@ -631,45 +741,27 @@ body {
   box-shadow:
     0 0 0 2px rgba(244, 197, 66, 0.18),
     0 0 24px rgba(244, 197, 66, 0.35),
-    0 12px 30px rgba(0, 0, 0, 0.1);
+    0 12px 30px rgba(15, 23, 42, 0.1);
 }
 
 /* =========================
-   Checklist Panel
+   Final Step / Readiness
 ========================= */
 
-.playbooks-checklist-panel {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 18px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-  position: sticky;
-  top: 20px;
+.playbooks-readiness-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 18px;
+  align-items: start;
 }
 
-.playbooks-checklist-head {
-  margin-bottom: 12px;
-}
-
-.playbooks-checklist-title {
-  margin: 0 0 8px;
-  font-weight: 800;
-}
-
-.playbooks-checklist-sub {
-  margin: 0;
-  font-size: 0.9rem;
-  color: rgba(0, 0, 0, 0.68);
-  line-height: 1.4;
-}
-
-.playbooks-checklist-group {
-  margin-top: 14px;
+.playbooks-checklist-groups {
+  display: grid;
+  gap: 14px;
 }
 
 .playbooks-checklist-group-title {
-  font-weight: 700;
+  font-weight: 800;
   margin-bottom: 8px;
   color: #1e3a8a;
 }
@@ -684,8 +776,9 @@ body {
   gap: 6px;
   padding: 10px 12px;
   border-radius: 12px;
-  background: #f8fafc;
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.04);
 }
 
 .playbooks-checklist-item-main {
@@ -704,12 +797,47 @@ body {
   font-weight: 700;
 }
 
+.playbooks-attestation-panel {
+  min-width: 0;
+}
+
+.playbooks-attestation-card {
+  background: linear-gradient(135deg, #fff7db, #ffeab8);
+  border-radius: 18px;
+  padding: 18px;
+  border: 1px solid rgba(191, 149, 39, 0.24);
+  box-shadow: 0 10px 22px rgba(120, 74, 0, 0.08);
+}
+
+.playbooks-attestation-kicker {
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #8a5a00;
+  margin-bottom: 10px;
+}
+
+.playbooks-attestation-title {
+  margin: 0;
+  font-size: 1.06rem;
+  font-weight: 900;
+  color: #111827;
+}
+
+.playbooks-attestation-text {
+  margin: 10px 0 0;
+  color: rgba(0, 0, 0, 0.72);
+  line-height: 1.5;
+  font-size: 0.92rem;
+}
+
 .playbooks-attestation-link {
   width: 100%;
   margin-top: 16px;
-  border: 1px solid rgba(37, 99, 235, 0.18);
-  background: linear-gradient(135deg, #eff6ff, #dbeafe);
-  color: #1d4ed8;
+  border: 1px solid rgba(191, 149, 39, 0.22);
+  background: linear-gradient(135deg, #ffffff, #fff3cf);
+  color: #8a5a00;
   border-radius: 12px;
   padding: 11px 14px;
   font-weight: 800;
@@ -718,7 +846,52 @@ body {
 }
 
 .playbooks-attestation-link:hover {
-  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  background: linear-gradient(135deg, #fff0c2, #ffe7a3);
+}
+
+/* =========================
+   Definition Box
+========================= */
+
+.playbooks-attestation-definition {
+  width: 280px;
+  max-width: 100%;
+  background: linear-gradient(180deg, #ffffff, #fff9ee);
+  border: 1px solid rgba(191, 149, 39, 0.18);
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: 0 8px 18px rgba(120, 74, 0, 0.06);
+  flex-shrink: 0;
+}
+
+.playbooks-attestation-definition__label {
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8a5a00;
+  margin-bottom: 8px;
+}
+
+.playbooks-attestation-definition__word {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #111827;
+  line-height: 1.2;
+}
+
+.playbooks-attestation-definition__pronounce {
+  margin-top: 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.playbooks-attestation-definition__text {
+  margin: 10px 0 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.75);
 }
 
 /* =========================
@@ -811,21 +984,26 @@ body {
 ========================= */
 
 @media (max-width: 1100px) {
-  .playbooks-hub-layout--diagram {
+  .playbooks-readiness-grid {
     grid-template-columns: 1fr;
   }
 
-  .playbooks-checklist-panel {
-    position: static;
+  .playbooks-step-band__header--finish {
+    flex-direction: column;
+  }
+
+  .playbooks-attestation-definition {
+    width: 100%;
   }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
   .playbooks-collapsed-grid {
     grid-template-columns: 1fr;
   }
 
-  .playbooks-zone-expanded-items {
+  .playbooks-zone-expanded-items,
+  .playbooks-zone-expanded-items--response {
     grid-template-columns: 1fr;
   }
 
@@ -1837,4 +2015,3 @@ body {
     white-space: normal;
   }
 }
-

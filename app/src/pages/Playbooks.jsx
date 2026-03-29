@@ -1,3 +1,4 @@
+// src/pages/Playbooks.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ContentPanel from "../components/ContentPanel";
@@ -190,7 +191,7 @@ export default function Playbooks() {
 
   const [overviewOpen, setOverviewOpen] = useState(false);
   const [trainingUnlockedNext, setTrainingUnlockedNext] = useState(false);
-  const [expandedZone, setExpandedZone] = useState("training");
+  const [expandedZone, setExpandedZone] = useState(null);
   const [reviewedMap, setReviewedMap] = useState({});
   const [reviewSavingId, setReviewSavingId] = useState(null);
   const [hasSeenOverview, setHasSeenOverview] = useState(false);
@@ -214,7 +215,7 @@ export default function Playbooks() {
 
     if (!seen) {
       setOverviewOpen(true);
-      setExpandedZone("training");
+      setExpandedZone(null);
     }
   }, []);
 
@@ -297,7 +298,7 @@ export default function Playbooks() {
 
   function handleCollapsedZoneClick(zoneKey) {
     if (!unlockedMap[zoneKey]) return;
-    setExpandedZone(zoneKey);
+    setExpandedZone((prev) => (prev === zoneKey ? null : zoneKey));
   }
 
   function handleCollapseExpanded() {
@@ -363,8 +364,19 @@ export default function Playbooks() {
         </button>
       </div>
 
-      <div className="playbooks-hub-layout playbooks-hub-layout--diagram">
-        <div className="playbooks-hub-main">
+      <div className="playbooks-flow-board">
+        <section className="playbooks-step-band playbooks-step-band--start">
+          <div className="playbooks-step-band__header">
+            <div className="playbooks-step-pill playbooks-step-pill--start">
+              Step 1
+            </div>
+            <h3 className="playbooks-step-heading">Begin Here</h3>
+            <p className="playbooks-step-copy">
+              Start with the readiness overview before working through the
+              categories below.
+            </p>
+          </div>
+
           <div className="playbooks-start-wrap">
             <button
               type="button"
@@ -379,47 +391,65 @@ export default function Playbooks() {
               <div className="playbooks-start-label">
                 Security Readiness Overview
               </div>
+              <div className="playbooks-start-sub">
+                Open the overview and understand the full flow
+              </div>
             </button>
           </div>
+        </section>
 
-          <div className="playbooks-collapsed-grid">
-            {PLAYBOOK_ZONES.map((zone) => {
-              const isExpanded = expandedZone === zone.key;
-              const isUnlocked = unlockedMap[zone.key];
+        <section className="playbooks-step-band playbooks-step-band--work">
+          <div className="playbooks-step-band__header">
+            <div className="playbooks-step-pill playbooks-step-pill--work">
+              Step 2
+            </div>
+            <h3 className="playbooks-step-heading">Work Through the Playbooks</h3>
+            <p className="playbooks-step-copy">
+              Choose a category, open its playbooks, and track reviewed items as
+              you go.
+            </p>
+          </div>
 
-              return (
-                <button
-                  key={zone.key}
-                  type="button"
-                  className={[
-                    "playbooks-collapsed-card",
-                    zone.collapsedThemeClass,
-                    isExpanded ? "is-expanded" : "",
-                    !isUnlocked ? "is-locked" : "",
-                  ].join(" ")}
-                  onClick={() => handleCollapsedZoneClick(zone.key)}
-                  disabled={!isUnlocked}
-                >
-                  {!isUnlocked && (
-                    <div className="playbooks-collapsed-lock">Locked</div>
-                  )}
+          <div className="playbooks-categories-wrap">
+            <div className="playbooks-collapsed-grid">
+              {PLAYBOOK_ZONES.map((zone) => {
+                const isExpanded = expandedZone === zone.key;
+                const isUnlocked = unlockedMap[zone.key];
 
-                  <div className="playbooks-collapsed-title">{zone.title}</div>
-                  <div className="playbooks-collapsed-progress">
-                    {zone.statusText}
-                  </div>
-                  <div className="playbooks-collapsed-progress-secondary">
-                    {reviewedCounts[zone.key]}
-                  </div>
+                return (
+                  <button
+                    key={zone.key}
+                    type="button"
+                    className={[
+                      "playbooks-collapsed-card",
+                      zone.collapsedThemeClass,
+                      isExpanded ? "is-expanded" : "",
+                      !isUnlocked ? "is-locked" : "",
+                    ].join(" ")}
+                    onClick={() => handleCollapsedZoneClick(zone.key)}
+                    disabled={!isUnlocked}
+                  >
+                    {!isUnlocked && (
+                      <div className="playbooks-collapsed-lock">Locked</div>
+                    )}
 
-                  {!isUnlocked && (
-                    <div className="playbooks-collapsed-note">
-                      Complete Training Playbook first
+                    <div className="playbooks-collapsed-title">{zone.title}</div>
+                    <div className="playbooks-collapsed-progress">
+                      {zone.statusText}
                     </div>
-                  )}
-                </button>
-              );
-            })}
+                    <div className="playbooks-collapsed-progress-secondary">
+                      {reviewedCounts[zone.key]}
+                    </div>
+
+                    {!isUnlocked && (
+                      <div className="playbooks-collapsed-note">
+                        Complete Training Playbook first
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {expandedZoneData && (
@@ -506,58 +536,100 @@ export default function Playbooks() {
               </div>
             </section>
           )}
-        </div>
+        </section>
 
-        <aside className="playbooks-checklist-panel">
-          <div className="playbooks-checklist-head">
-            <h3 className="playbooks-checklist-title">Readiness Checklist</h3>
-            <p className="playbooks-checklist-sub">
-              Track readiness items while working through the playbooks.
-            </p>
-          </div>
-
-          <div className="playbooks-checklist-groups">
-            {CHECKLIST_GROUPS.map((group) => (
-              <div key={group.title} className="playbooks-checklist-group">
-                <div className="playbooks-checklist-group-title">
-                  {group.title}
-                </div>
-
-                <div className="playbooks-checklist-items">
-                  {group.items.map((item) => (
-                    <label
-                      key={item.id}
-                      className="playbooks-checklist-item"
-                    >
-                      <div className="playbooks-checklist-item-main">
-                        <input
-                          type="checkbox"
-                          checked={!!checklistState[item.id]}
-                          onChange={() => toggleChecklistItem(item.id)}
-                        />
-                        <span>{item.label}</span>
-                      </div>
-
-                      {item.note && (
-                        <div className="playbooks-checklist-note">
-                          {item.note}
-                        </div>
-                      )}
-                    </label>
-                  ))}
-                </div>
+        <section className="playbooks-step-band playbooks-step-band--finish">
+          <div className="playbooks-step-band__header playbooks-step-band__header--finish">
+            <div className="playbooks-step-band__header-main">
+              <div className="playbooks-step-pill playbooks-step-pill--finish">
+                Step 3
               </div>
-            ))}
+              <h3 className="playbooks-step-heading">
+                Final Review / Attestation
+              </h3>
+              <p className="playbooks-step-copy">
+                Review your readiness items and continue to the full attestation
+                when you are ready.
+              </p>
+            </div>
+
+            <aside className="playbooks-attestation-definition">
+              <div className="playbooks-attestation-definition__label">
+                Definition
+              </div>
+              <div className="playbooks-attestation-definition__word">
+                Attestation
+              </div>
+              <div className="playbooks-attestation-definition__pronounce">
+                noun
+              </div>
+              <p className="playbooks-attestation-definition__text">
+                Evidence or confirmation that something has been completed,
+                reviewed, or documented.
+              </p>
+            </aside>
           </div>
 
-          <button
-            type="button"
-            className="playbooks-attestation-link"
-            onClick={() => navigate("/securityreadiness")}
-          >
-            Open Full Attestation
-          </button>
-        </aside>
+          <div className="playbooks-readiness-grid">
+            <div className="playbooks-checklist-groups">
+              {CHECKLIST_GROUPS.map((group) => (
+                <div key={group.title} className="playbooks-checklist-group">
+                  <div className="playbooks-checklist-group-title">
+                    {group.title}
+                  </div>
+
+                  <div className="playbooks-checklist-items">
+                    {group.items.map((item) => (
+                      <label
+                        key={item.id}
+                        className="playbooks-checklist-item"
+                      >
+                        <div className="playbooks-checklist-item-main">
+                          <input
+                            type="checkbox"
+                            checked={!!checklistState[item.id]}
+                            onChange={() => toggleChecklistItem(item.id)}
+                          />
+                          <span>{item.label}</span>
+                        </div>
+
+                        {item.note && (
+                          <div className="playbooks-checklist-note">
+                            {item.note}
+                          </div>
+                        )}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="playbooks-attestation-panel">
+              <div className="playbooks-attestation-card">
+                <div className="playbooks-attestation-kicker">
+                  Review & Submit
+                </div>
+                <h4 className="playbooks-attestation-title">
+                  Open Full Attestation
+                </h4>
+                <p className="playbooks-attestation-text">
+                  Use the full attestation page to review readiness items,
+                  confirm completion details, and continue the documentation
+                  process.
+                </p>
+
+                <button
+                  type="button"
+                  className="playbooks-attestation-link"
+                  onClick={() => navigate("/securityreadiness")}
+                >
+                  Open Full Attestation
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
 
       {overviewOpen && (
@@ -610,8 +682,8 @@ export default function Playbooks() {
               <div className="playbooks-modal-item">
                 <strong>Checklist & Attestation</strong>
                 <span>
-                  Track progress on the right, then open the full attestation
-                  page when ready to review and submit.
+                  Track progress in the final section, then open the full
+                  attestation page when ready to review and submit.
                 </span>
               </div>
             </div>
