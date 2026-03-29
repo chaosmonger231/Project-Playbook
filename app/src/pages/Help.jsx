@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ContentPanel from "../components/ContentPanel";
-import "./help.css";
+import "../pages/Help.css";
 
 const FAQS = [
   {
