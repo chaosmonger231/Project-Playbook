@@ -1336,7 +1336,7 @@ body {
   justify-content: center;
   min-height: 340px;
   padding: 20px;
-  background: linear-gradient(135deg, #eef6ff, #f8fbff);
+  background: linear-gradient(135deg, rgb(105, 216, 121), #399b0c);
 }
 
 .policy-guide-landing-image {
@@ -1427,7 +1427,7 @@ body {
 }
 
 .policy-guide-question-card {
-  background: #ffffff;
+  background: #d8f9d6;
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 22px;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
@@ -1545,6 +1545,20 @@ body {
   color: rgba(0, 0, 0, 0.72);
 }
 
+.policy-guide-results-notice {
+  margin-top: 12px;
+  max-width: 760px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #fff7ed, #fffbeb);
+  border: 1px solid #fed7aa;
+  color: #9a3412;
+  line-height: 1.5;
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(154, 52, 18, 0.06);
+}
+
 .policy-guide-results-actions {
   display: flex;
   gap: 10px;
@@ -1568,6 +1582,17 @@ body {
 .policy-guide-restart-btn {
   background: #f1f5f9;
   color: #334155;
+}
+
+.policy-guide-download-error {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  line-height: 1.45;
+  font-size: 0.92rem;
+  font-weight: 700;
 }
 
 .policy-guide-priority-box {
@@ -1612,6 +1637,26 @@ body {
   padding: 18px;
 }
 
+.policy-guide-result-card--blue {
+  border-left: 6px solid #2563eb;
+}
+
+.policy-guide-result-card--green {
+  border-left: 6px solid #16a34a;
+}
+
+.policy-guide-result-card--red {
+  border-left: 6px solid #dc2626;
+}
+
+.policy-guide-result-card--purple {
+  border-left: 6px solid #7c3aed;
+}
+
+.policy-guide-result-card--yellow {
+  border-left: 6px solid #d97706;
+}
+
 .policy-guide-result-card-title {
   font-size: 1.05rem;
   font-weight: 900;
@@ -1648,6 +1693,10 @@ body {
   color: #1d4ed8;
   font-weight: 900;
   cursor: pointer;
+}
+
+.policy-guide-result-card-action:hover {
+  background: #bfdbfe;
 }
 
 .policy-guide-results-side {
@@ -1709,6 +1758,10 @@ body {
   color: #1d4ed8;
   font-weight: 800;
   cursor: pointer;
+}
+
+.policy-guide-side-item-action:hover {
+  background: #bfdbfe;
 }
 
 .policy-guide-side-note {

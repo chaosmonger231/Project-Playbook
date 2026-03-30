@@ -1,7 +1,9 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ContentPanel from "../components/ContentPanel";
 import { getAuth } from "firebase/auth";
+
+const POLICY_GUIDE_STORAGE_KEY = "policyGuideProgress";
 
 const QUESTIONS = [
   {
@@ -238,10 +240,10 @@ function buildRecommendations(answers) {
       summary:
         "Define who should have access to systems and require stronger authentication for important accounts.",
       whyItMatters:
-        "MFA and stronger account protection are fast, practical ways to reduce account compromise risk.",
+        "Multi Factor Authentication and stronger account protection are fast, practical ways to reduce account compromise risk.",
       actionLabel: "View Security Tools",
       actionPath: "/securitytools",
-      openInNewTab: true,
+      openInNewTab: false,
       accentClass: "policy-guide-result-card--blue",
     });
 
@@ -250,7 +252,7 @@ function buildRecommendations(answers) {
       description: "A simple option for adding MFA to important accounts.",
       actionLabel: "Open Security Tools",
       actionPath: "/securitytools",
-      openInNewTab: true,
+      openInNewTab: false,
     });
 
     addTool({
@@ -258,7 +260,7 @@ function buildRecommendations(answers) {
       description: "Useful for Microsoft accounts and other supported services.",
       actionLabel: "Open Security Tools",
       actionPath: "/securitytools",
-      openInNewTab: true,
+      openInNewTab: false,
     });
 
     priorityActions.push("Enable MFA for your most important accounts first.");
@@ -273,7 +275,7 @@ function buildRecommendations(answers) {
         "Regular backups and tested recovery steps are foundational for resilience after ransomware or device failure.",
       actionLabel: "View Incident Response Tools",
       actionPath: "/incidentresponse",
-      openInNewTab: true,
+      openInNewTab: false,
       accentClass: "policy-guide-result-card--green",
     });
 
@@ -283,7 +285,7 @@ function buildRecommendations(answers) {
         "Backup tools can help reduce downtime after ransomware or accidental loss.",
       actionLabel: "Open Security Tools",
       actionPath: "/securitytools",
-      openInNewTab: true,
+      openInNewTab: false,
     });
 
     priorityActions.push(
@@ -300,7 +302,7 @@ function buildRecommendations(answers) {
         "A basic response plan should identify key contacts, responsibilities, and reporting expectations before an incident occurs.",
       actionLabel: "Go to Incident Response",
       actionPath: "/incidentresponse",
-      openInNewTab: true,
+      openInNewTab: false,
       accentClass: "policy-guide-result-card--red",
     });
 
@@ -316,7 +318,7 @@ function buildRecommendations(answers) {
         "Knowing what sensitive data you have and restricting access appropriately helps reduce exposure and confusion.",
       actionLabel: "Open Planning Tools",
       actionPath: "/riskplanningtools",
-      openInNewTab: true,
+      openInNewTab: false,
       accentClass: "policy-guide-result-card--purple",
     });
 
@@ -334,7 +336,7 @@ function buildRecommendations(answers) {
         "Remote access increases exposure and should be paired with stronger account protection and clear approved-access practices.",
       actionLabel: "View Security Tools",
       actionPath: "/securitytools",
-      openInNewTab: true,
+      openInNewTab: false,
       accentClass: "policy-guide-result-card--blue",
     });
 
@@ -370,7 +372,7 @@ function buildRecommendations(answers) {
         "Education environments often handle sensitive records and need clear expectations for who can access them.",
       actionLabel: "Open Planning Tools",
       actionPath: "/riskplanningtools",
-      openInNewTab: true,
+      openInNewTab: false,
       accentClass: "policy-guide-result-card--purple",
     });
   }
@@ -384,7 +386,7 @@ function buildRecommendations(answers) {
         "Public organizations often need clearer communications and incident handling responsibilities.",
       actionLabel: "Go to Incident Response",
       actionPath: "/incidentresponse",
-      openInNewTab: true,
+      openInNewTab: false,
       accentClass: "policy-guide-result-card--red",
     });
   }
@@ -398,7 +400,7 @@ function buildRecommendations(answers) {
         "As organizations grow, unclear responsibilities create delays and confusion during security events.",
       actionLabel: "Open Planning Tools",
       actionPath: "/riskplanningtools",
-      openInNewTab: true,
+      openInNewTab: false,
       accentClass: "policy-guide-result-card--blue",
     });
   }
@@ -409,7 +411,7 @@ function buildRecommendations(answers) {
       "Use this to think through how incidents could affect your organization.",
     actionLabel: "Open Impact Calculator",
     actionPath: "/playbook2",
-    openInNewTab: true,
+    openInNewTab: false,
   });
 
   if (!recommendations.length) {
@@ -421,7 +423,7 @@ function buildRecommendations(answers) {
         "A basic cybersecurity program helps clarify responsibilities, priorities, and expectations across the organization.",
       actionLabel: "Open Planning Tools",
       actionPath: "/riskplanningtools",
-      openInNewTab: true,
+      openInNewTab: false,
       accentClass: "policy-guide-result-card--blue",
     });
 
@@ -444,6 +446,54 @@ export default function PolicyGuide() {
   const [answers, setAnswers] = useState({});
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadError, setDownloadError] = useState("");
+  const [hasRestoredState, setHasRestoredState] = useState(false);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(POLICY_GUIDE_STORAGE_KEY);
+
+      if (saved) {
+        const parsed = JSON.parse(saved);
+
+        if (typeof parsed.started === "boolean") {
+          setStarted(parsed.started);
+        }
+
+        if (
+          typeof parsed.currentIndex === "number" &&
+          parsed.currentIndex >= 0 &&
+          parsed.currentIndex <= QUESTIONS.length
+        ) {
+          setCurrentIndex(parsed.currentIndex);
+        }
+
+        if (parsed.answers && typeof parsed.answers === "object") {
+          setAnswers(parsed.answers);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to restore Policy Guide progress:", error);
+    } finally {
+      setHasRestoredState(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!hasRestoredState) return;
+
+    try {
+      localStorage.setItem(
+        POLICY_GUIDE_STORAGE_KEY,
+        JSON.stringify({
+          started,
+          currentIndex,
+          answers,
+        })
+      );
+    } catch (error) {
+      console.error("Failed to save Policy Guide progress:", error);
+    }
+  }, [started, currentIndex, answers, hasRestoredState]);
 
   const currentQuestion = QUESTIONS[currentIndex];
   const isComplete = currentIndex >= QUESTIONS.length;
@@ -452,6 +502,8 @@ export default function PolicyGuide() {
   const results = useMemo(() => buildRecommendations(answers), [answers]);
 
   function handleAnswer(value) {
+    if (!currentQuestion) return;
+
     setAnswers((prev) => ({
       ...prev,
       [currentQuestion.id]: value,
@@ -459,7 +511,7 @@ export default function PolicyGuide() {
   }
 
   function goNext() {
-    if (!answers[currentQuestion.id]) return;
+    if (!currentQuestion || !answers[currentQuestion.id]) return;
     setCurrentIndex((prev) => prev + 1);
   }
 
@@ -473,14 +525,15 @@ export default function PolicyGuide() {
     setAnswers({});
     setDownloadError("");
     setIsDownloading(false);
+
+    try {
+      localStorage.removeItem(POLICY_GUIDE_STORAGE_KEY);
+    } catch (error) {
+      console.error("Failed to clear Policy Guide progress:", error);
+    }
   }
 
-  function handleOpen(path, openInNewTab = false) {
-    if (openInNewTab) {
-      const fullUrl = `${window.location.origin}${path}`;
-      window.open(fullUrl, "_blank", "noopener,noreferrer");
-      return;
-    }
+  function handleOpen(path) {
     navigate(path);
   }
 
@@ -564,7 +617,7 @@ export default function PolicyGuide() {
         <div className="policy-guide-landing">
           <div className="policy-guide-landing-media">
             <img
-              src="/images/playbookImage1.png"
+              src="/images/policyguidelogo.svg"
               alt="Policy Guide"
               className="policy-guide-landing-image"
             />
@@ -686,6 +739,11 @@ export default function PolicyGuide() {
                 Based on your answers, these are the best areas to focus on
                 first.
               </p>
+              <div className="policy-guide-results-notice">
+                Download your recommendations before leaving this page. Your
+                results are saved in this browser for convenience, but the PDF is
+                the best copy to keep and share.
+              </div>
             </div>
 
             <div className="policy-guide-results-actions">
@@ -712,9 +770,7 @@ export default function PolicyGuide() {
           </div>
 
           {downloadError && (
-            <div className="policy-guide-download-error">
-              {downloadError}
-            </div>
+            <div className="policy-guide-download-error">{downloadError}</div>
           )}
 
           <div className="policy-guide-priority-box">
@@ -752,17 +808,10 @@ export default function PolicyGuide() {
                   <button
                     type="button"
                     className="policy-guide-result-card-action"
-                    onClick={() => handleOpen(rec.actionPath, rec.openInNewTab)}
+                    onClick={() => handleOpen(rec.actionPath)}
                   >
                     {rec.actionLabel}
-                    {rec.openInNewTab ? " ↗" : ""}
                   </button>
-
-                  {rec.openInNewTab && (
-                    <div className="policy-guide-result-card-note">
-                      Opens in a new tab so your results stay here.
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
@@ -785,19 +834,10 @@ export default function PolicyGuide() {
                       <button
                         type="button"
                         className="policy-guide-side-item-action"
-                        onClick={() =>
-                          handleOpen(tool.actionPath, tool.openInNewTab)
-                        }
+                        onClick={() => handleOpen(tool.actionPath)}
                       >
                         {tool.actionLabel}
-                        {tool.openInNewTab ? " ↗" : ""}
                       </button>
-
-                      {tool.openInNewTab && (
-                        <div className="policy-guide-side-item-note">
-                          Opens in a new tab so your results stay here.
-                        </div>
-                      )}
                     </div>
                   ))}
                 </div>

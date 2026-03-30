@@ -28,10 +28,10 @@ export default function ImpactCalculator() {
       <div
         style={{
           width: "100%",
-          height: "80vh",
+          height: "1000px",
           background: "#fff",
           borderRadius: "20px",
-          overflow: "hidden",
+          overflow: "visible",
           boxShadow: "0 10px 24px rgba(15, 23, 42, 0.08)",
         }}
       >
