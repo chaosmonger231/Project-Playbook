@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Detection & Response Playbook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="A practical incident detection and response playbook for small and mid-sized organizations, aligned to the NIST incident response lifecycle."
+  />
+  <style>
+    :root {
+      --bg: #f3f7ff;
+      --panel: #ffffff;
+      --panel-soft: #f8fbff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #dbe6f3;
+      --blue: #2563eb;
+      --blue-soft: #eaf2ff;
+      --green: #16a34a;
+      --green-soft: #ecfdf3;
+      --amber: #d97706;
+      --amber-soft: #fff7ed;
+      --red: #dc2626;
+      --red-soft: #fef2f2;
+      --shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: var(--sans);
+      background:
+        radial-gradient(900px 500px at 12% 5%, rgba(37, 99, 235, 0.08), transparent 55%),
+        radial-gradient(700px 420px at 88% 10%, rgba(22, 163, 74, 0.05), transparent 45%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    main {
+      max-width: 1020px;
+      margin: 0 auto;
+    }
+
+    .hero,
+    .section-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 28px 30px;
+      margin-bottom: 20px;
+    }
+
+    .section-card {
+      padding: 22px 24px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0 0 10px;
+      color: var(--text);
+    }
+
+    h1 {
+      font-size: 2rem;
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 1.28rem;
+      margin-bottom: 8px;
+    }
+
+    h3 {
+      font-size: 1.02rem;
+      margin-top: 4px;
+    }
+
+    p {
+      margin: 0 0 12px;
+      color: var(--muted);
+    }
+
+    ul,
+    ol {
+      margin: 10px 0 0 20px;
+      padding: 0;
+      color: var(--muted);
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    .callout {
+      margin-top: 16px;
+      background: var(--amber-soft);
+      border: 1px solid #fed7aa;
+      border-left: 4px solid var(--amber);
+      border-radius: 14px;
+      padding: 14px 16px;
+      color: #9a3412;
+      font-size: 0.95rem;
+    }
+
+    .callout-blue {
+      background: var(--blue-soft);
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid var(--blue);
+      color: #1e40af;
+    }
+
+    .callout-red {
+      background: var(--red-soft);
+      border: 1px solid #fecaca;
+      border-left: 4px solid var(--red);
+      color: #991b1b;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .mini-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--panel-soft);
+      padding: 16px;
+    }
+
+    .mini-label {
+      display: inline-block;
+      font-size: 0.76rem;
+      font-weight: 900;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      color: #334155;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .phase-card {
+      border: 1px solid #dbe6f3;
+      border-left: 5px solid #2563eb;
+      border-radius: 16px;
+      background: #f8fbff;
+      padding: 16px;
+    }
+
+    .phase-title {
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .codewrap {
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #f8fbff;
+    }
+
+    .codebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid #bfdbfe;
+      background: #dbeafe;
+      color: #1e3a8a;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    pre {
+      margin: 0;
+      padding: 14px 16px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: #0f172a;
+      white-space: pre-wrap;
+    }
+
+    code {
+      font-family: var(--mono);
+    }
+
+    .source-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+
+    .source-box a {
+      color: var(--blue);
+      text-decoration: none;
+      word-break: break-word;
+    }
+
+    .source-box a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: #64748b;
+      font-size: 0.86rem;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 860px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      body {
+        padding: 16px;
+      }
+
+      .hero,
+      .section-card {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <div class="eyebrow">Incident Response & Operations</div>
+      <h1>Detection &amp; Response Playbook</h1>
+      <p>
+        This playbook provides a practical starting point for identifying, analyzing, containing, and recovering
+        from cybersecurity incidents. It is designed for small and mid-sized organizations that need a simple,
+        structured workflow for handling alerts and suspicious activity.
+      </p>
+
+      <div class="chip-row">
+        <span class="chip">Preparation</span>
+        <span class="chip">Detection &amp; Analysis</span>
+        <span class="chip">Containment</span>
+        <span class="chip">Recovery</span>
+        <span class="chip">Lessons learned</span>
+      </div>
+
+      <div class="callout callout-blue">
+        This page follows a simplified 5-phase incident response lifecycle adapted from NIST guidance.
+        It is meant to help organizations move from alert to action in a clear and repeatable way.
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>Why this playbook matters</h2>
+      <p>
+        Cyber incidents often begin as scattered warning signs: a suspicious login, an antivirus alert,
+        an unusual process, a strange outbound connection, or unexpected file changes. Without a simple process,
+        teams may delay action, miss escalation points, or lose valuable evidence.
+      </p>
+      <p>
+        A detection and response playbook helps define what to do first, who should be involved, how to assess
+        severity, and how to move from detection into containment and recovery.
+      </p>
+
+      <div class="callout">
+        A simple way to think about this page: it is the general incident workflow. More specialized playbooks,
+        such as ransomware response, can then build on top of this foundation.
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>The 5 Phases of Incident Response</h2>
+      <p>
+        This version breaks the response process into five practical phases that are easier to follow during a real event.
+      </p>
+
+      <div class="timeline">
+        <div class="phase-card">
+          <div class="phase-title">1. Preparation</div>
+          <p>
+            Preparation is the work done before an incident occurs. The goal is to make sure your organization
+            is ready to recognize and handle suspicious activity.
+          </p>
+          <ul>
+            <li>Ensure logging is enabled on important systems and services.</li>
+            <li>Put monitoring tools in place where possible.</li>
+            <li>Define staff roles, emergency contacts, and response responsibilities.</li>
+            <li>Create a clear escalation path for after-hours or urgent incidents.</li>
+            <li>Make sure critical systems, backups, and documentation are known in advance.</li>
+          </ul>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-title">2. Detection &amp; Analysis</div>
+          <p>
+            Detection begins when an alert, report, or suspicious observation comes in. Analysis determines whether
+            the activity is benign, suspicious, or malicious.
+          </p>
+          <ul>
+            <li>Review the alert source and what triggered it.</li>
+            <li>Identify affected hosts, users, processes, files, IP addresses, or services.</li>
+            <li>Determine whether the activity appears benign, suspicious, or malicious.</li>
+            <li>Estimate severity, scope, and urgency.</li>
+            <li>Decide whether the event should be escalated into a formal incident.</li>
+          </ul>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-title">3. Containment</div>
+          <p>
+            Containment aims to reduce damage and stop the incident from spreading while preserving enough information
+            to continue investigation.
+          </p>
+          <ul>
+            <li>Isolate affected hosts if needed.</li>
+            <li>Block suspicious IP addresses, domains, or accounts if appropriate.</li>
+            <li>Disable compromised credentials when misuse is suspected.</li>
+            <li>Preserve logs, screenshots, alerts, and other evidence before making major changes.</li>
+            <li>Coordinate internally so actions are not duplicated or missed.</li>
+          </ul>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-title">4. Eradication &amp; Recovery</div>
+          <p>
+            Once the threat is contained, focus on removing the cause, fixing weaknesses, and safely returning systems
+            to normal operation.
+          </p>
+          <ul>
+            <li>Remove malicious files, scripts, persistence mechanisms, or processes.</li>
+            <li>Patch vulnerable software or correct the root cause.</li>
+            <li>Reset passwords or rotate credentials if necessary.</li>
+            <li>Restore from backups when required and verify integrity before reconnecting systems.</li>
+            <li>Monitor closely for recurrence after recovery steps are complete.</li>
+          </ul>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-title">5. Post-Incident Activity</div>
+          <p>
+            After the immediate event is over, capture lessons learned so the organization improves over time.
+          </p>
+          <ul>
+            <li>Document what happened and when.</li>
+            <li>Record actions taken, decisions made, and what evidence was collected.</li>
+            <li>Identify what worked well and what slowed the response down.</li>
+            <li>Update detections, procedures, contact lists, and training as needed.</li>
+            <li>Use the incident to strengthen future readiness.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>Simple alert triage questions</h2>
+      <p>
+        When an alert comes in, a small organization does not need a complicated process. Start by answering a few basic questions:
+      </p>
+
+      <div class="grid-2">
+        <div class="mini-card">
+          <div class="mini-label">Initial questions</div>
+          <ul>
+            <li>What happened?</li>
+            <li>When did it happen?</li>
+            <li>Which host, user, or account is involved?</li>
+            <li>What tool or person reported it?</li>
+            <li>Is it still ongoing?</li>
+          </ul>
+        </div>
+
+        <div class="mini-card">
+          <div class="mini-label">Decision questions</div>
+          <ul>
+            <li>Is this benign, suspicious, or clearly malicious?</li>
+            <li>Could the activity spread or cause business disruption?</li>
+            <li>Should the device or account be isolated now?</li>
+            <li>Do leadership or outside partners need to be informed?</li>
+            <li>What evidence should be preserved before changes are made?</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>Starter incident note template</h2>
+      <p>
+        A short, repeatable note format can help reduce confusion during a live event.
+      </p>
+
+      <div class="codewrap">
+        <div class="codebar">Detection &amp; Response Note Template</div>
+        <pre><code>Incident Summary
+- Alert or issue:
+- Date and time observed:
+- Reported by:
+- Affected host/user/system:
+- Current status:
+
+Initial Assessment
+- Classification: Benign / Suspicious / Malicious
+- Severity: Low / Medium / High / Critical
+- Scope known so far:
+- Evidence collected:
+
+Containment Actions
+- Host isolated:
+- Account disabled:
+- IP/domain blocked:
+- Other immediate actions:
+
+Recovery / Follow-Up
+- Root cause identified:
+- Systems restored:
+- Monitoring increased:
+- Next review time:
+
+Post-Incident Notes
+- Lessons learned:
+- Detection or procedure changes needed:
+- Additional follow-up owners:</code></pre>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>How this connects to other playbooks</h2>
+      <p>
+        This is the general response workflow page. Other pages in this section can be more specialized.
+      </p>
+      <ul>
+        <li><strong>Ransomware Response Playbook</strong>: scenario-specific guidance for encryption, extortion, and backup-related decisions.</li>
+        <li><strong>Incident Response Planning Playbook</strong>: planning roles, communications, contacts, and organizational readiness.</li>
+        <li><strong>Security Monitoring Tools</strong>: supporting technologies such as Wazuh and Suricata that may feed alerts into this workflow.</li>
+      </ul>
+
+      <div class="callout callout-red">
+        This playbook is not a substitute for legal, regulatory, law enforcement, or sector-specific reporting requirements.
+        Organizations should follow any obligations that apply to their environment.
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>References</h2>
+      <p>
+        This page is based on NIST incident response and cybersecurity framework guidance.
+      </p>
+
+      <div class="source-box">
+        <p>
+          NIST SP 800-61 Rev. 2, Computer Security Incident Handling Guide:
+          <a href="https://csrc.nist.gov/pubs/sp/800/61/r2/final" target="_blank" rel="noopener noreferrer">
+            https://csrc.nist.gov/pubs/sp/800/61/r2/final
+          </a>
+        </p>
+        <p>
+          NIST SP 800-61 Rev. 3:
+          <a href="https://csrc.nist.gov/pubs/sp/800/61/r3/final" target="_blank" rel="noopener noreferrer">
+            https://csrc.nist.gov/pubs/sp/800/61/r3/final
+          </a>
+        </p>
+        <p>
+          NIST Cybersecurity Framework 2.0:
+          <a href="https://www.nist.gov/cyberframework" target="_blank" rel="noopener noreferrer">
+            https://www.nist.gov/cyberframework
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      This page is intended as a lightweight starting point for detection, incident handling, and response planning.
+    </div>
+  </main>
+</body>
+</html>

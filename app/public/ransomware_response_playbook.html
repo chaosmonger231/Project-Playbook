@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ransomware Response Playbook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="A practical ransomware response playbook for small and mid-sized organizations, covering ransomware context, tool deployment, communication planning, notification drafting, and containment actions."
+  />
+  <style>
+    :root {
+      --bg: #f3f7ff;
+      --panel: #ffffff;
+      --panel-soft: #f8fbff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #dbe6f3;
+      --blue: #2563eb;
+      --blue-soft: #eaf2ff;
+      --green: #16a34a;
+      --green-soft: #ecfdf3;
+      --amber: #d97706;
+      --amber-soft: #fff7ed;
+      --red: #dc2626;
+      --red-soft: #fef2f2;
+      --shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: var(--sans);
+      background:
+        radial-gradient(900px 500px at 12% 5%, rgba(37, 99, 235, 0.08), transparent 55%),
+        radial-gradient(700px 420px at 88% 10%, rgba(220, 38, 38, 0.05), transparent 45%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    main {
+      max-width: 1020px;
+      margin: 0 auto;
+    }
+
+    .hero,
+    .section-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 28px 30px;
+      margin-bottom: 20px;
+    }
+
+    .section-card {
+      padding: 22px 24px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0 0 10px;
+      color: var(--text);
+    }
+
+    h1 {
+      font-size: 2rem;
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 1.28rem;
+      margin-bottom: 8px;
+    }
+
+    h3 {
+      font-size: 1.02rem;
+      margin-top: 4px;
+    }
+
+    p {
+      margin: 0 0 12px;
+      color: var(--muted);
+    }
+
+    ul,
+    ol {
+      margin: 10px 0 0 20px;
+      padding: 0;
+      color: var(--muted);
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      color: #334155;
+    }
+
+    .callout {
+      margin-top: 16px;
+      background: var(--amber-soft);
+      border: 1px solid #fed7aa;
+      border-left: 4px solid var(--amber);
+      border-radius: 14px;
+      padding: 14px 16px;
+      color: #9a3412;
+      font-size: 0.95rem;
+    }
+
+    .callout-blue {
+      background: var(--blue-soft);
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid var(--blue);
+      color: #1e40af;
+    }
+
+    .callout-red {
+      background: var(--red-soft);
+      border: 1px solid #fecaca;
+      border-left: 4px solid var(--red);
+      color: #991b1b;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .mini-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--panel-soft);
+      padding: 16px;
+    }
+
+    .mini-label {
+      display: inline-block;
+      font-size: 0.76rem;
+      font-weight: 900;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+
+    .step-card {
+      border: 1px solid #dbe6f3;
+      border-left: 5px solid #2563eb;
+      border-radius: 16px;
+      background: #f8fbff;
+      padding: 16px;
+      margin-top: 14px;
+    }
+
+    .step-title {
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .codewrap {
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #f8fbff;
+    }
+
+    .codebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid #bfdbfe;
+      background: #dbeafe;
+      color: #1e3a8a;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    pre {
+      margin: 0;
+      padding: 14px 16px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: #0f172a;
+      white-space: pre-wrap;
+    }
+
+    code {
+      font-family: var(--mono);
+    }
+
+    .source-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+
+    .source-box a {
+      color: var(--blue);
+      text-decoration: none;
+      word-break: break-word;
+    }
+
+    .source-box a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: #64748b;
+      font-size: 0.86rem;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 860px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      body {
+        padding: 16px;
+      }
+
+      .hero,
+      .section-card {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <div class="eyebrow">Incident Response &amp; Operations</div>
+      <h1>Ransomware Response Playbook</h1>
+      <p>
+        This playbook gives small and mid-sized organizations a practical starting point for recognizing,
+        preparing for, and responding to ransomware incidents. It focuses on ransomware-specific warning signs,
+        supporting tools, communication planning, notification drafting, and immediate containment actions.
+      </p>
+
+      <div class="chip-row">
+        <span class="chip">Ransomware context</span>
+        <span class="chip">Wazuh</span>
+        <span class="chip">Suricata</span>
+        <span class="chip">Containment</span>
+        <span class="chip">Communication</span>
+      </div>
+
+      <div class="callout callout-blue">
+        This is a scenario-specific playbook. It builds on general detection and response practices,
+        but focuses on ransomware warning signs, tool deployment, and rapid coordination steps during a likely ransomware event.
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>Ransomware context</h2>
+      <p>
+        Ransomware is malicious software that encrypts files or systems and then demands payment in exchange
+        for a decryption key or supposed restoration of access. In many cases, the attack is not limited to encryption.
+        Threat actors may also steal sensitive data and threaten to release it publicly if the ransom is not paid.
+      </p>
+      <p>
+        Small organizations, schools, and local agencies are often attractive targets because they may have limited staffing,
+        slower response processes, and fewer dedicated security tools in place.
+      </p>
+
+      <div class="grid-2">
+        <div class="mini-card">
+          <div class="mini-label">Common entry points</div>
+          <ul>
+            <li>Phishing emails with malicious links or attachments</li>
+            <li>Compromised or misused remote access tools such as RDP or VPN</li>
+            <li>Unpatched internet-facing systems and vulnerable applications</li>
+          </ul>
+        </div>
+
+        <div class="mini-card">
+          <div class="mini-label">Common warning signs</div>
+          <ul>
+            <li>Sudden file renaming or unusual extensions</li>
+            <li>Ransom notes appearing on systems or shared drives</li>
+            <li>Unexpected backup deletion or log clearing</li>
+            <li>Large numbers of files being changed in a short period</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout callout-red">
+        Paying a ransom does not guarantee recovery, may support criminal activity, and may still leave the organization
+        exposed to data theft, repeat attacks, or incomplete restoration.
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>How ransomware incidents commonly unfold</h2>
+      <p>
+        Ransomware incidents often progress in a pattern. Understanding the rough stages can help responders
+        recognize when an alert may be part of a larger attack.
+      </p>
+
+      <div class="step-card">
+        <div class="step-title">1. Initial access</div>
+        <p>
+          The attacker gains access through phishing, exposed services, stolen credentials, vulnerable software,
+          or abused remote access tools.
+        </p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-title">2. Execution and spread</div>
+        <p>
+          Malicious code begins running, spreading, or establishing persistence. This phase may also involve
+          credential theft, disabling defenses, deleting backups, and preparing for broader impact.
+        </p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-title">3. Encryption and extortion</div>
+        <p>
+          Files are encrypted, ransom notes appear, and the organization may be pressured to pay. In some cases,
+          stolen data is used as leverage in a double-extortion scheme.
+        </p>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>Supporting tools and deployment overview</h2>
+      <p>
+        This playbook assumes the organization may use both host-side and network-side monitoring to catch ransomware-related activity earlier.
+        Two example tools are Wazuh and Suricata.
+      </p>
+
+      <div class="grid-2">
+        <div class="mini-card">
+          <div class="mini-label">Wazuh</div>
+          <p>
+            Wazuh helps monitor host activity such as suspicious commands, backup deletion attempts,
+            log clearing, ransom note creation, and suspicious file extensions.
+          </p>
+        </div>
+
+        <div class="mini-card">
+          <div class="mini-label">Suricata</div>
+          <p>
+            Suricata helps monitor network activity such as suspicious DNS requests, unusual HTTP behavior,
+            risky TLS fingerprints, and file-related activity across the network.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>Example deployment SOP</h2>
+      <p>
+        The following steps describe a simple process for deploying pre-configured ransomware-oriented rules for Wazuh and Suricata.
+        These are starter examples and should be tested in a safe environment before production use.
+      </p>
+
+      <h3>Prerequisites</h3>
+      <ul>
+        <li><strong>Wazuh Manager:</strong> installed and accessible, with agents already deployed to endpoints.</li>
+        <li><strong>Suricata Sensor:</strong> installed and active, with access to the Suricata configuration and rules directories.</li>
+        <li><strong>Administrative access:</strong> SSH or local access to the relevant servers.</li>
+      </ul>
+
+      <div class="step-card">
+        <div class="step-title">Wazuh deployment</div>
+        <ul>
+          <li>Upload the ransomware rules XML file to the Wazuh rules directory.</li>
+          <li>Validate the rules file syntax before relying on it.</li>
+          <li>Confirm the ruleset is referenced in the Wazuh configuration if required.</li>
+          <li>Restart Wazuh Manager so the rules are loaded.</li>
+        </ul>
+
+        <div class="codewrap">
+          <div class="codebar">Example Wazuh commands</div>
+          <pre><code>scp local_ransomware_rules.xml ExampleUser@wazuh-manager:/var/ossec/etc/rules/
+
+/var/ossec/bin/wazuh-logtest
+
+sudo nano /var/ossec/etc/ossec.conf
+
+sudo systemctl restart wazuh-manager</code></pre>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-title">Suricata deployment</div>
+        <ul>
+          <li>Upload the ransomware rules file to the Suricata rules directory.</li>
+          <li>Add the rules file to the <code>rule-files</code> section of the Suricata configuration if needed.</li>
+          <li>Validate the configuration before restart.</li>
+          <li>Restart Suricata so the new rules are applied.</li>
+        </ul>
+
+        <div class="codewrap">
+          <div class="codebar">Example Suricata commands</div>
+          <pre><code>scp SuricataRansomware.rules ExampleUser@suricata-sensor:/etc/suricata/rules/
+
+sudo nano /etc/suricata/suricata.yaml
+
+sudo suricata -T -c /etc/suricata/suricata.yaml -v
+
+sudo systemctl restart suricata</code></pre>
+        </div>
+      </div>
+
+      <div class="callout">
+        If configuration formatting errors occur, correct them before restart. Rule validation should always happen in a safe environment before production use.
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>Communication tree planning</h2>
+      <p>
+        Ransomware response is not only technical. A clear communication tree helps reduce confusion,
+        speed up response, and make sure the right people are informed in the right order.
+      </p>
+
+      <div class="grid-2">
+        <div class="mini-card">
+          <div class="mini-label">Questions to answer</div>
+          <ul>
+            <li>Who receives the first alert or report?</li>
+            <li>Who is the backup if the primary person is unavailable?</li>
+            <li>Who can approve isolation or broader containment decisions?</li>
+            <li>What group activates after hours or during weekends?</li>
+          </ul>
+        </div>
+
+        <div class="mini-card">
+          <div class="mini-label">Why it matters</div>
+          <ul>
+            <li>Reduces delays during a live incident</li>
+            <li>Avoids duplicated or conflicting actions</li>
+            <li>Improves coordination between technical and leadership staff</li>
+            <li>Helps smaller teams respond more consistently</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout callout-blue">
+        A simple top-down contact chart with names, roles, after-hours contact methods, and fallback contacts can be more useful than a complex document that no one checks during an emergency.
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>Draft notification template</h2>
+      <p>
+        A draft notification format helps responders communicate the most important details quickly and consistently.
+        This can be adjusted to fit the organization’s workflow.
+      </p>
+
+      <div class="codewrap">
+        <div class="codebar">Ransomware alert notification template</div>
+        <pre><code>1) Incident Summary
+
+&lt;Alert Name&gt; was detected on &lt;endpoint&gt; at &lt;alert time&gt;.
+The logged-in user at the time was &lt;localuser&gt;.
+The originating process was &lt;process&gt;.
+
+Incident Severity:
+&lt;Malicious, Suspicious, Benign&gt;
+
+Mitigation Status:
+&lt;Mitigated, Not Mitigated, Under Investigation, False Positive&gt;
+
+
+2) Detection Details
+
+Alert Name:
+Endpoint Hostname:
+Internal Endpoint IP:
+External Endpoint IP:
+Logged-in User:
+Command Line Activity (if Wazuh):
+Network Log (if Suricata):
+File Modification Activity:
+
+
+3) OSINT Analysis
+
+&lt;IP/Command/Filename&gt; was deemed &lt;malicious, suspicious, benign&gt;.
+
+VirusTotal Reputation:
+&lt;link to VirusTotal report&gt;
+
+AbuseIPDB Reputation:
+&lt;link to AbuseIPDB report&gt;
+
+
+4) Analyst Notes
+
+- Explain the indicator of compromise and the risk it poses
+- Estimate where the activity may fall in the attack chain
+- Note duplicate detections on other endpoints
+- Note other related alerts on the same hostname
+
+Recommended Actions:
+&lt;Quarantine host&gt;
+&lt;Block IP or domain&gt;
+&lt;Run AV scan&gt;
+&lt;Remove suspicious files or persistence&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>Containment and immediate next steps</h2>
+      <p>
+        During a suspected ransomware event, the goal is to reduce damage quickly while preserving enough information
+        to continue investigation and recovery.
+      </p>
+
+      <div class="step-card">
+        <div class="step-title">1. Remove the affected endpoint from the network</div>
+        <p>
+          If an endpoint appears compromised, isolate it from the network as quickly as possible.
+          This may be done through an agent-based action if supported, or manually by disconnecting the device.
+        </p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-title">2. Identify the suspicious process or activity</div>
+        <p>
+          Use alert details, logs, and endpoint information to identify what is likely driving the activity.
+          Review command lines, file changes, user activity, and related alerts on the same host.
+        </p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-title">3. Follow internal recovery procedures</div>
+        <p>
+          Recovery steps may include checking backups, rebuilding systems, resetting credentials, validating scope,
+          and reviewing whether other systems show similar signs of compromise.
+        </p>
+      </div>
+
+      <div class="callout callout-red">
+        If data theft, legal reporting requirements, or external partner obligations are involved, the organization should follow the appropriate legal, regulatory, and reporting processes in parallel with technical response.
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>How this playbook fits with the others</h2>
+      <p>
+        This page is ransomware-specific. It should work alongside the broader playbooks in the Incident Response &amp; Operations section.
+      </p>
+      <ul>
+        <li><strong>Detection &amp; Response Playbook:</strong> the general workflow for identifying, triaging, containing, and recovering from incidents.</li>
+        <li><strong>Incident Response Planning Playbook:</strong> planning roles, contacts, and internal readiness before an incident occurs.</li>
+        <li><strong>Security Monitoring Tools:</strong> supporting technologies such as Wazuh and Suricata that may help generate the alerts used here.</li>
+      </ul>
+    </section>
+
+    <section class="section-card">
+      <h2>References</h2>
+      <p>
+        The original donor content for this page included practical ransomware response ideas, deployment examples,
+        and alert workflow guidance that shaped this version. External references should be reviewed and updated as needed
+        before production or academic use. :contentReference[oaicite:2]{index=2}
+      </p>
+
+      <div class="source-box">
+        <p>
+          Example reference mentioned in the donor:
+          <a href="https://ic3.gov" target="_blank" rel="noopener noreferrer">
+            https://ic3.gov
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      This page is intended as a lightweight starting point for ransomware response planning, communication, and containment.
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Suricata Monitoring Tool</title>
+  <meta
+    name="description"
+    content="A lightweight overview of Suricata for network monitoring, traffic inspection, and ransomware-oriented detection examples."
+  />
+  <style>
+    :root {
+      --bg: #f3f7ff;
+      --panel: #ffffff;
+      --panel-soft: #f8fbff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #dbe6f3;
+      --blue: #2563eb;
+      --blue-soft: #eaf2ff;
+      --green: #16a34a;
+      --green-soft: #ecfdf3;
+      --amber: #d97706;
+      --amber-soft: #fff7ed;
+      --red: #dc2626;
+      --red-soft: #fef2f2;
+      --shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: var(--sans);
+      background:
+        radial-gradient(900px 500px at 12% 5%, rgba(37, 99, 235, 0.08), transparent 55%),
+        radial-gradient(700px 420px at 88% 10%, rgba(22, 163, 74, 0.05), transparent 45%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    main {
+      max-width: 1020px;
+      margin: 0 auto;
+    }
+
+    .hero,
+    .section-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 28px 30px;
+      margin-bottom: 20px;
+    }
+
+    .section-card {
+      padding: 22px 24px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0 0 10px;
+      color: var(--text);
+    }
+
+    h1 {
+      font-size: 2rem;
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 1.28rem;
+      margin-bottom: 8px;
+    }
+
+    h3 {
+      font-size: 1.02rem;
+      margin-top: 4px;
+    }
+
+    p {
+      margin: 0 0 12px;
+      color: var(--muted);
+    }
+
+    ul {
+      margin: 10px 0 0 20px;
+      padding: 0;
+      color: var(--muted);
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    .callout {
+      margin-top: 16px;
+      background: var(--amber-soft);
+      border: 1px solid #fed7aa;
+      border-left: 4px solid var(--amber);
+      border-radius: 14px;
+      padding: 14px 16px;
+      color: #9a3412;
+      font-size: 0.95rem;
+    }
+
+    .callout-blue {
+      background: var(--blue-soft);
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid var(--blue);
+      color: #1e40af;
+    }
+
+    .callout-red {
+      background: var(--red-soft);
+      border: 1px solid #fecaca;
+      border-left: 4px solid var(--red);
+      color: #991b1b;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .mini-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--panel-soft);
+      padding: 16px;
+    }
+
+    .mini-label {
+      display: inline-block;
+      font-size: 0.76rem;
+      font-weight: 900;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      color: #334155;
+    }
+
+    .codewrap {
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #f8fbff;
+    }
+
+    .codebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid #bfdbfe;
+      background: #dbeafe;
+      color: #1e3a8a;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    pre {
+      margin: 0;
+      padding: 14px 16px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: #0f172a;
+      white-space: pre;
+    }
+
+    code {
+      font-family: var(--mono);
+    }
+
+    details {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #ffffff;
+      margin-top: 14px;
+      overflow: hidden;
+    }
+
+    summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 14px 16px;
+      font-weight: 800;
+      color: var(--text);
+      background: #f8fbff;
+      border-bottom: 1px solid transparent;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details[open] summary {
+      border-bottom-color: var(--border);
+    }
+
+    .detail-body {
+      padding: 16px;
+    }
+
+    .rule-card {
+      border: 1px solid #dbe6f3;
+      border-left: 5px solid #2563eb;
+      border-radius: 16px;
+      background: #f8fbff;
+      padding: 16px;
+      margin-top: 14px;
+    }
+
+    .rule-title {
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .source-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+
+    .source-box a {
+      color: var(--blue);
+      text-decoration: none;
+      word-break: break-word;
+    }
+
+    .source-box a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: #64748b;
+      font-size: 0.86rem;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 860px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      body {
+        padding: 16px;
+      }
+
+      .hero,
+      .section-card {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <div class="eyebrow">Security Monitoring Tools</div>
+      <h1>Suricata Monitoring Tool</h1>
+      <p>
+        Suricata is commonly used to improve visibility into network traffic, protocol activity, and suspicious communication
+        patterns. It can help organizations detect unusual DNS lookups, suspicious HTTP requests, risky TLS fingerprints, SMB
+        file activity, and other network-level signs that may point to ransomware or broader malicious activity.
+      </p>
+
+      <div class="chip-row">
+        <span class="chip">Network visibility</span>
+        <span class="chip">Traffic inspection</span>
+        <span class="chip">Protocol-aware detection</span>
+        <span class="chip">Ransomware indicators</span>
+      </div>
+
+      <div class="callout callout-blue">
+        This page is a lightweight Suricata overview, not a full enterprise deployment guide. It is meant to help explain where
+        Suricata fits and provide starter examples that can later be adapted to your own environment.
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>What Suricata is good for</h2>
+      <p>
+        Suricata is most useful when you want visibility into what is happening across the network. That includes:
+      </p>
+
+      <div class="grid-2">
+        <div class="mini-card">
+          <div class="mini-label">Traffic-side visibility</div>
+          <ul>
+            <li>Suspicious DNS lookups</li>
+            <li>Unusual HTTP requests and headers</li>
+            <li>TLS fingerprinting and connection patterns</li>
+            <li>Potential command-and-control communication</li>
+          </ul>
+        </div>
+
+        <div class="mini-card">
+          <div class="mini-label">File and protocol visibility</div>
+          <ul>
+            <li>SMB filename activity</li>
+            <li>Ransom note file naming patterns</li>
+            <li>Suspicious encrypted extensions over SMB</li>
+            <li>Heuristic file write behavior on the network</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>Why it matters in ransomware detection</h2>
+      <p>
+        Many ransomware events generate observable network behavior before or during impact. Suricata can help surface those
+        signs earlier by watching traffic patterns, protocol activity, and known indicators instead of relying only on host-side
+        evidence.
+      </p>
+
+      <div class="callout">
+        A simple way to think about Suricata: it helps you see what systems are doing across the network, which makes it valuable
+        for spotting suspicious communications and file-related activity moving between devices.
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>Basic deployment notes</h2>
+      <p>
+        Suricata rules are commonly managed in rule files that use Snort/Suricata syntax. Depending on how your environment is set
+        up, you may maintain standalone rule files or use update tooling to pull and apply custom sources before restarting the service.
+      </p>
+
+      <details open>
+        <summary>Example deployment notes</summary>
+        <div class="detail-body">
+          <ul>
+            <li>Rules are typically stored in <code>.rules</code> files using Snort/Suricata syntax.</li>
+            <li>Some environments also manage custom sources through update tooling.</li>
+            <li>After adding or updating rules, Suricata generally needs to reload or restart.</li>
+          </ul>
+
+          <div class="codewrap">
+            <div class="codebar">Example commands (Linux)</div>
+            <pre><code>sudo suricata-update add-source projectplaybook https://&lt;our-name&gt;/rules.tar.gz
+sudo suricata-update
+sudo systemctl restart suricata</code></pre>
+          </div>
+
+          <div class="callout callout-red">
+            Replace placeholders like <code>&lt;our-name&gt;</code> with your actual domain or host, and make sure your rules are being
+            added to the correct Suricata source or file path for your environment.
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="section-card">
+      <h2>Example Suricata detections</h2>
+      <p>
+        Below are example rule ideas that are often useful in ransomware-oriented monitoring. These are not meant to be treated
+        as universal production-ready content without validation and tuning.
+      </p>
+
+      <div class="rule-card">
+        <div class="rule-title">1. WannaCry killswitch DNS lookup</div>
+        <p>
+          Detects DNS queries for the classic WannaCry killswitch domain.
+        </p>
+        <div class="codewrap">
+          <div class="codebar">suricata.rules</div>
+          <pre><code>alert dns $HOME_NET any -&gt; any 53 (
+  msg:"Ransomware – Possible WannaCry killswitch DNS lookup";
+  dns_query;
+  content:"iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea";
+  sid:2000001; rev:1;
+)</code></pre>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-title">2. WannaCry killswitch HTTP Host header</div>
+        <p>
+          Detects HTTP requests containing the killswitch domain in headers.
+        </p>
+        <div class="codewrap">
+          <div class="codebar">suricata.rules</div>
+          <pre><code>alert http $HOME_NET any -&gt; $EXTERNAL_NET any (
+  msg:"Ransomware – WannaCry killswitch HTTP request";
+  flow:established,to_server;
+  content:"iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea"; http_header;
+  content:"Host"; http_header;
+  sid:2000002; rev:1;
+)</code></pre>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-title">3. Android WannaLocker DNS lookup</div>
+        <p>
+          Detects DNS queries for a domain associated with WannaLocker.
+        </p>
+        <div class="codewrap">
+          <div class="codebar">suricata.rules</div>
+          <pre><code>alert dns $HOME_NET any -&gt; any 53 (
+  msg:"Ransomware – Android WannaLocker DNS lookup";
+  dns_query;
+  content:"biaozhunshijian.51240.com";
+  sid:2000003; rev:1;
+)</code></pre>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-title">4. JA3 TLS fingerprint associated with ransomware</div>
+        <p>
+          Detects a specific JA3 hash example associated with suspicious TLS clients.
+        </p>
+        <div class="codewrap">
+          <div class="codebar">suricata.rules</div>
+          <pre><code>alert tls $HOME_NET any -&gt; $EXTERNAL_NET any (
+  msg:"Ransomware – TLS JA3 fingerprint from SSLBL";
+  ja3_hash; content:"2d8794cb7b52b777bee2695e79c15760";
+  sid:2000004; rev:1;
+)</code></pre>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-title">5. LockBit ransom note over SMB filenames</div>
+        <p>
+          Flags SMB filenames matching common ransom note names.
+        </p>
+        <div class="codewrap">
+          <div class="codebar">suricata.rules</div>
+          <pre><code>alert smb any any -&gt; any any (
+  msg:"Ransomware – ransom note over SMB";
+  smb.filename; content:"Restore-My-Files.txt"; nocase;
+  sid:2000005; rev:1;
+)</code></pre>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-title">6. Ransomware extension over SMB</div>
+        <p>
+          Detects SMB filenames ending in suspicious encrypted extensions.
+        </p>
+        <div class="codewrap">
+          <div class="codebar">suricata.rules</div>
+          <pre><code>alert smb any any -&gt; any any (
+  msg:"Ransomware – encrypted extension over SMB";
+  smb.filename; pcre:"\\.(lockbit|funksec|encrypted)$";
+  sid:2000006; rev:1;
+)</code></pre>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-title">7. LockBit onion ransom gate in HTTP Host header</div>
+        <p>
+          Detects requests using a known onion host in HTTP headers.
+        </p>
+        <div class="codewrap">
+          <div class="codebar">suricata.rules</div>
+          <pre><code>alert http $HOME_NET any -&gt; $EXTERNAL_NET any (
+  msg:"Ransomware – LockBit ransom gate onion host";
+  flow:established,to_server;
+  content:"lockbitkodidilol.onion"; http_header; nocase;
+  sid:2000007; rev:1;
+)</code></pre>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-title">8. High-volume SMB encryption behavior</div>
+        <p>
+          Basic SMB write indicator that can be useful as a candidate for rate or correlation logic.
+        </p>
+        <div class="codewrap">
+          <div class="codebar">suricata.rules</div>
+          <pre><code>alert smb any any -&gt; any any (
+  msg:"Possible ransomware – SMB file write (candidate for rate correlation)";
+  smb.command; content:"write"; nocase;
+  sid:2000008; rev:1;
+)</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>Practical notes</h2>
+      <ul>
+        <li>Keep custom rule identifiers organized to avoid collisions.</li>
+        <li>Validate rules in a safe environment before relying on them operationally.</li>
+        <li>Tune detections to your own environment so they are useful and not overly noisy.</li>
+        <li>Do not assume example rules are complete coverage by themselves.</li>
+      </ul>
+
+      <div class="callout">
+        Suricata is especially valuable when you want stronger network-side visibility during detection and monitoring, but it works best
+        when paired with sensible alert tuning, logging, and a clear process for triage and escalation.
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>References</h2>
+      <p>
+        The examples and direction for this page were inspired in part by the following sources and related detection concepts:
+      </p>
+
+      <div class="source-box">
+        <p>
+          General detection inspiration:
+          <a href="https://alican-kiraz1.medium.com/destroy-the-ransomware-threat-part-1-1-detection-and-prevention-6785aa7e1154" target="_blank" rel="noopener noreferrer">
+            https://alican-kiraz1.medium.com/destroy-the-ransomware-threat-part-1-1-detection-and-prevention-6785aa7e1154
+          </a>
+        </p>
+        <p>
+          Wazuh blog also referenced in the original donor page:
+          <a href="https://wazuh.com/blog/detecting-and-responding-to-funklocker-ransomware-with-wazuh/" target="_blank" rel="noopener noreferrer">
+            https://wazuh.com/blog/detecting-and-responding-to-funklocker-ransomware-with-wazuh/
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      This Suricata page is intended as a lightweight starting point for monitoring, detection, and planning discussions.
+    </div>
+  </main>
+</body>
+</html>

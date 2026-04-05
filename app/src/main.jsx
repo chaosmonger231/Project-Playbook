@@ -14,6 +14,7 @@ import AccountPage from "./pages/AccountPage.jsx";
 import UserAgreement from "./pages/UserAgreement";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Help from "./pages/Help";
+import AccountTerms from "./pages/AccountTerms"
 
 import Home from "./pages/Home";
 import Lessons from "./pages/Lessons.jsx";
@@ -22,6 +23,13 @@ import TeamManagament from "./pages/TeamManagement.jsx";
 import TrainingCampaign from "./pages/TrainingCampaign";
 import About from "./pages/About";
 import IncidentResponse from "./pages/IncidentResponse.jsx";
+import IncidentResponsePlanning from "./pages/IncidentResponsePlanning";
+import SecurityMonitoringTools from "./pages/SecurityMonitoringTools";
+import WazuhMonitoringTool from "./pages/WazuhMonitoringTool";
+import SuricataMonitoringTool from "./pages/SuricataMonitoringTool";
+import MonitoringGuidance from "./pages/MonitoringGuidance";
+import DetectionResponsePlaybook from "./pages/DetectionResponsePlaybook";
+import RansomwareResponsePlaybook from "./pages/RansomwareResponsePlaybook";
 
 import SecurityReadiness from "./pages/SecurityReadiness.jsx";
 import Playbook1 from "./pages/Playbook1";
@@ -43,6 +51,7 @@ import RiskCalculator from "./pages/RiskCalculator";
 const router = createBrowserRouter([
   // Public route
   { path: "/login", element: <Login /> },
+  { path: "/account-terms", element: <AccountTerms/> },
 
   // Auth routes WITHOUT Shell
   {
@@ -96,6 +105,13 @@ const router = createBrowserRouter([
       { path: "/riskplanningtools", element: <RiskPlanningTools /> },
       { path: "/impactcalculator", element: <ImpactCalculator /> },
       { path: "/riskcalculator", element: <RiskCalculator /> },
+      { path: "/incidentresponseplanning", element: <IncidentResponsePlanning /> },
+      { path: "/securitymonitoringtools", element: <SecurityMonitoringTools /> },
+      { path: "/wazuhmonitoringtool", element: <WazuhMonitoringTool /> },
+      { path: "/suricatamonitoringtool", element: <SuricataMonitoringTool /> },
+      { path: "/monitoringguidance", element: <MonitoringGuidance /> },
+      { path: "/detectionresponseplaybook", element: <DetectionResponsePlaybook /> },
+      { path: "/ransomwareresponseplaybook", element: <RansomwareResponsePlaybook /> },
 
       // Playbook detail pages
       { path: "/securityreadiness", element: <SecurityReadiness /> },

@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wazuh Monitoring Tool</title>
+  <meta
+    name="description"
+    content="A lightweight overview of Wazuh for endpoint, log, file, and process monitoring, including example deployment notes and detection rules."
+  />
+  <style>
+    :root {
+      --bg: #f3f7ff;
+      --panel: #ffffff;
+      --panel-soft: #f8fbff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #dbe6f3;
+      --blue: #2563eb;
+      --blue-soft: #eaf2ff;
+      --green: #16a34a;
+      --green-soft: #ecfdf3;
+      --amber: #d97706;
+      --amber-soft: #fff7ed;
+      --red: #dc2626;
+      --red-soft: #fef2f2;
+      --shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: var(--sans);
+      background:
+        radial-gradient(900px 500px at 12% 5%, rgba(37, 99, 235, 0.08), transparent 55%),
+        radial-gradient(700px 420px at 88% 10%, rgba(22, 163, 74, 0.05), transparent 45%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    main {
+      max-width: 1020px;
+      margin: 0 auto;
+    }
+
+    .hero,
+    .section-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 28px 30px;
+      margin-bottom: 20px;
+    }
+
+    .section-card {
+      padding: 22px 24px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0 0 10px;
+      color: var(--text);
+    }
+
+    h1 {
+      font-size: 2rem;
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 1.28rem;
+      margin-bottom: 8px;
+    }
+
+    h3 {
+      font-size: 1.02rem;
+      margin-top: 4px;
+    }
+
+    p {
+      margin: 0 0 12px;
+      color: var(--muted);
+    }
+
+    ul {
+      margin: 10px 0 0 20px;
+      padding: 0;
+      color: var(--muted);
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    .callout {
+      margin-top: 16px;
+      background: var(--amber-soft);
+      border: 1px solid #fed7aa;
+      border-left: 4px solid var(--amber);
+      border-radius: 14px;
+      padding: 14px 16px;
+      color: #9a3412;
+      font-size: 0.95rem;
+    }
+
+    .callout-blue {
+      background: var(--blue-soft);
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid var(--blue);
+      color: #1e40af;
+    }
+
+    .callout-red {
+      background: var(--red-soft);
+      border: 1px solid #fecaca;
+      border-left: 4px solid var(--red);
+      color: #991b1b;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .mini-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--panel-soft);
+      padding: 16px;
+    }
+
+    .mini-label {
+      display: inline-block;
+      font-size: 0.76rem;
+      font-weight: 900;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      color: #334155;
+    }
+
+    .codewrap {
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #f8fbff;
+    }
+
+    .codebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid #bfdbfe;
+      background: #dbeafe;
+      color: #1e3a8a;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    pre {
+      margin: 0;
+      padding: 14px 16px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: #0f172a;
+      white-space: pre;
+    }
+
+    code {
+      font-family: var(--mono);
+    }
+
+    details {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #ffffff;
+      margin-top: 14px;
+      overflow: hidden;
+    }
+
+    summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 14px 16px;
+      font-weight: 800;
+      color: var(--text);
+      background: #f8fbff;
+      border-bottom: 1px solid transparent;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details[open] summary {
+      border-bottom-color: var(--border);
+    }
+
+    .detail-body {
+      padding: 16px;
+    }
+
+    .rule-card {
+        border: 1px solid #dbe6f3;
+        border-left: 5px solid #2563eb;
+        border-radius: 16px;
+        background: #f8fbff;
+        padding: 16px;
+        margin-top: 14px;
+        }
+
+    .rule-title {
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .source-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+
+    .source-box a {
+      color: var(--blue);
+      text-decoration: none;
+      word-break: break-word;
+    }
+
+    .source-box a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: #64748b;
+      font-size: 0.86rem;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 860px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      body {
+        padding: 16px;
+      }
+
+      .hero,
+      .section-card {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <div class="eyebrow">Security Monitoring Tools</div>
+      <h1>Wazuh Monitoring Tool</h1>
+      <p>
+        Wazuh is commonly used to improve visibility into endpoint, host, log, and file activity. It can help organizations
+        detect suspicious commands, backup deletion attempts, log tampering, unusual file modifications, and other host-level
+        signs that may point to ransomware or broader malicious activity.
+      </p>
+
+      <div class="chip-row">
+        <span class="chip">Endpoint visibility</span>
+        <span class="chip">Log monitoring</span>
+        <span class="chip">File integrity monitoring</span>
+        <span class="chip">Process activity</span>
+      </div>
+
+      <div class="callout callout-blue">
+        This page is a lightweight Wazuh overview, not a full enterprise deployment guide. It is meant to help explain where
+        Wazuh fits and provide starter examples that can later be adapted to your own environment.
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>What Wazuh is good for</h2>
+      <p>
+        Wazuh is most useful when you want visibility into what is happening directly on systems and endpoints. That includes:
+      </p>
+
+      <div class="grid-2">
+        <div class="mini-card">
+          <div class="mini-label">Host-side visibility</div>
+          <ul>
+            <li>Suspicious commands and process creation</li>
+            <li>Attempts to delete backups or shadow copies</li>
+            <li>Event log clearing or tampering</li>
+            <li>Unexpected system changes</li>
+          </ul>
+        </div>
+
+        <div class="mini-card">
+          <div class="mini-label">File-side visibility</div>
+          <ul>
+            <li>Ransom note file creation</li>
+            <li>Suspicious encrypted file extensions</li>
+            <li>Mass file modification behavior</li>
+            <li>File integrity monitoring alerts</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>Why it matters in ransomware detection</h2>
+      <p>
+        Many ransomware events leave signs on the affected system before or during encryption. Wazuh can help surface those signs
+        earlier by watching for destructive behavior on hosts rather than relying only on network indicators.
+      </p>
+
+      <div class="callout">
+        A simple way to think about Wazuh: it helps you see what a device or server is doing, which makes it valuable for spotting
+        suspicious activity happening directly on the system.
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>Basic deployment notes</h2>
+      <p>
+        Wazuh rules and related detection logic are often managed through XML files. Depending on how your environment is set up,
+        you may place rules on the manager, use shared configuration, or apply them locally to endpoints.
+      </p>
+
+      <details open>
+        <summary>Example deployment notes</summary>
+        <div class="detail-body">
+          <ul>
+            <li>Custom rules and decoders are typically stored in XML files.</li>
+            <li>Active response actions may use Bash or PowerShell scripts.</li>
+            <li>Deployment location depends on whether the environment uses manager-side, shared, or local agent configuration.</li>
+          </ul>
+
+          <div class="codewrap">
+            <div class="codebar">Example commands (Linux)</div>
+            <pre><code>sudo curl -L https://&lt;your-domain&gt;.com/playbook/local_rules.xml \
+-o /var/ossec/etc/shared/&lt;group&gt;/local_rules.xml
+sudo systemctl restart wazuh-manager</code></pre>
+          </div>
+
+          <div class="callout callout-red">
+            Make sure your Wazuh deployment model matches the path you are writing to. In practice, this may differ depending on
+            whether you are updating the manager, shared agent config, or a local agent.
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="section-card">
+      <h2>Example Wazuh detections</h2>
+      <p>
+        Below are example rule ideas that are often useful in ransomware-oriented monitoring. These are not meant to be treated
+        as universal production-ready content without validation and tuning.
+      </p>
+
+      <div class="rule-card">
+        <div class="rule-title">1. VSS shadow copies deletion</div>
+        <p>
+          Detects shadow copy deletion commands, which are often used to make recovery harder.
+        </p>
+        <div class="codewrap">
+          <div class="codebar">local_rules.xml</div>
+          <pre><code>&lt;rule id="100600" level="12"&gt;
+  &lt;if_sid&gt;61603&lt;/if_sid&gt;
+  &lt;field name="win.eventdata.CommandLine" type="pcre2"&gt;(?i)vssadmin\.exe.*delete\s+shadows.*\/all.*\/quiet&lt;/field&gt;
+  &lt;description&gt;Possible ransomware: Volume Shadow Copies deleted&lt;/description&gt;
+  &lt;mitre&gt;&lt;id&gt;T1490&lt;/id&gt;&lt;/mitre&gt;
+&lt;/rule&gt;</code></pre>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-title">2. Event log clearing</div>
+        <p>
+          Detects suspicious log clearing activity, which may be used to hide malicious behavior.
+        </p>
+        <div class="codewrap">
+          <div class="codebar">local_rules.xml</div>
+          <pre><code>&lt;rule id="100602" level="10"&gt;
+  &lt;if_sid&gt;61603&lt;/if_sid&gt;
+  &lt;field name="win.eventdata.CommandLine" type="pcre2"&gt;
+    (?i)wevtutil\.exe\s+cl\s+(security|system|application)
+  &lt;/field&gt;
+  &lt;description&gt;Suspicious log clearing via wevtutil&lt;/description&gt;
+  &lt;mitre&gt;&lt;id&gt;T1070&lt;/id&gt;&lt;/mitre&gt;
+&lt;/rule&gt;</code></pre>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-title">3. Backup deletion through WBADMIN</div>
+        <p>
+          Detects attempts to remove or damage backups, which can be a major ransomware warning sign.
+        </p>
+        <div class="codewrap">
+          <div class="codebar">local_rules.xml</div>
+          <pre><code>&lt;rule id="100604" level="12"&gt;
+  &lt;if_sid&gt;61603&lt;/if_sid&gt;
+  &lt;field name="win.eventdata.CommandLine" type="pcre2"&gt;
+    (?i)wbadmin\.exe.*(DELETE\s+SYSTEMSTATEBACKUP|delete\s+catalog)
+  &lt;/field&gt;
+  &lt;description&gt;Possible ransomware: wbadmin backup deletion&lt;/description&gt;
+  &lt;mitre&gt;&lt;id&gt;T1490&lt;/id&gt;&lt;/mitre&gt;
+&lt;/rule&gt;</code></pre>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-title">4. Ransom note file creation</div>
+        <p>
+          Detects common ransom note filenames created in user directories.
+        </p>
+        <div class="codewrap">
+          <div class="codebar">local_rules.xml</div>
+          <pre><code>&lt;rule id="100605" level="12"&gt;
+  &lt;if_sid&gt;554&lt;/if_sid&gt;
+  &lt;field name="file" type="pcre2"&gt;
+    (?i)C:\\Users\\.+\\(Desktop|Documents|Downloads).*(Restore-My-Files\.txt|README\.txt)
+  &lt;/field&gt;
+  &lt;description&gt;Possible ransomware: ransom note file created in user profile&lt;/description&gt;
+  &lt;mitre&gt;&lt;id&gt;T1486&lt;/id&gt;&lt;/mitre&gt;
+&lt;/rule&gt;</code></pre>
+        </div>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-title">5. Suspicious encrypted file extensions</div>
+        <p>
+          Detects file creation or modification patterns that match suspicious encrypted extensions.
+        </p>
+        <div class="codewrap">
+          <div class="codebar">local_rules.xml</div>
+          <pre><code>&lt;rule id="100606" level="12"&gt;
+  &lt;if_sid&gt;554&lt;/if_sid&gt;
+  &lt;field name="file" type="pcre2"&gt;
+    (?i)\.(lockbit|funksec|encrypted)$
+  &lt;/field&gt;
+  &lt;description&gt;Possible ransomware: encrypted file extension detected&lt;/description&gt;
+  &lt;mitre&gt;&lt;id&gt;T1486&lt;/id&gt;&lt;/mitre&gt;
+&lt;/rule&gt;</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>Practical notes</h2>
+      <ul>
+        <li>Keep custom rule identifiers organized to avoid collisions.</li>
+        <li>Validate rules in a safe environment before relying on them operationally.</li>
+        <li>Tune detections to your own environment so they are useful and not overly noisy.</li>
+        <li>Do not assume example rules are complete coverage by themselves.</li>
+      </ul>
+
+      <div class="callout">
+        Wazuh is especially valuable when you want stronger host-side visibility during detection and monitoring, but it works best
+        when paired with good logging, sensible alert tuning, and a clear process for triage and escalation.
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2>References</h2>
+      <p>
+        The examples and direction for this page were inspired in part by the following sources and related detection concepts:
+      </p>
+
+      <div class="source-box">
+        <p>
+          Wazuh blog:
+          <a href="https://wazuh.com/blog/detecting-and-responding-to-funklocker-ransomware-with-wazuh/" target="_blank" rel="noopener noreferrer">
+            https://wazuh.com/blog/detecting-and-responding-to-funklocker-ransomware-with-wazuh/
+          </a>
+        </p>
+        <p>
+          General detection inspiration:
+          <a href="https://alican-kiraz1.medium.com/destroy-the-ransomware-threat-part-1-1-detection-and-prevention-6785aa7e1154" target="_blank" rel="noopener noreferrer">
+            https://alican-kiraz1.medium.com/destroy-the-ransomware-threat-part-1-1-detection-and-prevention-6785aa7e1154
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      This Wazuh page is intended as a lightweight starting point for monitoring, detection, and planning discussions.
+    </div>
+  </main>
+</body>
+</html>

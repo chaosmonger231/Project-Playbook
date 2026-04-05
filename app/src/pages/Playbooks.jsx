@@ -1,6 +1,6 @@
 // src/pages/Playbooks.jsx
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ContentPanel from "../components/ContentPanel";
 import { useUser } from "../auth/UserContext";
 import { db } from "../auth/firebase";
@@ -38,7 +38,7 @@ const PLAYBOOK_ZONES = [
       },
       {
         id: "security-tools",
-        title: "Security Tools",
+        title: "Everyday Security Tools",
         path: "/securitytools",
         icon: "/images/securitytoolslogo.svg",
         type: "support",
@@ -81,31 +81,31 @@ const PLAYBOOK_ZONES = [
       {
         id: "response-guidance",
         title: "Detection & Response Playbook",
-        path: "/playbook3",
+        path: "/detectionresponseplaybook",
         icon: "/images/detectionresponselogo.svg",
         type: "main",
         status: "not-started",
       },
       {
         id: "ransomware-response",
-        title: "Ransomware Response",
-        path: "/ransomwareresponse",
+        title: "Ransomware Response Playbook",
+        path: "/ransomwareresponseplaybook",
         icon: "/images/ransomwareresponselogo.svg",
         type: "support",
         status: "not-started",
       },
       {
         id: "incident-setup",
-        title: "Incident Response Setup",
-        path: "/incidentresponse",
+        title: "Incident Response Planning Playbook",
+        path: "/incidentresponseplanning",
         icon: "/images/incidentresponselogo.svg",
         type: "support",
         status: "not-started",
       },
       {
         id: "monitoring-tools",
-        title: "Wazuh & Suricata",
-        path: "/playbook4",
+        title: "Security Monitoring Tools",
+        path: "/securitymonitoringtools",
         icon: "/images/playbookImage1.png",
         type: "support",
         status: "not-started",
@@ -187,6 +187,7 @@ function writeReviewedToLocal(uid, map) {
 
 export default function Playbooks() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { uid } = useUser();
 
   const [overviewOpen, setOverviewOpen] = useState(false);
@@ -262,6 +263,16 @@ export default function Playbooks() {
     };
   }, [uid]);
 
+  useEffect(() => {
+    const sectionParam = (searchParams.get("section") || "").trim().toLowerCase();
+    if (!sectionParam) return;
+
+    const validSections = new Set(["training", "policies", "response"]);
+    if (validSections.has(sectionParam)) {
+      setExpandedZone(sectionParam);
+    }
+  }, [searchParams]);
+
   const isPoliciesUnlocked = hasSeenOverview || trainingUnlockedNext;
   const isResponseUnlocked = hasSeenOverview || trainingUnlockedNext;
 
@@ -298,11 +309,26 @@ export default function Playbooks() {
 
   function handleCollapsedZoneClick(zoneKey) {
     if (!unlockedMap[zoneKey]) return;
-    setExpandedZone((prev) => (prev === zoneKey ? null : zoneKey));
+
+    setExpandedZone((prev) => {
+      const nextZone = prev === zoneKey ? null : zoneKey;
+
+      if (nextZone) {
+        setSearchParams({ section: nextZone }, { replace: true });
+      } else {
+        setSearchParams({}, { replace: true });
+      }
+
+      return nextZone;
+    });
   }
 
   function handleCollapseExpanded() {
     setExpandedZone(null);
+
+    if (searchParams.get("section")) {
+      setSearchParams({}, { replace: true });
+    }
   }
 
   function handleCardOpen(item) {

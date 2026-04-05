@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Incident Response Planning Playbook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 24px;
+      line-height: 1.6;
+      background: #f3f4f6;
+      color: #111827;
+    }
+
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 28px 32px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    h1, h2, h3 {
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #0f172a;
+    }
+
+    h1 {
+      font-size: 2rem;
+      border-bottom: 2px solid #111827;
+      padding-bottom: 0.45rem;
+      margin-top: 0;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      border-bottom: 1px solid #d1d5db;
+      padding-bottom: 0.35rem;
+    }
+
+    h3 {
+      font-size: 1.08rem;
+      margin-top: 1.1rem;
+    }
+
+    p {
+      margin: 0.45rem 0;
+    }
+
+    ul, ol {
+      margin: 0.35rem 0 0.9rem 1.4rem;
+    }
+
+    .tagline {
+      font-size: 1rem;
+      color: #475569;
+      margin-bottom: 0.8rem;
+    }
+
+    .callout {
+      background: #eff6ff;
+      border-left: 4px solid #2563eb;
+      padding: 12px 14px;
+      margin: 1rem 0;
+      border-radius: 8px;
+    }
+
+    .callout-warning {
+      background: #fff7ed;
+      border-left: 4px solid #f59e0b;
+      padding: 12px 14px;
+      margin: 1rem 0;
+      border-radius: 8px;
+    }
+
+    .action-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 1.2rem 0 1.4rem 0;
+    }
+
+    .action-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      border-radius: 10px;
+      padding: 11px 16px;
+      font-weight: 800;
+      transition: all 0.15s ease;
+    }
+
+    .action-link.primary {
+      background: #2563eb;
+      color: #ffffff;
+    }
+
+    .action-link.primary:hover {
+      background: #1d4ed8;
+    }
+
+    .action-link.secondary {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .action-link.secondary:hover {
+      background: #cbd5e1;
+    }
+
+    .section-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin: 1rem 0;
+    }
+
+    .mini-label {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #1d4ed8;
+      margin-bottom: 8px;
+    }
+
+    .resource-box {
+      background: #f8fafc;
+      border: 1px solid #dbeafe;
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-top: 1.2rem;
+    }
+
+    .resource-title {
+      font-weight: 800;
+      font-size: 1rem;
+      margin-bottom: 6px;
+      color: #0f172a;
+    }
+
+    .note {
+      color: #475569;
+      font-size: 0.95rem;
+    }
+
+    hr {
+      margin: 1.4rem 0;
+      border: none;
+      border-top: 1px solid #e5e7eb;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Incident Response Planning Playbook</h1>
+    <p class="tagline">
+      Use this planning guide to understand what an incident response plan should include before an incident occurs.
+    </p>
+
+    <div class="callout">
+      <strong>What is CISA?</strong><br />
+      CISA stands for the <strong>Cybersecurity and Infrastructure Security Agency</strong>. It is a U.S. government agency that provides practical cybersecurity guidance, incident preparedness resources, and security support for organizations. This playbook is inspired by CISA’s <strong>Incident Response Plan Basics</strong> guidance.
+    </div>
+
+    <div class="action-bar">
+      <a class="action-link primary" href="/incidentresponse">
+        Open Main Incident Response Workspace
+      </a>
+      <a
+        class="action-link secondary"
+        href="https://www.cisa.gov/sites/default/files/publications/Incident-Response-Plan-Basics_508c.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Download CISA Incident Response Plan Basics
+      </a>
+    </div>
+
+    <h2>1. What this playbook is for</h2>
+    <p>
+      An incident response plan is a written guide that helps an organization prepare for, respond to, and recover from cybersecurity incidents.
+      A good plan reduces confusion, improves communication, and helps teams act faster when something goes wrong.
+    </p>
+    <p>
+      This page is meant to help your organization think through the structure of a response plan before you begin filling out the main incident response workspace.
+    </p>
+
+    <div class="callout-warning">
+      This planning page is a practical starting point. Your organization may still need legal, technical, regulatory, or leadership review before relying on a final incident response plan.
+    </div>
+
+    <h2>2. Why incident response planning matters</h2>
+    <ul>
+      <li>It helps staff know what to do during a stressful situation.</li>
+      <li>It clarifies who makes decisions and who should be contacted first.</li>
+      <li>It helps preserve evidence and reduce accidental mistakes.</li>
+      <li>It improves coordination across technical staff, leadership, and communications roles.</li>
+      <li>It supports faster containment, recovery, and post-incident review.</li>
+    </ul>
+
+    <h2>3. Who should be involved</h2>
+    <p>
+      Incident response planning should not belong to only one person. Even small organizations should identify the people who may need to participate when an incident happens.
+    </p>
+
+    <div class="section-card">
+      <div class="mini-label">Common participants</div>
+      <ul>
+        <li><strong>Incident lead</strong> – coordinates the response process</li>
+        <li><strong>Technical lead / IT support</strong> – investigates, contains, and restores systems</li>
+        <li><strong>Leadership</strong> – approves major decisions and external actions</li>
+        <li><strong>Communications contact</strong> – handles messaging to staff, users, or the public</li>
+        <li><strong>Outside support</strong> – vendors, legal counsel, cyber insurance, or law enforcement if needed</li>
+      </ul>
+    </div>
+
+    <h2>4. Core parts of an incident response plan</h2>
+
+    <h3>A. Emergency Contacts</h3>
+    <p>
+      Your plan should list the people or groups who must be contacted first. Include names, roles, phone numbers, email addresses, and any notes that would help someone act quickly.
+    </p>
+
+    <h3>B. Quick Actions</h3>
+    <p>
+      Quick actions are the first steps your organization expects someone to take when a possible incident is discovered. These should be short, practical, and easy to follow under pressure.
+    </p>
+
+    <h3>C. Reporting and Escalation</h3>
+    <p>
+      Your organization should define who must be informed, when escalation is required, and whether any outside reporting obligations may apply. This helps avoid delays and confusion during an incident.
+    </p>
+
+    <h3>D. Response Lifecycle</h3>
+    <p>
+      A structured plan usually includes stages such as preparation, detection, containment, recovery, and review. This helps teams stay organized and avoid skipping important steps.
+    </p>
+
+    <h2>5. Simple before, during, and after model</h2>
+
+    <div class="section-card">
+      <div class="mini-label">Before an incident</div>
+      <ul>
+        <li>Identify important systems, data, and services.</li>
+        <li>Assign roles and decision-makers.</li>
+        <li>Prepare contact lists and escalation paths.</li>
+        <li>Review backup readiness and recovery options.</li>
+        <li>Make sure staff know how to report suspicious activity.</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <div class="mini-label">During an incident</div>
+      <ul>
+        <li>Confirm whether the event is credible.</li>
+        <li>Document what happened and when it was detected.</li>
+        <li>Preserve logs, screenshots, emails, or other evidence.</li>
+        <li>Contain the issue safely without creating more damage.</li>
+        <li>Communicate status updates to the right people.</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <div class="mini-label">After an incident</div>
+      <ul>
+        <li>Recover systems and validate they are safe to use.</li>
+        <li>Review what worked and what failed.</li>
+        <li>Document lessons learned.</li>
+        <li>Improve policies, training, tooling, or communications based on the event.</li>
+      </ul>
+    </div>
+
+    <h2>6. Questions your organization should answer</h2>
+    <ol>
+      <li>Who is the first person staff should contact if something suspicious happens?</li>
+      <li>Who can approve containment steps, shutdowns, or major communications?</li>
+      <li>Which systems or services are most critical to restore first?</li>
+      <li>What evidence should be preserved during an incident?</li>
+      <li>What outside contacts might be needed, such as a vendor or insurer?</li>
+      <li>How will your organization decide when an event becomes an incident?</li>
+      <li>How will your organization review and improve the plan afterward?</li>
+    </ol>
+
+    <h2>7. How this connects to the main Incident Response page</h2>
+    <p>
+      This playbook is the planning guide. The main <strong>Incident Response Workspace</strong> is where your organization can actually fill in and organize its incident response information.
+    </p>
+    <p>
+      Use this page to understand what should be included. Then open the main workspace to enter contacts, quick actions, reporting guidance, and lifecycle details.
+    </p>
+
+    <div class="action-bar">
+      <a class="action-link primary" href="/incidentresponse">
+        Continue to Incident Response Workspace
+      </a>
+    </div>
+
+    <hr />
+
+    <div class="resource-box">
+      <div class="resource-title">Credit & Reference</div>
+      <p class="note">
+        This playbook was inspired in part by guidance from the
+        <strong> Cybersecurity and Infrastructure Security Agency (CISA)</strong>,
+        including <strong>Incident Response Plan Basics</strong>.
+      </p>
+      <p class="note">
+        Because cybersecurity guidance evolves over time, users should review official CISA resources periodically for updated incident response practices, planning recommendations, and related best-practice guidance.
+      </p>
+
+      <div class="action-bar" style="margin-bottom: 0;">
+        <a
+          class="action-link secondary"
+          href="https://www.cisa.gov/sites/default/files/publications/Incident-Response-Plan-Basics_508c.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Download CISA Incident Response Plan Basics
+        </a>
+
+        <a
+          class="action-link secondary"
+          href="https://www.cisa.gov/topics/cyber-threats-and-response/incident-response"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Visit CISA Incident Response Resources
+        </a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
