@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   collection,
@@ -7,7 +7,19 @@ import {
   getDocs,
   doc,
   getDoc,
+  orderBy,
+  limit,
 } from "firebase/firestore";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+} from "chart.js";
+import { Doughnut, Bar } from "react-chartjs-2";
 import ContentPanel from "../components/ContentPanel";
 import AttestationsList from "../components/AttestationsList";
 import ParticipantTrainingPanel from "../components/ParticipantTrainingPanel";
@@ -15,6 +27,15 @@ import { db } from "../auth/firebase";
 import { useUser } from "../auth/UserContext";
 import moduleRegistry from "../learningContent/moduleRegistry.json";
 import "./TeamManagement.css";
+
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement
+);
 
 const COORDINATOR_TABS = [
   { key: "members", label: "Members" },
@@ -43,6 +64,56 @@ const CATEGORY_META = {
     className: "tm-module-category-local-government",
   },
 };
+
+const ATTESTATION_SECTIONS = [
+  {
+    id: "program_training",
+    title: "A. Program & Training",
+    items: [
+      { id: "program_adopted", label: "Cybersecurity program adopted" },
+      { id: "employee_training", label: "Employee training conducted" },
+    ],
+  },
+  {
+    id: "incident_preparedness",
+    title: "B. Incident Preparedness",
+    items: [
+      { id: "ir_plan_documented", label: "Incident response plan documented" },
+      {
+        id: "incident_reporting_procedure",
+        label: "Incident reporting procedure defined",
+      },
+      {
+        id: "ransomware_response_policy",
+        label: "Ransomware response policy documented",
+      },
+      {
+        id: "backup_recovery_plan",
+        label: "Backup / recovery plan documented",
+      },
+    ],
+  },
+  {
+    id: "access_protection",
+    title: "C. Access & Protection",
+    items: [
+      {
+        id: "mfa_enabled_key_accounts",
+        label: "Multi-factor authentication enabled for key accounts",
+      },
+      {
+        id: "critical_systems_updated",
+        label: "Critical systems are updated regularly",
+      },
+      {
+        id: "protective_security_tools",
+        label: "Protective security tools are in place",
+      },
+    ],
+  },
+];
+
+const INVITE_VIDEO_EMBED_URL = "https://www.youtube.com/embed/YOUR_VIDEO_ID";
 
 function csvEscape(value) {
   const s = String(value ?? "");
@@ -135,10 +206,10 @@ function canAccessByOrgType(module, orgType) {
   return allowed.includes(normalizedOrgType);
 }
 
-function getVisibleModulesForMode({ allModules, trainingMode, activeCampaign, orgType }) {
+function getVisibleModulesForMode({ allModules, trainingMode, campaignSource, orgType }) {
   if (trainingMode === "controlled") {
-    const assignedIds = Array.isArray(activeCampaign?.moduleIds)
-      ? activeCampaign.moduleIds
+    const assignedIds = Array.isArray(campaignSource?.moduleIds)
+      ? campaignSource.moduleIds
       : [];
 
     return allModules.filter((module) => assignedIds.includes(module.id));
@@ -180,7 +251,7 @@ async function getCampaignContextForOrg(orgId) {
 
   const latestCompletedCampaign =
     [...playbooks]
-      .filter((pb) => pb.isActive !== true && pb.endedEarly !== true)
+      .filter((pb) => pb.isActive !== true)
       .sort((a, b) => getSortableTime(b) - getSortableTime(a))[0] || null;
 
   return {
@@ -254,36 +325,69 @@ function getSafeTab(searchParams, isCoordinator) {
   return isCoordinator ? "members" : "training";
 }
 
-function getPreparednessLabel(percentCompleted) {
-  if (percentCompleted >= 85) {
-    return {
-      title: "Strong coverage",
-      description: "Most assigned training has been completed across your organization.",
-      tone: "good",
-    };
+function getReadinessMeta(percent) {
+  if (percent <= 50) {
+    return { label: "Needs Attention", tone: "danger" };
+  }
+  if (percent <= 80) {
+    return { label: "In Progress", tone: "warning" };
+  }
+  return { label: "Strong Coverage", tone: "good" };
+}
+
+function formatDateTime(value) {
+  if (!value) return "—";
+
+  if (typeof value?.toDate === "function") {
+    return value.toDate().toLocaleString();
   }
 
-  if (percentCompleted >= 60) {
-    return {
-      title: "Improving coverage",
-      description: "Training progress is moving in the right direction, but some gaps remain.",
-      tone: "medium",
-    };
+  if (typeof value === "string") {
+    const date = new Date(value);
+    if (!Number.isNaN(date.getTime())) return date.toLocaleString();
   }
 
-  if (percentCompleted >= 30) {
+  return "—";
+}
+
+function buildAttestationSummary(attestation) {
+  const answers = attestation?.answers || {};
+  const sectionSummaries = ATTESTATION_SECTIONS.map((section) => {
+    const checkedCount = section.items.filter((item) => !!answers[item.id]).length;
+    const total = section.items.length;
+
     return {
-      title: "Moderate risk",
-      description: "A meaningful portion of the organization still needs training attention.",
-      tone: "warning",
+      ...section,
+      checkedCount,
+      total,
+      percent: total > 0 ? Math.round((checkedCount / total) * 100) : 0,
+      items: section.items.map((item) => ({
+        ...item,
+        checked: !!answers[item.id],
+      })),
     };
-  }
+  });
+
+  const totalItems = ATTESTATION_SECTIONS.flatMap((section) => section.items).length;
+  const checkedCount = sectionSummaries.reduce(
+    (sum, section) => sum + section.checkedCount,
+    0
+  );
+  const readinessPercent =
+    totalItems > 0 ? Math.round((checkedCount / totalItems) * 100) : 0;
 
   return {
-    title: "Needs attention",
-    description: "Training coverage is currently low and follow-up is recommended.",
-    tone: "danger",
+    sectionSummaries,
+    totalItems,
+    checkedCount,
+    readinessPercent,
   };
+}
+
+function buildSafeOrgFilePrefix(orgName) {
+  return (orgName || "organization")
+    .replace(/[^a-z0-9-_]+/gi, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 export default function TeamManagement() {
@@ -298,6 +402,7 @@ export default function TeamManagement() {
   const [tab, setTab] = useState(() => getSafeTab(searchParams, isCoordinator));
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
+  const [showInviteVideo, setShowInviteVideo] = useState(false);
 
   useEffect(() => {
     const next = getSafeTab(searchParams, isCoordinator);
@@ -309,7 +414,9 @@ export default function TeamManagement() {
     const currentParam = (searchParams.get("tab") || "").trim();
 
     if (currentParam !== safeTab) {
-      setSearchParams({ tab: safeTab }, { replace: true });
+      const nextParams = new URLSearchParams(searchParams);
+      nextParams.set("tab", safeTab);
+      setSearchParams(nextParams, { replace: true });
     }
   }, [searchParams, setSearchParams, isCoordinator]);
 
@@ -320,9 +427,57 @@ export default function TeamManagement() {
     }
   }, [isCoordinator, drawerOpen]);
 
+  useEffect(() => {
+    if (showInviteVideo) {
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+
+      return () => {
+        document.body.style.overflow = prevOverflow;
+      };
+    }
+  }, [showInviteVideo]);
+
+  useEffect(() => {
+    if (!showInviteVideo) return;
+
+    function handleKeyDown(e) {
+      if (e.key === "Escape") {
+        setShowInviteVideo(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [showInviteVideo]);
+
   function handleTabChange(nextTab) {
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.set("tab", nextTab);
+
+    if (nextTab !== "attestations") {
+      nextParams.delete("memberId");
+      nextParams.delete("memberEmail");
+      nextParams.delete("memberName");
+    }
+
     setTab(nextTab);
-    setSearchParams({ tab: nextTab });
+    setSearchParams(nextParams);
+  }
+
+  function handleViewMemberAttestations(member) {
+    if (!member) return;
+
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.set("tab", "attestations");
+    nextParams.set("memberId", member.id || "");
+    nextParams.set("memberEmail", member.email || "");
+    nextParams.set("memberName", member.name || "");
+
+    setDrawerOpen(false);
+    setSelectedMember(null);
+    setTab("attestations");
+    setSearchParams(nextParams);
   }
 
   return (
@@ -345,11 +500,7 @@ export default function TeamManagement() {
               <button
                 type="button"
                 className="tm-btn tm-btn-primary"
-                onClick={() =>
-                  alert(
-                    "Under construction: for now, share the Join Code from Account to add members."
-                  )
-                }
+                onClick={() => setShowInviteVideo(true)}
               >
                 + Invite Member
               </button>
@@ -410,8 +561,111 @@ export default function TeamManagement() {
           title="Member Details"
           onClose={() => setDrawerOpen(false)}
         >
-          <MemberDetails member={selectedMember} />
+          <MemberDetails
+            member={selectedMember}
+            onViewAttestations={handleViewMemberAttestations}
+          />
         </RightDrawer>
+      )}
+
+      {showInviteVideo && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(15, 23, 42, 0.45)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "24px",
+            zIndex: 9999,
+          }}
+          onClick={() => setShowInviteVideo(false)}
+          role="presentation"
+        >
+          <div
+            style={{
+              position: "relative",
+              width: "min(960px, 100%)",
+              background: "#ffffff",
+              borderRadius: "24px",
+              boxShadow: "0 24px 80px rgba(15, 23, 42, 0.28)",
+              padding: "18px 18px 16px",
+            }}
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Invite member help video"
+          >
+            <button
+              type="button"
+              onClick={() => setShowInviteVideo(false)}
+              aria-label="Close invite member video"
+              style={{
+                position: "absolute",
+                top: "12px",
+                right: "14px",
+                width: "40px",
+                height: "40px",
+                borderRadius: "999px",
+                border: "1px solid rgba(148, 163, 184, 0.35)",
+                background: "#ffffff",
+                color: "#0f172a",
+                fontSize: "24px",
+                lineHeight: 1,
+                cursor: "pointer",
+                boxShadow: "0 8px 24px rgba(15, 23, 42, 0.12)",
+              }}
+            >
+              ×
+            </button>
+
+            <div style={{ padding: "4px 44px 14px 4px" }}>
+              <div
+                style={{
+                  fontSize: "1.15rem",
+                  fontWeight: 800,
+                  color: "#0f172a",
+                  marginBottom: "6px",
+                }}
+              >
+                How to Invite Members
+              </div>
+              <div
+                style={{
+                  fontSize: "0.95rem",
+                  color: "#475569",
+                }}
+              >
+                Watch this quick walkthrough for inviting members to your organization.
+              </div>
+            </div>
+
+            <div
+              style={{
+                width: "100%",
+                aspectRatio: "16 / 9",
+                borderRadius: "18px",
+                overflow: "hidden",
+                background: "#0f172a",
+                boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.04)",
+              }}
+            >
+              <iframe
+                width="100%"
+                height="100%"
+                src={INVITE_VIDEO_EMBED_URL}
+                title="How to Invite Members"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </div>
       )}
     </ContentPanel>
   );
@@ -440,7 +694,7 @@ function MembersPanel({ onManage }) {
         setLoading(true);
         setError("");
 
-        const [{ trainingMode, activeCampaign, campaignContext }, snap] = await Promise.all([
+        const [{ trainingMode, campaignContext }, snap] = await Promise.all([
           getCampaignContextForOrg(orgId),
           getDocs(query(collection(db, "users"), where("orgId", "==", orgId))),
         ]);
@@ -448,7 +702,7 @@ function MembersPanel({ onManage }) {
         const visibleModules = getVisibleModulesForMode({
           allModules: getAllRegistryModules(),
           trainingMode,
-          activeCampaign,
+          campaignSource: campaignContext,
           orgType,
         });
 
@@ -533,9 +787,7 @@ function MembersPanel({ onManage }) {
     ]);
 
     const today = new Date().toISOString().slice(0, 10);
-    const safeOrgName = (orgName || "organization")
-      .replace(/[^a-z0-9-_]+/gi, "-")
-      .replace(/^-+|-+$/g, "");
+    const safeOrgName = buildSafeOrgFilePrefix(orgName);
 
     downloadCsv(`${safeOrgName}-members-${today}.csv`, [header, ...body]);
   }
@@ -557,11 +809,6 @@ function MembersPanel({ onManage }) {
             className="tm-btn tm-btn-danger-soft"
             onClick={handleExportMembersCsv}
             disabled={loading || filtered.length === 0}
-            title={
-              filtered.length === 0
-                ? "No filtered members to export"
-                : "Export the currently filtered member list"
-            }
           >
             Export Filtered CSV
           </button>
@@ -637,12 +884,8 @@ function MembersPanel({ onManage }) {
                 <div key={r.id} className="tm-row tm-row-members">
                   <div className="tm-strong">{r.name}</div>
                   <div className="tm-muted">{r.email}</div>
-                  <div>
-                    <span className="tm-pill">{r.role}</span>
-                  </div>
-                  <div>
-                    <span className="tm-pill">{r.status}</span>
-                  </div>
+                  <div><span className="tm-pill">{r.role}</span></div>
+                  <div><span className="tm-pill">{r.status}</span></div>
                   <div className="tm-muted">{r.training}</div>
                   <div className="tm-align-right">
                     <button
@@ -686,10 +929,10 @@ function TrainingPanel() {
     return getVisibleModulesForMode({
       allModules,
       trainingMode,
-      activeCampaign,
+      campaignSource: campaignContext,
       orgType,
     });
-  }, [allModules, trainingMode, activeCampaign, orgType]);
+  }, [allModules, trainingMode, campaignContext, orgType]);
 
   useEffect(() => {
     let isMounted = true;
@@ -715,7 +958,7 @@ function TrainingPanel() {
         const modulesForRows = getVisibleModulesForMode({
           allModules,
           trainingMode: mode,
-          activeCampaign: active,
+          campaignSource: context,
           orgType,
         });
 
@@ -801,7 +1044,6 @@ function TrainingPanel() {
         row.email.toLowerCase().includes(q);
 
       if (!matchesQuery) return false;
-
       if (statusFilter === "all") return true;
 
       return visibleModules.some(
@@ -831,22 +1073,18 @@ function TrainingPanel() {
           <div className="tm-training-stat-value">{filteredRows.length}</div>
           <div className="tm-training-stat-label">Learners shown</div>
         </div>
-
         <div className="tm-training-stat">
           <div className="tm-training-stat-value">{visibleModules.length}</div>
           <div className="tm-training-stat-label">Modules shown</div>
         </div>
-
         <div className="tm-training-stat">
           <div className="tm-training-stat-value">{summary.completed}</div>
           <div className="tm-training-stat-label">Completed cells</div>
         </div>
-
         <div className="tm-training-stat">
           <div className="tm-training-stat-value">{summary.inProgress}</div>
           <div className="tm-training-stat-label">In progress cells</div>
         </div>
-
         <div className="tm-training-stat">
           <div className="tm-training-stat-value">{summary.notStarted}</div>
           <div className="tm-training-stat-label">Not started cells</div>
@@ -882,18 +1120,9 @@ function TrainingPanel() {
 
         <div className="tm-training-legend-wrap">
           <div className="tm-training-legend">
-            <span className="tm-legend-item">
-              <span className="tm-legend-dot tm-legend-completed" />
-              Completed
-            </span>
-            <span className="tm-legend-item">
-              <span className="tm-legend-dot tm-legend-progress" />
-              In Progress
-            </span>
-            <span className="tm-legend-item">
-              <span className="tm-legend-dot tm-legend-not-started" />
-              Not Started
-            </span>
+            <span className="tm-legend-item"><span className="tm-legend-dot tm-legend-completed" />Completed</span>
+            <span className="tm-legend-item"><span className="tm-legend-dot tm-legend-progress" />In Progress</span>
+            <span className="tm-legend-item"><span className="tm-legend-dot tm-legend-not-started" />Not Started</span>
           </div>
 
           <div className="tm-module-legend">
@@ -1001,7 +1230,7 @@ function TrainingPanel() {
           <div className="tm-hint">
             The Training tab follows the same assignment logic as Lessons:
             organization-based mode shows general plus org-specific lessons, and
-            controlled mode shows only the active campaign’s selected modules.
+            controlled mode shows the selected modules from the campaign in view.
           </div>
 
           {!activeCampaign && campaignContext && (
@@ -1016,7 +1245,7 @@ function TrainingPanel() {
 }
 
 function InsightsPanel() {
-  const { orgId, orgType = "education" } = useUser();
+  const { orgId, orgType = "education", orgName } = useUser();
 
   const [rows, setRows] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
@@ -1024,17 +1253,20 @@ function InsightsPanel() {
   const [trainingMode, setTrainingMode] = React.useState("organization");
   const [activeCampaign, setActiveCampaign] = React.useState(null);
   const [campaignContext, setCampaignContext] = React.useState(null);
+  const [latestAttestation, setLatestAttestation] = React.useState(null);
+  const [activeChart, setActiveChart] = React.useState("trainingOverview");
 
+  const chartRef = useRef(null);
   const allModules = React.useMemo(() => getAllRegistryModules(), []);
 
   const visibleModules = React.useMemo(() => {
     return getVisibleModulesForMode({
       allModules,
       trainingMode,
-      activeCampaign,
+      campaignSource: campaignContext,
       orgType,
     });
-  }, [allModules, trainingMode, activeCampaign, orgType]);
+  }, [allModules, trainingMode, campaignContext, orgType]);
 
   useEffect(() => {
     let isMounted = true;
@@ -1061,7 +1293,7 @@ function InsightsPanel() {
         const modulesForRows = getVisibleModulesForMode({
           allModules,
           trainingMode: mode,
-          activeCampaign: active,
+          campaignSource: context,
           orgType,
         });
 
@@ -1098,6 +1330,11 @@ function InsightsPanel() {
               0
             );
 
+            const completionPercent =
+              modulesForRows.length > 0
+                ? Math.round((completed / modulesForRows.length) * 100)
+                : 0;
+
             return {
               id: userDoc.id,
               name: d.displayName || d.name || "—",
@@ -1108,6 +1345,8 @@ function InsightsPanel() {
               inProgress,
               notStarted,
               statuses,
+              completionPercent,
+              isTrainingReady: completionPercent >= 80,
             };
           })
         );
@@ -1118,12 +1357,24 @@ function InsightsPanel() {
           return nameA.localeCompare(nameB);
         });
 
+        const attestationQuery = query(
+          collection(db, "orgs", orgId, "attestations"),
+          orderBy("createdAt", "desc"),
+          limit(10)
+        );
+        const attestationSnap = await getDocs(attestationQuery);
+        const latestHb96 =
+          attestationSnap.docs
+            .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+            .find((item) => item.playbookId === "hb96") || null;
+
         if (!isMounted) return;
 
         setTrainingMode(mode);
         setActiveCampaign(active);
         setCampaignContext(context);
         setRows(loadedRows);
+        setLatestAttestation(latestHb96);
       } catch (err) {
         console.error("Failed to load insights", err);
 
@@ -1133,6 +1384,7 @@ function InsightsPanel() {
         setRows([]);
         setActiveCampaign(null);
         setCampaignContext(null);
+        setLatestAttestation(null);
       } finally {
         if (isMounted) {
           setLoading(false);
@@ -1149,45 +1401,41 @@ function InsightsPanel() {
 
   const totalLearners = rows.length;
   const totalModules = visibleModules.length;
-  const totalAssignedCells = totalLearners * totalModules;
 
   const completionSummary = useMemo(
     () => getMatrixSummary(rows, visibleModules),
     [rows, visibleModules]
   );
 
-  const percentCompleted =
-    totalAssignedCells > 0
-      ? Math.round((completionSummary.completed / totalAssignedCells) * 100)
+  const readyLearnersCount = useMemo(
+    () => rows.filter((row) => row.isTrainingReady).length,
+    [rows]
+  );
+
+  const trainingReadinessPercent =
+    totalLearners > 0 && totalModules > 0
+      ? Math.round((readyLearnersCount / totalLearners) * 100)
       : 0;
 
-  const percentInProgress =
-    totalAssignedCells > 0
-      ? Math.round((completionSummary.inProgress / totalAssignedCells) * 100)
-      : 0;
+  const trainingReadinessMeta = getReadinessMeta(trainingReadinessPercent);
 
-  const percentNotStarted =
-    totalAssignedCells > 0
-      ? Math.max(100 - percentCompleted - percentInProgress, 0)
-      : 0;
+  const attestationSummary = useMemo(
+    () => buildAttestationSummary(latestAttestation),
+    [latestAttestation]
+  );
 
-  const preparedness = getPreparednessLabel(percentCompleted);
+  const attestationReadinessPercent = attestationSummary.readinessPercent;
+  const attestationReadinessMeta = getReadinessMeta(attestationReadinessPercent);
 
   const learnerNeedsSupport = useMemo(() => {
     return [...rows]
       .sort((a, b) => {
-        const aPercent = a.assigned > 0 ? a.completed / a.assigned : 0;
-        const bPercent = b.assigned > 0 ? b.completed / b.assigned : 0;
-
-        if (aPercent !== bPercent) return aPercent - bPercent;
+        if (a.completionPercent !== b.completionPercent) {
+          return a.completionPercent - b.completionPercent;
+        }
         return a.name.localeCompare(b.name);
       })
-      .slice(0, 5)
-      .map((row) => ({
-        ...row,
-        completionPercent:
-          row.assigned > 0 ? Math.round((row.completed / row.assigned) * 100) : 0,
-      }));
+      .slice(0, 7);
   }, [rows]);
 
   const moduleAttention = useMemo(() => {
@@ -1224,11 +1472,186 @@ function InsightsPanel() {
         }
         return a.label.localeCompare(b.label);
       })
-      .slice(0, 6);
+      .slice(0, 7);
   }, [visibleModules, rows]);
+
+  const trainingOverviewChartData = useMemo(
+    () => ({
+      labels: ["Training Ready (80%+)", "Below 80%"],
+      datasets: [
+        {
+          data: [readyLearnersCount, Math.max(totalLearners - readyLearnersCount, 0)],
+          backgroundColor: ["#22c55e", "#e5e7eb"],
+          borderColor: ["#16a34a", "#d1d5db"],
+          borderWidth: 1,
+        },
+      ],
+    }),
+    [readyLearnersCount, totalLearners]
+  );
+
+  const learnerFollowUpChartData = useMemo(
+    () => ({
+      labels: learnerNeedsSupport.map((learner) => learner.name),
+      datasets: [
+        {
+          label: "Completion %",
+          data: learnerNeedsSupport.map((learner) => learner.completionPercent),
+          backgroundColor: "#f59e0b",
+          borderRadius: 8,
+          barThickness: 20,
+        },
+      ],
+    }),
+    [learnerNeedsSupport]
+  );
+
+  const moduleGapsChartData = useMemo(
+    () => ({
+      labels: moduleAttention.map((module) => module.label),
+      datasets: [
+        {
+          label: "Completion %",
+          data: moduleAttention.map((module) => module.completionPercent),
+          backgroundColor: "#2563eb",
+          borderRadius: 8,
+          barThickness: 20,
+        },
+      ],
+    }),
+    [moduleAttention]
+  );
+
+  const chartOptionsBase = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+    },
+  };
+
+  const doughnutOptions = {
+    ...chartOptionsBase,
+    cutout: "68%",
+    plugins: {
+      ...chartOptionsBase.plugins,
+      legend: {
+        display: true,
+        position: "bottom",
+      },
+    },
+  };
+
+  const horizontalBarOptions = {
+    ...chartOptionsBase,
+    indexAxis: "y",
+    scales: {
+      x: {
+        min: 0,
+        max: 100,
+        ticks: {
+          callback: (value) => `${value}%`,
+        },
+        grid: {
+          color: "rgba(148, 163, 184, 0.18)",
+        },
+      },
+      y: {
+        grid: { display: false },
+      },
+    },
+  };
+
+  function handleExportInsightsCsv() {
+    const today = new Date().toISOString().slice(0, 10);
+    const safeOrgName = buildSafeOrgFilePrefix(orgName);
+
+    if (activeChart === "trainingOverview") {
+      const rowsForCsv = [
+        ["Metric", "Value"],
+        ["Campaign Name", campaignContext?.title || "—"],
+        ["Campaign ID", campaignContext?.id || "—"],
+        ["Campaign Status", activeCampaign ? "Active" : "Fallback"],
+        ["Total Learners", totalLearners],
+        ["Modules", totalModules],
+        ["Training Ready (80%+)", readyLearnersCount],
+        ["Below 80%", Math.max(totalLearners - readyLearnersCount, 0)],
+        ["Training Readiness %", trainingReadinessPercent],
+      ];
+      downloadCsv(`${safeOrgName}-insights-training-overview-${today}.csv`, rowsForCsv);
+      return;
+    }
+
+    if (activeChart === "learnerFollowUp") {
+      const rowsForCsv = [
+        ["Learner", "Role", "Completed", "Assigned", "Completion %", "In Progress", "Not Started"],
+        ...learnerNeedsSupport.map((learner) => [
+          learner.name,
+          learner.role,
+          learner.completed,
+          learner.assigned,
+          learner.completionPercent,
+          learner.inProgress,
+          learner.notStarted,
+        ]),
+      ];
+      downloadCsv(`${safeOrgName}-insights-learner-follow-up-${today}.csv`, rowsForCsv);
+      return;
+    }
+
+    const rowsForCsv = [
+      ["Module", "Completed", "Total Learners", "Completion %", "In Progress", "Not Started"],
+      ...moduleAttention.map((module) => [
+        module.label,
+        module.completed,
+        module.total,
+        module.completionPercent,
+        module.inProgress,
+        module.notStarted,
+      ]),
+    ];
+    downloadCsv(`${safeOrgName}-insights-module-gaps-${today}.csv`, rowsForCsv);
+  }
+
+  function handleDownloadChart() {
+    const chart = chartRef.current;
+    if (!chart || typeof chart.toBase64Image !== "function") return;
+
+    const url = chart.toBase64Image("image/png", 1);
+    const link = document.createElement("a");
+    const today = new Date().toISOString().slice(0, 10);
+    const safeOrgName = buildSafeOrgFilePrefix(orgName);
+
+    link.href = url;
+    link.download = `${safeOrgName}-${activeChart}-${today}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  const chartTitle =
+    activeChart === "trainingOverview"
+      ? "Training Overview"
+      : activeChart === "learnerFollowUp"
+      ? "Learner Follow-Up"
+      : "Module Gaps";
+
+  const chartDescription =
+    activeChart === "trainingOverview"
+      ? "This view shows how many learners have reached the 80% completion mark required to count as training ready."
+      : activeChart === "learnerFollowUp"
+      ? "This view highlights the learners currently furthest from the 80% readiness threshold."
+      : "This view highlights the modules with the weakest completion rates across the organization.";
 
   const campaignModeLabel =
     trainingMode === "controlled" ? "Controlled" : "Organization-Based";
+
+  const campaignStatusLabel = activeCampaign ? "Active Campaign" : campaignContext ? "Fallback Campaign" : "No Campaign";
+  const campaignNameLabel = campaignContext?.title || "No campaign found";
+  const campaignIdLabel = campaignContext?.id || "—";
+  const campaignModuleCount = Array.isArray(campaignContext?.moduleIds)
+    ? campaignContext.moduleIds.length
+    : 0;
 
   return (
     <div className="tm-card tm-insights-card">
@@ -1236,7 +1659,7 @@ function InsightsPanel() {
         <div>
           <div className="tm-card-title">Insights</div>
           <div className="tm-card-sub">
-            A question-driven view of your organization’s training readiness.
+            A visual snapshot of training readiness and current HB 96 alignment.
           </div>
         </div>
       </div>
@@ -1247,205 +1670,287 @@ function InsightsPanel() {
       {!loading && !error && (
         <div className="tm-insights-layout">
           <section className="tm-insight-section">
-            <div className="tm-insight-question-row">
-              <div>
-                <h3 className="tm-insight-question">How prepared are we?</h3>
-                <p className="tm-insight-answer">
-                  Based on assigned training completion, your organization is currently in
-                  <strong> {preparedness.title.toLowerCase()}</strong>.
-                </p>
+            <div className="tm-insight-top-grid">
+              <div className="tm-readiness-card">
+                <div className="tm-readiness-card-head">
+                  <div className="tm-readiness-card-title">Training Readiness</div>
+                  <span
+                    className="tm-info-badge"
+                    title="Training readiness marks a learner as ready when they complete at least 80% of assigned lessons. The organization score reflects how many learners reached that threshold."
+                  >
+                    i
+                  </span>
+                </div>
+
+                <div className="tm-readiness-card-value">
+                  {trainingMode === "controlled" && totalModules === 0 ? "—" : `${trainingReadinessPercent}%`}
+                </div>
+
+                <div
+                  className={`tm-readiness-chip tm-readiness-chip--${trainingReadinessMeta.tone}`}
+                >
+                  {trainingMode === "controlled" && totalModules === 0
+                    ? "No Campaign Data"
+                    : trainingReadinessMeta.label}
+                </div>
+
+                <div className="tm-readiness-card-meta">
+                  {trainingMode === "controlled" && totalModules === 0
+                    ? "No modules were found for the campaign currently in view."
+                    : `${readyLearnersCount} of ${totalLearners} learners have reached the 80% mark.`}
+                </div>
               </div>
 
-              <div className={`tm-readiness-chip tm-readiness-chip--${preparedness.tone}`}>
-                {preparedness.title}
+              <div className="tm-readiness-card">
+                <div className="tm-readiness-card-head">
+                  <div className="tm-readiness-card-title">Attestation Readiness</div>
+                  <span
+                    className="tm-info-badge"
+                    title="This score reflects self-attested readiness items marked in the current HB 96 readiness submission. It supports internal planning and tracking, not legal certification."
+                  >
+                    i
+                  </span>
+                </div>
+
+                <div className="tm-readiness-card-value">{attestationReadinessPercent}%</div>
+
+                <div
+                  className={`tm-readiness-chip tm-readiness-chip--${attestationReadinessMeta.tone}`}
+                >
+                  {attestationReadinessMeta.label}
+                </div>
+
+                <div className="tm-readiness-card-meta">
+                  {attestationSummary.checkedCount} of {attestationSummary.totalItems} attestation
+                  items are checked.
+                </div>
+              </div>
+
+              <div className="tm-guide-card">
+                <div className="tm-guide-card-title">How to Read Readiness</div>
+
+                <div className="tm-guide-row">
+                  <span className="tm-guide-dot tm-guide-dot-danger" />
+                  <span>0–50%</span>
+                  <strong>Needs Attention</strong>
+                </div>
+
+                <div className="tm-guide-row">
+                  <span className="tm-guide-dot tm-guide-dot-warning" />
+                  <span>51–80%</span>
+                  <strong>In Progress</strong>
+                </div>
+
+                <div className="tm-guide-row">
+                  <span className="tm-guide-dot tm-guide-dot-good" />
+                  <span>81–100%</span>
+                  <strong>Strong Coverage</strong>
+                </div>
+
+                <div className="tm-guide-note">
+                  Planning signal only. Use this as a quick snapshot, not a certification result.
+                </div>
               </div>
             </div>
 
             <div className="tm-insight-summary-line">
               <span>Training Mode: {campaignModeLabel}</span>
               <span>•</span>
+              <span>Campaign Status: {campaignStatusLabel}</span>
+              <span>•</span>
+              <span>Campaign Name: {campaignNameLabel}</span>
+              <span>•</span>
+              <span>Campaign ID: {campaignIdLabel}</span>
+              <span>•</span>
+              <span>Campaign Modules: {campaignModuleCount}</span>
+              <span>•</span>
+              <span>Visible Modules: {totalModules}</span>
+              <span>•</span>
               <span>Learners: {totalLearners}</span>
               <span>•</span>
-              <span>Modules: {totalModules}</span>
+              <span>Completed Cells: {completionSummary.completed}</span>
               <span>•</span>
-              <span>Assigned training cells: {totalAssignedCells}</span>
-            </div>
-
-            <div className="tm-insight-kpis">
-              <div className="tm-insight-kpi">
-                <div className="tm-insight-kpi-value">{percentCompleted}%</div>
-                <div className="tm-insight-kpi-label">Completed</div>
-              </div>
-
-              <div className="tm-insight-kpi">
-                <div className="tm-insight-kpi-value">{completionSummary.completed}</div>
-                <div className="tm-insight-kpi-label">Completed Cells</div>
-              </div>
-
-              <div className="tm-insight-kpi">
-                <div className="tm-insight-kpi-value">{completionSummary.inProgress}</div>
-                <div className="tm-insight-kpi-label">In Progress</div>
-              </div>
-
-              <div className="tm-insight-kpi">
-                <div className="tm-insight-kpi-value">{completionSummary.notStarted}</div>
-                <div className="tm-insight-kpi-label">Not Started</div>
-              </div>
-            </div>
-
-            <div className="tm-insight-panel-grid tm-insight-panel-grid--two">
-              <div className="tm-insight-panel">
-                <div className="tm-insight-panel-title">Training Coverage</div>
-                <div className="tm-insight-panel-sub">
-                  A simple breakdown of completed, in-progress, and not-started training.
-                </div>
-
-                <div className="tm-insight-stacked-bar" aria-label="Training coverage">
-                  <div
-                    className="tm-insight-stacked-segment tm-segment-completed"
-                    style={{ width: `${percentCompleted}%` }}
-                    title={`Completed: ${percentCompleted}%`}
-                  />
-                  <div
-                    className="tm-insight-stacked-segment tm-segment-in-progress"
-                    style={{ width: `${percentInProgress}%` }}
-                    title={`In Progress: ${percentInProgress}%`}
-                  />
-                  <div
-                    className="tm-insight-stacked-segment tm-segment-not-started"
-                    style={{ width: `${percentNotStarted}%` }}
-                    title={`Not Started: ${percentNotStarted}%`}
-                  />
-                </div>
-
-                <div className="tm-insight-legend">
-                  <span className="tm-insight-legend-item">
-                    <span className="tm-insight-legend-dot tm-segment-completed" />
-                    Completed ({percentCompleted}%)
-                  </span>
-                  <span className="tm-insight-legend-item">
-                    <span className="tm-insight-legend-dot tm-segment-in-progress" />
-                    In Progress ({percentInProgress}%)
-                  </span>
-                  <span className="tm-insight-legend-item">
-                    <span className="tm-insight-legend-dot tm-segment-not-started" />
-                    Not Started ({percentNotStarted}%)
-                  </span>
-                </div>
-              </div>
-
-              <div className="tm-insight-panel">
-                <div className="tm-insight-panel-title">What this means</div>
-                <div className="tm-insight-panel-sub">
-                  Training completion is a readiness signal, not a guarantee of security.
-                </div>
-
-                <div className="tm-insight-callout">
-                  <strong>{preparedness.title}:</strong> {preparedness.description}
-                </div>
-
-                <div className="tm-insight-mini-list">
-                  <div className="tm-insight-mini-item">
-                    <span className="tm-insight-mini-label">Completed percentage</span>
-                    <span className="tm-insight-mini-value">{percentCompleted}%</span>
-                  </div>
-                  <div className="tm-insight-mini-item">
-                    <span className="tm-insight-mini-label">Learners tracked</span>
-                    <span className="tm-insight-mini-value">{totalLearners}</span>
-                  </div>
-                  <div className="tm-insight-mini-item">
-                    <span className="tm-insight-mini-label">Visible modules</span>
-                    <span className="tm-insight-mini-value">{totalModules}</span>
-                  </div>
-                </div>
-              </div>
+              <span>In Progress Cells: {completionSummary.inProgress}</span>
             </div>
           </section>
 
           <section className="tm-insight-section">
-            <h3 className="tm-insight-question">Who needs more training?</h3>
-            <p className="tm-insight-answer">
-              These learners currently have the lowest completion rates among assigned
-              modules.
-            </p>
+            <div className="tm-insight-chart-card">
+              <div className="tm-insight-chart-head">
+                <div>
+                  <div className="tm-insight-chart-title">{chartTitle}</div>
+                  <div className="tm-insight-chart-sub">{chartDescription}</div>
+                </div>
 
-            <div className="tm-insight-panel">
-              <div className="tm-insight-bar-list">
-                {learnerNeedsSupport.length === 0 ? (
-                  <div className="tm-empty">No learner data available yet.</div>
-                ) : (
-                  learnerNeedsSupport.map((learner) => (
-                    <div key={learner.id} className="tm-insight-bar-row">
-                      <div className="tm-insight-bar-head">
-                        <span className="tm-insight-bar-title">
-                          {learner.name} ({learner.role})
-                        </span>
-                        <span className="tm-insight-bar-value">
-                          {learner.completed}/{learner.assigned} ({learner.completionPercent}%)
-                        </span>
-                      </div>
+                <div className="tm-insight-actions">
+                  <button
+                    type="button"
+                    className="tm-btn tm-btn-ghost"
+                    onClick={handleDownloadChart}
+                  >
+                    Download Chart
+                  </button>
 
-                      <div className="tm-insight-bar-track">
-                        <div
-                          className="tm-insight-bar-fill"
-                          style={{ width: `${learner.completionPercent}%` }}
-                        />
-                      </div>
+                  <button
+                    type="button"
+                    className="tm-btn tm-btn-ghost"
+                    onClick={handleExportInsightsCsv}
+                  >
+                    Export Data
+                  </button>
+                </div>
+              </div>
 
-                      <div className="tm-insight-bar-meta">
-                        <span>In Progress: {learner.inProgress}</span>
-                        <span>Not Started: {learner.notStarted}</span>
-                      </div>
-                    </div>
-                  ))
+              <div className="tm-insight-view-tabs">
+                <button
+                  type="button"
+                  className={`tm-insight-view-tab ${
+                    activeChart === "trainingOverview" ? "tm-insight-view-tab-active" : ""
+                  }`}
+                  onClick={() => setActiveChart("trainingOverview")}
+                >
+                  Training Overview
+                </button>
+
+                <button
+                  type="button"
+                  className={`tm-insight-view-tab ${
+                    activeChart === "learnerFollowUp" ? "tm-insight-view-tab-active" : ""
+                  }`}
+                  onClick={() => setActiveChart("learnerFollowUp")}
+                >
+                  Learner Follow-Up
+                </button>
+
+                <button
+                  type="button"
+                  className={`tm-insight-view-tab ${
+                    activeChart === "moduleGaps" ? "tm-insight-view-tab-active" : ""
+                  }`}
+                  onClick={() => setActiveChart("moduleGaps")}
+                >
+                  Module Gaps
+                </button>
+              </div>
+
+              <div className="tm-insight-chart-shell">
+                {activeChart === "trainingOverview" && (
+                  <Doughnut
+                    ref={chartRef}
+                    data={trainingOverviewChartData}
+                    options={doughnutOptions}
+                  />
+                )}
+
+                {activeChart === "learnerFollowUp" && (
+                  <Bar
+                    ref={chartRef}
+                    data={learnerFollowUpChartData}
+                    options={horizontalBarOptions}
+                  />
+                )}
+
+                {activeChart === "moduleGaps" && (
+                  <Bar
+                    ref={chartRef}
+                    data={moduleGapsChartData}
+                    options={horizontalBarOptions}
+                  />
                 )}
               </div>
             </div>
           </section>
 
           <section className="tm-insight-section">
-            <h3 className="tm-insight-question">Which modules need attention?</h3>
-            <p className="tm-insight-answer">
-              These are the modules with the lowest completion rates across your learners.
-            </p>
+            <div className="tm-insight-question-row">
+              <div>
+                <h3 className="tm-insight-question">Readiness by Area</h3>
+                <p className="tm-insight-answer">
+                  Current self-attested HB 96 alignment grouped into the three readiness areas.
+                </p>
+              </div>
 
-            <div className="tm-insight-panel">
-              <div className="tm-insight-bar-list">
-                {moduleAttention.length === 0 ? (
-                  <div className="tm-empty">No module data available yet.</div>
-                ) : (
-                  moduleAttention.map((module) => (
-                    <div key={module.id} className="tm-insight-bar-row">
-                      <div className="tm-insight-bar-head">
-                        <span className="tm-insight-bar-title">{module.label}</span>
-                        <span className="tm-insight-bar-value">
-                          {module.completed}/{module.total} ({module.completionPercent}%)
-                        </span>
-                      </div>
+              <span
+                className="tm-info-badge tm-info-badge-large"
+                title="This section summarizes self-attested readiness areas based on the current HB 96 submission. It supports internal tracking and planning, not legal certification."
+              >
+                i
+              </span>
+            </div>
 
-                      <div className="tm-insight-bar-track">
-                        <div
-                          className="tm-insight-bar-fill tm-insight-bar-fill--module"
-                          style={{ width: `${module.completionPercent}%` }}
-                        />
-                      </div>
-
-                      <div className="tm-insight-bar-meta">
-                        <span>In Progress: {module.inProgress}</span>
-                        <span>Not Started: {module.notStarted}</span>
-                      </div>
+            <div className="tm-attestation-grid">
+              {attestationSummary.sectionSummaries.map((section) => (
+                <div key={section.id} className="tm-attestation-pane">
+                  <div className="tm-attestation-pane-head">
+                    <div className="tm-attestation-pane-title">{section.title}</div>
+                    <div className="tm-attestation-pane-score">
+                      {section.checkedCount}/{section.total}
                     </div>
-                  ))
-                )}
+                  </div>
+
+                  <div className="tm-attestation-pane-progress">
+                    <div
+                      className="tm-attestation-pane-progress-fill"
+                      style={{ width: `${section.percent}%` }}
+                    />
+                  </div>
+
+                  <div className="tm-attestation-checklist">
+                    {section.items.map((item) => (
+                      <div key={item.id} className="tm-attestation-check-row">
+                        <span
+                          className={`tm-attestation-check ${
+                            item.checked ? "tm-attestation-check--yes" : "tm-attestation-check--no"
+                          }`}
+                        >
+                          {item.checked ? "✓" : "—"}
+                        </span>
+                        <span className="tm-attestation-check-label">{item.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="tm-attestation-meta-strip">
+              <div className="tm-attestation-meta-item">
+                <span className="tm-attestation-meta-label">Attested by</span>
+                <strong>{latestAttestation?.displayName || "—"}</strong>
+              </div>
+
+              <div className="tm-attestation-meta-item">
+                <span className="tm-attestation-meta-label">Last updated</span>
+                <strong>
+                  {formatDateTime(
+                    latestAttestation?.createdAt || latestAttestation?.createdAtUtcIso
+                  )}
+                </strong>
+              </div>
+
+              <div className="tm-attestation-meta-item">
+                <span className="tm-attestation-meta-label">Submission</span>
+                <strong>{latestAttestation?.id || "No current attestation"}</strong>
+              </div>
+
+              <div className="tm-attestation-meta-actions">
+                <button
+                  type="button"
+                  className="tm-btn tm-btn-ghost"
+                  onClick={() => window.location.assign("/securityreadiness")}
+                >
+                  Open Security Readiness
+                </button>
+
+                <button
+                  type="button"
+                  className="tm-btn tm-btn-ghost"
+                  onClick={() => window.location.assign("/organization?tab=attestations")}
+                >
+                  View Attestation History
+                </button>
               </div>
             </div>
-          </section>
-
-          <section className="tm-insight-section">
-            <h3 className="tm-insight-question">Detailed reference</h3>
-            <p className="tm-insight-answer">
-              Use the Training tab for the full learner-by-module matrix and status table.
-            </p>
           </section>
 
           {!activeCampaign && campaignContext && (
@@ -1523,7 +2028,7 @@ function RightDrawer({ open, title, onClose, children }) {
   );
 }
 
-function MemberDetails({ member }) {
+function MemberDetails({ member, onViewAttestations }) {
   if (!member) {
     return <div className="tm-empty">Select a member to view details.</div>;
   }
@@ -1573,7 +2078,7 @@ function MemberDetails({ member }) {
           <button
             type="button"
             className="tm-btn tm-btn-ghost"
-            onClick={() => alert("View attestations later")}
+            onClick={() => onViewAttestations?.(member)}
           >
             View Attestations
           </button>

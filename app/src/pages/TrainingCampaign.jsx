@@ -381,7 +381,7 @@ export default function TrainingCampaign() {
 
       await updateDoc(doc(db, "orgs", orgId, "playbooks", playbookId), {
         isActive: false,
-        endedEarly: true,
+        endedEarly: false,
         completedNaturally: false,
         endedAt: serverTimestamp(),
         endedBy: uid || null,
@@ -389,7 +389,9 @@ export default function TrainingCampaign() {
       });
 
       setActivePlaybooks((prev) => prev.filter((pb) => pb.id !== playbookId));
-      setSuccessMessage("Campaign ended successfully.");
+      setSuccessMessage(
+        "Campaign ended successfully. Its results will remain available until a new campaign starts."
+      );
     } catch (err) {
       console.error("Failed to end campaign", err);
       setError("We could not end the campaign right now.");

@@ -334,9 +334,7 @@ export default function Login() {
 
                   <p className="login-agreement">
                     By creating an account, you agree to the{" "}
-                    <Link to="/account-terms">Account Terms</Link>,{" "}
-                    <Link to="/user-agreement">User Agreement</Link>, and{" "}
-                    <Link to="/privacy-policy">Privacy Policy</Link>.
+                    <Link to="/account-terms">Account Terms</Link>
                   </p>
                 </>
               ) : null}

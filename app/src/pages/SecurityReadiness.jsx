@@ -5,7 +5,13 @@ import { useNavigate, Link } from "react-router-dom";
 
 // Firestore
 import { auth, db } from "../auth/firebase";
-import { doc, collection, addDoc, serverTimestamp, writeBatch } from "firebase/firestore";
+import {
+  doc,
+  collection,
+  addDoc,
+  serverTimestamp,
+  writeBatch,
+} from "firebase/firestore";
 
 const CHECKLIST_V1 = [
   {
@@ -30,7 +36,7 @@ const CHECKLIST_V1 = [
     items: [
       {
         id: "ir_plan_documented",
-        label: "Incident Response Plan documented",
+        label: "Incident response plan documented",
         hint: "An incident response plan exists and is accessible to the right people.",
       },
       {
@@ -41,12 +47,33 @@ const CHECKLIST_V1 = [
       {
         id: "ransomware_response_policy",
         label: "Ransomware response policy documented",
-        hint: "Ransomware-specific response steps are documented (containment, recovery, comms).",
+        hint: "Ransomware-specific response steps are documented (containment, recovery, communications).",
       },
       {
         id: "backup_recovery_plan",
         label: "Backup / recovery plan documented",
         hint: "Backups and restore procedures exist and are tested periodically.",
+      },
+    ],
+  },
+  {
+    id: "access_protection",
+    title: "C. Access & Protection",
+    items: [
+      {
+        id: "mfa_enabled_key_accounts",
+        label: "Multi-factor authentication enabled for key accounts",
+        hint: "MFA is enabled for important or sensitive accounts where practical.",
+      },
+      {
+        id: "critical_systems_updated",
+        label: "Critical systems are updated regularly",
+        hint: "Important systems and software are patched and updated on a routine basis.",
+      },
+      {
+        id: "protective_security_tools",
+        label: "Protective security tools are in place",
+        hint: "Security tools such as endpoint protection, firewalling, filtering, or monitoring are in use where appropriate.",
       },
     ],
   },
@@ -67,19 +94,25 @@ function getApiBase() {
   return "https://e71s0lsvsd.execute-api.us-east-1.amazonaws.com/prod";
 }
 
+function getSectionProgress(section, checked) {
+  const total = section.items.length;
+  const done = section.items.reduce((acc, item) => acc + (checked[item.id] ? 1 : 0), 0);
+  return {
+    total,
+    done,
+    percent: pct(done, total),
+  };
+}
+
 export default function SecurityReadiness() {
-  const [checked, setChecked] = useState(() => ({})); // { [itemId]: boolean }
+  const [checked, setChecked] = useState(() => ({}));
   const [attestedByName, setAttestedByName] = useState("");
   const [notes, setNotes] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  // Status banner
   const [status, setStatus] = useState(null);
-  // status = { type: "info"|"success"|"error", msg: string | JSX.Element }
-
-  // View mode
-  const [mode, setMode] = useState("form"); // "form" | "report"
+  const [mode, setMode] = useState("form");
   const [reportData, setReportData] = useState(null);
 
   const { orgId, loading: userLoading } = useUser();
@@ -93,7 +126,9 @@ export default function SecurityReadiness() {
   }, [checked]);
 
   const { checkedItems, uncheckedItems } = useMemo(() => {
-    const all = CHECKLIST_V1.flatMap((c) => c.items.map((it) => ({ ...it, category: c.title })));
+    const all = CHECKLIST_V1.flatMap((c) =>
+      c.items.map((it) => ({ ...it, category: c.title }))
+    );
     return {
       checkedItems: all.filter((it) => !!checked[it.id]),
       uncheckedItems: all.filter((it) => !checked[it.id]),
@@ -141,13 +176,11 @@ export default function SecurityReadiness() {
 
   async function requestHb96Pdf({ orgId, submissionId }) {
     const apiBase = getApiBase();
-    console.log("requestHb96Pdf()", { apiBase, orgId, submissionId });
 
     const user = auth.currentUser;
     if (!user) throw new Error("User not signed in");
 
     const idToken = await user.getIdToken();
-    console.log("ID token prefix:", idToken.slice(0, 18));
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 15000);
@@ -219,13 +252,11 @@ export default function SecurityReadiness() {
 
     setSaving(true);
 
-    // We'll define these outside try so we can reuse in later blocks safely
     const version = "hb96-v1";
     const createdAtUtcIso = new Date().toISOString();
     let submissionId = null;
 
     try {
-      // 1) Create ONE submission doc for audit/history
       const attestationsRef = collection(db, "orgs", orgId, "attestations");
       const submissionDoc = await addDoc(attestationsRef, {
         playbookId: "hb96",
@@ -246,7 +277,6 @@ export default function SecurityReadiness() {
 
       submissionId = submissionDoc.id;
 
-      // 2) Optional per-item writes
       const batch = writeBatch(db);
       for (const cat of CHECKLIST_V1) {
         for (const it of cat.items) {
@@ -268,7 +298,6 @@ export default function SecurityReadiness() {
       }
       await batch.commit();
 
-      // Snapshot report data (source-of-truth for the report view)
       setReportData({
         orgId,
         submissionId,
@@ -282,11 +311,9 @@ export default function SecurityReadiness() {
         readinessPct,
       });
 
-      // 3) Ask AWS to generate PDF (don’t fail save if AWS fails)
       try {
         await requestHb96Pdf({ orgId, submissionId });
 
-        // Option A banner text
         setStatus({
           type: "success",
           msg: (
@@ -322,12 +349,9 @@ export default function SecurityReadiness() {
         });
       }
 
-      // Switch to report view + close modal + scroll
       setIsModalOpen(false);
       setMode("report");
       scrollToTop();
-
-      console.log("HB96 submission saved:", { orgId, submissionId });
     } catch (e) {
       console.error("HB96 save failed:", e);
       setStatus({
@@ -340,7 +364,6 @@ export default function SecurityReadiness() {
     }
   }
 
-  // ---- Styles ----
   const pageWrap = { display: "grid", gap: 16 };
 
   const banner = (type) => ({
@@ -407,6 +430,22 @@ export default function SecurityReadiness() {
     cursor: saving ? "not-allowed" : "pointer",
   };
 
+  const infoBadge = {
+    width: 22,
+    height: 22,
+    borderRadius: 999,
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "rgba(59,130,246,0.10)",
+    border: "1px solid rgba(59,130,246,0.18)",
+    color: "rgba(15,23,42,0.82)",
+    fontSize: 12,
+    fontWeight: 800,
+    cursor: "default",
+    flex: "0 0 auto",
+  };
+
   const itemRow = (isChecked) => ({
     display: "flex",
     gap: 10,
@@ -430,15 +469,66 @@ export default function SecurityReadiness() {
       "linear-gradient(135deg, rgba(59,130,246,0.10) 0%, rgba(147,51,234,0.08) 45%, rgba(16,185,129,0.08) 100%)",
   };
 
-  const twoCol = { marginTop: 12, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 };
+  const twoCol = {
+    marginTop: 12,
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: 12,
+  };
+
+  const hb96GuideCard = {
+    ...card,
+    padding: 18,
+    background:
+      "linear-gradient(180deg, rgba(248,250,252,1) 0%, rgba(255,255,255,1) 100%)",
+  };
+
+  const hb96GuideList = {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+    gap: 10,
+    marginTop: 14,
+  };
+
+  const hb96GuideItem = {
+    border: "1px solid rgba(15, 23, 42, 0.08)",
+    background: "rgba(255,255,255,0.78)",
+    borderRadius: 14,
+    padding: 12,
+  };
+
+  const readinessGrid = {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+    gap: 14,
+  };
+
+  const readinessPane = {
+    ...card,
+    padding: 16,
+  };
+
+  const paneBarTrack = {
+    width: "100%",
+    height: 10,
+    borderRadius: 999,
+    background: "rgba(15,23,42,0.08)",
+    overflow: "hidden",
+    marginTop: 10,
+  };
+
+  const paneBarFill = (percent) => ({
+    width: `${percent}%`,
+    height: "100%",
+    borderRadius: 999,
+    background: "linear-gradient(90deg, #22c55e 0%, #2563eb 100%)",
+  });
 
   return (
     <ContentPanel>
       <div style={pageWrap}>
-        {/* Status banner always on top */}
         {status ? <div style={banner(status.type)}>{status.msg}</div> : null}
 
-        {/* REPORT VIEW (replaces page content) */}
         {mode === "report" ? (
           <div style={card}>
             <h2 style={{ marginTop: 0, marginBottom: 6 }}>Submission saved</h2>
@@ -458,7 +548,6 @@ export default function SecurityReadiness() {
               </div>
 
               <div style={twoCol}>
-                {/* Checked box */}
                 <div
                   style={{
                     padding: 12,
@@ -481,7 +570,6 @@ export default function SecurityReadiness() {
                   </div>
                 </div>
 
-                {/* Not checked box */}
                 <div
                   style={{
                     padding: 12,
@@ -512,12 +600,11 @@ export default function SecurityReadiness() {
               ) : null}
             </div>
 
-            {/* Actions */}
             <div style={{ marginTop: 14, display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "flex-end" }}>
               <button
                 type="button"
                 style={btn}
-                onClick={() => navigate("/organization?tab=attestations" )}
+                onClick={() => navigate("/organization?tab=attestations")}
                 title="Downloads will be available under Team Management → Attestations"
               >
                 Download PDF
@@ -526,7 +613,7 @@ export default function SecurityReadiness() {
               <button
                 type="button"
                 style={btn}
-                onClick={() => navigate("/organization?tab=attestations" )}
+                onClick={() => navigate("/organization?tab=attestations")}
               >
                 Go to Team Management
               </button>
@@ -538,10 +625,8 @@ export default function SecurityReadiness() {
           </div>
         ) : null}
 
-        {/* FORM VIEW (only when mode === "form") */}
         {mode === "form" ? (
           <>
-            {/* Header + Stats */}
             <div
               style={{
                 display: "flex",
@@ -571,46 +656,119 @@ export default function SecurityReadiness() {
               </div>
             </div>
 
-            {/* Checklist */}
-            {CHECKLIST_V1.map((cat) => (
-              <div key={cat.id} style={card}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "baseline",
-                    justifyContent: "space-between",
-                    gap: 10,
-                  }}
-                >
-                  <h3 style={{ margin: 0 }}>{cat.title}</h3>
-                  <div style={subtleText}>
-                    {cat.items.reduce((acc, it) => acc + (checked[it.id] ? 1 : 0), 0)} / {cat.items.length}
+            <div style={hb96GuideCard}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 10,
+                  flexWrap: "wrap",
+                }}
+              >
+                <div>
+                  <div style={{ fontSize: 18, fontWeight: 800, color: "rgba(15,23,42,0.92)" }}>
+                    What HB 96 is looking for
+                  </div>
+                  <div style={{ ...subtleText, marginTop: 4 }}>
+                    This page helps your organization track practical readiness areas tied to basic cybersecurity program maturity, incident preparedness, and protective controls.
                   </div>
                 </div>
 
-                <div style={{ marginTop: 12, display: "grid", gap: 10 }}>
-                  {cat.items.map((it) => {
-                    const isChecked = !!checked[it.id];
-                    return (
-                      <label key={it.id} style={itemRow(isChecked)}>
-                        <input
-                          type="checkbox"
-                          checked={isChecked}
-                          onChange={() => toggle(it.id)}
-                          style={{ marginTop: 2 }}
-                        />
-                        <div>
-                          <div style={{ fontWeight: 750, color: "rgba(15,23,42,0.92)" }}>{it.label}</div>
-                          {it.hint ? <div style={{ ...subtleText, marginTop: 4 }}>{it.hint}</div> : null}
-                        </div>
-                      </label>
-                    );
-                  })}
+                <span
+                  style={infoBadge}
+                  title="This is a practical trust-based readiness snapshot for internal tracking and planning. It is not a legal certification."
+                >
+                  i
+                </span>
+              </div>
+
+              <div style={hb96GuideList}>
+                <div style={hb96GuideItem}>
+                  <div style={{ fontWeight: 800, color: "rgba(15,23,42,0.9)" }}>
+                    Program & Training
+                  </div>
+                  <div style={{ ...subtleText, marginTop: 4 }}>
+                    Cybersecurity program direction and regular staff awareness efforts.
+                  </div>
+                </div>
+
+                <div style={hb96GuideItem}>
+                  <div style={{ fontWeight: 800, color: "rgba(15,23,42,0.9)" }}>
+                    Incident Preparedness
+                  </div>
+                  <div style={{ ...subtleText, marginTop: 4 }}>
+                    Planning, reporting, ransomware response, and backup/recovery readiness.
+                  </div>
+                </div>
+
+                <div style={hb96GuideItem}>
+                  <div style={{ fontWeight: 800, color: "rgba(15,23,42,0.9)" }}>
+                    Access & Protection
+                  </div>
+                  <div style={{ ...subtleText, marginTop: 4 }}>
+                    MFA, updates, and practical protective security tools for key systems.
+                  </div>
                 </div>
               </div>
-            ))}
+            </div>
 
-            {/* Attestation */}
+            <div style={readinessGrid}>
+              {CHECKLIST_V1.map((cat) => {
+                const progress = getSectionProgress(cat, checked);
+
+                return (
+                  <div key={cat.id} style={readinessPane}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "baseline",
+                        justifyContent: "space-between",
+                        gap: 10,
+                      }}
+                    >
+                      <h3 style={{ margin: 0 }}>{cat.title}</h3>
+                      <div style={subtleText}>
+                        {progress.done} / {progress.total}
+                      </div>
+                    </div>
+
+                    <div style={paneBarTrack}>
+                      <div style={paneBarFill(progress.percent)} />
+                    </div>
+
+                    <div style={{ ...subtleText, marginTop: 8 }}>
+                      {progress.percent}% complete in this readiness area
+                    </div>
+
+                    <div style={{ marginTop: 12, display: "grid", gap: 10 }}>
+                      {cat.items.map((it) => {
+                        const isChecked = !!checked[it.id];
+                        return (
+                          <label key={it.id} style={itemRow(isChecked)}>
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={() => toggle(it.id)}
+                              style={{ marginTop: 2 }}
+                            />
+                            <div>
+                              <div style={{ fontWeight: 750, color: "rgba(15,23,42,0.92)" }}>
+                                {it.label}
+                              </div>
+                              {it.hint ? (
+                                <div style={{ ...subtleText, marginTop: 4 }}>{it.hint}</div>
+                              ) : null}
+                            </div>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
             <div style={attestationCard}>
               <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
                 <div style={{ minWidth: 240, flex: 1 }}>
@@ -691,7 +849,7 @@ export default function SecurityReadiness() {
             >
               Previous saves can be found under{" "}
               <span
-                onClick={() => navigate("/organization?tab=attestations" )}
+                onClick={() => navigate("/organization?tab=attestations")}
                 style={{ fontWeight: 600, color: "rgba(59,130,246,0.85)", cursor: "pointer" }}
               >
                 Team Management → Attestations
@@ -699,7 +857,6 @@ export default function SecurityReadiness() {
               .
             </div>
 
-            {/* Modal */}
             {isModalOpen ? (
               <div
                 role="dialog"
@@ -728,8 +885,7 @@ export default function SecurityReadiness() {
                 >
                   <h3 style={{ marginTop: 0, marginBottom: 6 }}>Confirm attestation</h3>
                   <div style={{ color: "rgba(15,23,42,0.65)", fontSize: 13 }}>
-                    You are confirming this checklist reflects your organization’s current alignment status. This is not
-                    a legal certification.
+                    You are confirming this checklist reflects your organization’s current alignment status. This is not a legal certification.
                   </div>
 
                   <div style={{ marginTop: 12, ...card, background: "rgba(2,6,23,0.03)" }}>

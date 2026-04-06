@@ -114,49 +114,6 @@ const PLAYBOOK_ZONES = [
   },
 ];
 
-const CHECKLIST_GROUPS = [
-  {
-    title: "Training",
-    items: [
-      {
-        id: "employee-training",
-        label: "Employee training conducted",
-        note: "Blue 68% | Some participants have not completed all lessons",
-      },
-    ],
-  },
-  {
-    title: "Policies",
-    items: [
-      {
-        id: "cybersecurity-program",
-        label: "Cybersecurity program adopted",
-      },
-    ],
-  },
-  {
-    title: "Incident Response",
-    items: [
-      {
-        id: "incident-response-plan",
-        label: "Incident response plan documented",
-      },
-      {
-        id: "incident-reporting",
-        label: "Incident reporting procedure documented",
-      },
-      {
-        id: "ransomware-protocols",
-        label: "Ransomware protocols documented",
-      },
-      {
-        id: "backup-recovery",
-        label: "Backup & recovery process documented",
-      },
-    ],
-  },
-];
-
 function getStatusLabel(status) {
   switch (status) {
     case "completed":
@@ -196,15 +153,6 @@ export default function Playbooks() {
   const [reviewedMap, setReviewedMap] = useState({});
   const [reviewSavingId, setReviewSavingId] = useState(null);
   const [hasSeenOverview, setHasSeenOverview] = useState(false);
-
-  const [checklistState, setChecklistState] = useState({
-    "employee-training": false,
-    "cybersecurity-program": false,
-    "incident-response-plan": false,
-    "incident-reporting": false,
-    "ransomware-protocols": false,
-    "backup-recovery": false,
-  });
 
   useEffect(() => {
     const seen = localStorage.getItem(OVERVIEW_STORAGE_KEY) === "true";
@@ -265,11 +213,12 @@ export default function Playbooks() {
 
   useEffect(() => {
     const sectionParam = (searchParams.get("section") || "").trim().toLowerCase();
-    if (!sectionParam) return;
-
     const validSections = new Set(["training", "policies", "response"]);
+
     if (validSections.has(sectionParam)) {
       setExpandedZone(sectionParam);
+    } else {
+      setExpandedZone(null);
     }
   }, [searchParams]);
 
@@ -300,27 +249,17 @@ export default function Playbooks() {
     localStorage.setItem(OVERVIEW_STORAGE_KEY, "true");
   }
 
-  function toggleChecklistItem(id) {
-    setChecklistState((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  }
-
   function handleCollapsedZoneClick(zoneKey) {
     if (!unlockedMap[zoneKey]) return;
 
-    setExpandedZone((prev) => {
-      const nextZone = prev === zoneKey ? null : zoneKey;
+    const nextZone = expandedZone === zoneKey ? null : zoneKey;
+    setExpandedZone(nextZone);
 
-      if (nextZone) {
-        setSearchParams({ section: nextZone }, { replace: true });
-      } else {
-        setSearchParams({}, { replace: true });
-      }
-
-      return nextZone;
-    });
+    if (nextZone) {
+      setSearchParams({ section: nextZone }, { replace: true });
+    } else {
+      setSearchParams({}, { replace: true });
+    }
   }
 
   function handleCollapseExpanded() {
@@ -578,82 +517,25 @@ export default function Playbooks() {
                 when you are ready.
               </p>
             </div>
-
-            <aside className="playbooks-attestation-definition">
-              <div className="playbooks-attestation-definition__label">
-                Definition
-              </div>
-              <div className="playbooks-attestation-definition__word">
-                Attestation
-              </div>
-              <div className="playbooks-attestation-definition__pronounce">
-                noun
-              </div>
-              <p className="playbooks-attestation-definition__text">
-                Evidence or confirmation that something has been completed,
-                reviewed, or documented.
-              </p>
-            </aside>
           </div>
 
-          <div className="playbooks-readiness-grid">
-            <div className="playbooks-checklist-groups">
-              {CHECKLIST_GROUPS.map((group) => (
-                <div key={group.title} className="playbooks-checklist-group">
-                  <div className="playbooks-checklist-group-title">
-                    {group.title}
-                  </div>
-
-                  <div className="playbooks-checklist-items">
-                    {group.items.map((item) => (
-                      <label
-                        key={item.id}
-                        className="playbooks-checklist-item"
-                      >
-                        <div className="playbooks-checklist-item-main">
-                          <input
-                            type="checkbox"
-                            checked={!!checklistState[item.id]}
-                            onChange={() => toggleChecklistItem(item.id)}
-                          />
-                          <span>{item.label}</span>
-                        </div>
-
-                        {item.note && (
-                          <div className="playbooks-checklist-note">
-                            {item.note}
-                          </div>
-                        )}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="playbooks-attestation-panel">
-              <div className="playbooks-attestation-card">
-                <div className="playbooks-attestation-kicker">
-                  Review & Submit
-                </div>
-                <h4 className="playbooks-attestation-title">
-                  Open Full Attestation
-                </h4>
-                <p className="playbooks-attestation-text">
-                  Use the full attestation page to review readiness items,
-                  confirm completion details, and continue the documentation
-                  process.
-                </p>
-
-                <button
-                  type="button"
-                  className="playbooks-attestation-link"
-                  onClick={() => navigate("/securityreadiness")}
-                >
-                  Open Full Attestation
-                </button>
+          <div className="playbooks-start-wrap">
+            <button
+              type="button"
+              className="playbooks-start-card"
+              onClick={() => navigate("/securityreadiness")}
+            >
+              <img
+                src="/images/finalreview.svg"
+                alt="Final Review"
+                className="playbooks-start-icon"
+              />
+              <div className="playbooks-start-label">Final Review</div>
+              <div className="playbooks-start-sub">
+                Use the full attestation page to review readiness items, confirm
+                completion details, and continue the documentation process.
               </div>
-            </div>
+            </button>
           </div>
         </section>
       </div>
@@ -681,7 +563,10 @@ export default function Playbooks() {
             </p>
 
             <div className="playbooks-modal-list">
-              <div className="playbooks-modal-item">
+              <div
+                className="playbooks-modal-item"
+                style={{ background: "linear-gradient(135deg, #c8f0df, #a8c7ff)" }}
+              >
                 <strong>Training Playbook</strong>
                 <span>
                   Start here first. Launch employee training campaigns and build
@@ -689,7 +574,10 @@ export default function Playbooks() {
                 </span>
               </div>
 
-              <div className="playbooks-modal-item">
+              <div
+                className="playbooks-modal-item"
+                style={{ background: "linear-gradient(135deg, #d9efaa, #c2e45b)" }}
+              >
                 <strong>Policy Playbook</strong>
                 <span>
                   After training begins, use policy guidance and planning tools
@@ -697,7 +585,10 @@ export default function Playbooks() {
                 </span>
               </div>
 
-              <div className="playbooks-modal-item">
+              <div
+                className="playbooks-modal-item"
+                style={{ background: "linear-gradient(135deg, #ffe1d6, #ffb4b4)" }}
+              >
                 <strong>Incident Response & Operations</strong>
                 <span>
                   Prepare contacts, response guidance, ransomware information,
@@ -705,7 +596,10 @@ export default function Playbooks() {
                 </span>
               </div>
 
-              <div className="playbooks-modal-item">
+              <div
+                className="playbooks-modal-item"
+                style={{ background: "linear-gradient(135deg, #f7f380, #e69e1a)" }}
+              >
                 <strong>Checklist & Attestation</strong>
                 <span>
                   Track progress in the final section, then open the full
