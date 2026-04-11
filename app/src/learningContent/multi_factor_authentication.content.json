@@ -5,97 +5,117 @@
     {
       "type": "welcome",
       "title": "Welcome to Multi-Factor Authentication",
-      "subtitle": "Learn how multi-factor authentication helps protect accounts even if a password is stolen."
+      "subtitle": "Learn how multi-factor authentication helps protect accounts even if a password is stolen.",
+      "video": {
+        "provider": "youtube",
+        "videoId": "cyujbnJvKqY",
+        "caption": "Introduction to MFA"
+      }
     },
 
     {
       "type": "textImage",
       "title": "What is multi-factor authentication?",
-      "text": "Multi-factor authentication, or <strong>MFA</strong>, is a security measure that requires more than one form of verification before allowing access to an account.\n\nInstead of relying only on a password, MFA adds another layer of protection.\n\nThis helps reduce the risk of unauthorized access if a password is stolen, guessed, or reused.",
+      "text": "<p>Multi-factor authentication, or <strong>MFA</strong>, is a security measure that requires more than one form of verification before allowing access to an account.</p><p>Instead of relying only on a password, MFA adds another layer of protection.</p><p>This helps reduce the risk of unauthorized access if a password is stolen, guessed, or reused.</p>",
       "image": {
-        "src": "IMAGE_URL_MFA_OVERVIEW",
+        "src": "/images/mfa_overview.png",
         "alt": "Overview of multi-factor authentication"
       }
     },
 
     {
       "type": "textImage",
-      "title": "Why MFA matters",
-      "text": "Passwords alone are not always enough to protect an account.\n\nA password may be exposed through phishing, password reuse, data breaches, or social engineering.\n\n<strong>MFA helps stop attackers from logging in even if they know your password.</strong>",
+      "title": "Why MFA matters...",
+      "text": "<p>Passwords alone are not always enough to protect an account.</p><p>They may be exposed through phishing, password reuse, data breaches, or social engineering.</p><p><strong>MFA adds protection beyond passwords.</strong></p><p>A strong password is still important, but MFA provides a second layer of defense. If an attacker steals a password, MFA can help stop them from accessing the account unless they also have the second factor.</p><p style='text-align: center;'><strong><u>MFA helps stop attackers from logging in even if they know your password.</u></strong></p>",
       "image": {
-        "src": "IMAGE_URL_MFA_IMPORTANCE",
+        "src": "/images/mfa_blocked.png",
         "alt": "MFA blocking unauthorized access"
       }
     },
 
     {
-    "type": "textImage",
-    "title": "Common MFA methods",
-    "text": "Common forms of MFA include:\n\n<ul><li><strong>Authenticator apps</strong> that generate temporary login codes</li><li><strong>Push notifications</strong> asking you to approve a login</li><li><strong>Hardware security keys</strong> that plug into a computer or phone</li><li><strong>Text message (SMS) codes</strong> sent to a phone</li></ul>\n\nExamples of commonly used authenticator apps include:\n\n<ul><li>Microsoft Authenticator</li><li>Google Authenticator</li><li>Duo Mobile</li><li>Okta Verify</li></ul>\n\nThese apps generate short codes that change every 30 seconds and are used along with your password during login.",
-    "image": {
-        "src": "IMAGE_URL_MFA_METHODS",
+      "type": "textImage",
+      "title": "Common MFA methods",
+      "text": "<p>Common forms of MFA include:</p><ul><li><strong>Authenticator apps</strong> that generate temporary login codes.</li><li><strong>Push notifications</strong> asking you to approve a login.</li><li><strong>Hardware security keys</strong> that plug into a computer or phone.</li><li><strong>Text message (SMS) codes</strong> sent to a phone.</li></ul><p>Examples of commonly used authenticator apps include:</p><ul><li>Microsoft Authenticator.</li><li>Google Authenticator.</li><li>Duo Mobile.</li><li>Okta Verify.</li></ul><p>These apps generate short codes that change every 30 seconds or so and are used along with your password during login.</p><p>Visit the <strong>Everyday Tools</strong> Playbook in the Training category for more information.</p>",
+      "image": {
+        "src": "/images/mfa_methods.png",
         "alt": "Examples of common MFA methods"
-    }
-    },
-
-    {
-    "type": "textImage",
-    "title": "Stronger MFA methods",
-    "text": "Some MFA methods provide stronger protection than others.\n\n<ul><li><strong>Authenticator apps</strong> are generally safer than text messages because they do not rely on phone networks.</li><li><strong>Hardware security keys</strong> provide one of the strongest forms of MFA protection.</li></ul>\n\nText message codes are still helpful, but they can sometimes be intercepted through phone number attacks or SIM swapping.\n\nWhenever possible, organizations should prefer authenticator apps or hardware security keys.",
-    "image": {
-        "src": "IMAGE_URL_STRONG_MFA",
-        "alt": "Examples of stronger MFA methods"
-    }
+      }
     },
 
     {
       "type": "textImage",
-      "title": "MFA adds protection beyond passwords",
-      "text": "A strong password is still important, but MFA provides a second layer of defense.\n\nIf an attacker steals a password, MFA can help stop them from accessing the account unless they also have the second factor.\n\nThis is why organizations often require MFA for email, remote access, and sensitive systems.",
+      "title": "Stronger MFA methods",
+      "text": "<p>Some MFA methods provide stronger protection than others.</p><ul><li><strong>Authenticator apps</strong> are generally safer than text messages because they do not rely on phone networks.</li><li><strong>Hardware security keys</strong> provide one of the strongest forms of MFA protection.</li></ul><p>Text message codes are still helpful, but they can sometimes be intercepted through phone number attacks or SIM swapping.</p><p>Whenever possible, organizations should prefer authenticator apps or hardware security keys.</p>",
       "image": {
-        "src": "IMAGE_URL_PASSWORD_PLUS_MFA",
-        "alt": "Password plus MFA protection"
+        "src": "/images/mfa_strong.png",
+        "alt": "Examples of stronger MFA methods"
       }
     },
 
     {
       "type": "textImage",
       "title": "Unexpected MFA prompts",
-      "text": "If you receive an MFA prompt that you did not expect, it may be a warning sign.\n\nAn attacker could be trying to log in with your password and hoping you approve the request by mistake.\n\n<strong>Do not approve unexpected login requests.</strong>\n\nUnexpected MFA prompts should be treated seriously and reported according to your organization’s process.",
+      "text": "<p>If you receive an MFA prompt that you did not expect, it may be a warning sign.</p><p>An attacker could be trying to log in with your password and hoping you approve the request by mistake.</p><p style='text-align: center;'><strong><u>Do not approve unexpected login requests.</u></strong></p><p>Unexpected MFA prompts should be treated seriously and reported according to your organization's process.</p><p>Next slide shows the common ways attackers try to get around MFA.</p>",
       "image": {
-        "src": "IMAGE_URL_UNEXPECTED_PROMPT",
-        "alt": "Unexpected MFA approval request"
+        "src": "/images/mfa_unexpected.png",
+        "alt": "Unexpected MFA approval request",
+        "maxWidth": 320
       }
     },
 
     {
       "type": "textImage",
-      "title": "Push fatigue attacks",
-      "text": "A <strong>push fatigue attack</strong> happens when an attacker repeatedly triggers MFA approval requests, hoping the user becomes annoyed, confused, or accidentally approves one.\n\nThis is a form of social engineering.\n\nRepeated unexpected prompts are not normal and should never be approved just to make them stop.",
-      "image": {
-        "src": "IMAGE_URL_PUSH_FATIGUE",
-        "alt": "Repeated MFA push prompts"
-      }
+      "title": "How attackers try to get around MFA",
+      "text": "<p>MFA adds important protection, but attackers may still try to bypass it.</p><ol><li><strong>Phishing</strong> – Attackers may send users to fake login pages that look real in order to steal both the password and the MFA code.</li><li><strong>Push fatigue</strong> – Attackers may repeatedly send approval requests, hoping the user accepts one by mistake or just to make the prompts stop.</li><li><strong>SIM swapping</strong> – If MFA uses text messages, an attacker may try to take over the victim's phone number and receive the codes instead.</li><li><strong>Session theft</strong> – Sometimes attackers steal a valid logged-in session after MFA has already been completed, which can let them access the account without entering a new code.</li><li><strong>Social engineering</strong> – Attackers may pretend to be IT or support staff and ask the user to share a code, approve a login, or help with account access.</li></ol><p style='text-align: center;'><strong><u>Never approve unexpected login requests or share MFA codes.</u></strong></p>"
+    },
+
+    {
+      "type": "textImage",
+      "variant": "did_you_know",
+      "title": "Did you know?",
+      "text": "<p>MFA is highly effective, but attackers may still look for ways around it by targeting people instead of the technology.</p>",
+      "bullets": [
+        {
+          "title": "Push fatigue attacks are real",
+          "text": "Attackers may spam approval requests and hope the user accepts one just to make them stop."
+        },
+        {
+          "title": "Text message MFA is better than nothing, but not the strongest option",
+          "text": "SMS codes can be exposed through phone number attacks or SIM swapping."
+        },
+        {
+          "title": "Support impersonation is common",
+          "text": "Attackers may pretend to be IT or help desk staff and ask users to share codes or approve a login."
+        },
+        {
+          "title": "MFA helps most when users stay alert",
+          "text": "Even strong security controls work best when people verify requests and report suspicious activity quickly."
+        }
+      ]
     },
 
     {
       "type": "textImage",
       "title": "Never share MFA codes",
-      "text": "MFA codes are meant to verify <strong>your</strong> identity.\n\nYou should never share MFA codes, approval prompts, or authentication requests with another person, even if they claim to be from IT, a bank, or another trusted organization.\n\nLegitimate support staff should not ask you to provide your MFA code for routine access.",
+      "text": "<p>MFA codes are meant to verify <strong>your</strong> identity.</p><ul><li><strong>Never share</strong> MFA codes, approval prompts, or authentication requests with anyone.</li><li>This includes people claiming to be from <strong>IT, a bank, customer support, or another trusted organization</strong>.</li><li>Legitimate support staff should not ask for your MFA code for routine access.</li><li>If you receive an unexpected MFA prompt, <strong>do not approve it</strong> and report it using your organization's process.</li></ul><p style='text-align: center;'><strong><u>MFA codes should stay private and be used only by the account owner.</u></strong></p>"
+    },
+
+    {
+      "type": "textImage",
+      "title": "Real-world example: Uber MFA attack",
+      "text": "<p>In 2022, Uber reported a security incident in which an attacker used a contractor's stolen credentials and then targeted the contractor with repeated MFA approval requests.</p><p>Reporting on the incident also described the attacker using social engineering by pretending to be IT support, which helped convince the contractor to approve one of the MFA requests.</p><p>Once one request was accepted, the attacker gained access to internal systems.</p><p>This is a real-world example of how attackers may combine <strong>stolen passwords</strong>, <strong>push fatigue</strong>, and <strong>social engineering</strong> to get around MFA.</p><p style='text-align: center;'><strong><u>Even with MFA enabled, users should never approve an unexpected login request.</u></strong></p><p><strong>References:</strong> <a href='https://www.uber.com/hn/en/newsroom/security-update/' target='_blank' rel='noopener noreferrer'>Uber Security Update</a> | <a href='https://www.bleepingcomputer.com/news/security/uber-hacked-internal-systems-breached-and-vulnerability-reports-stolen/' target='_blank' rel='noopener noreferrer'>BleepingComputer coverage</a></p>",
       "image": {
-        "src": "IMAGE_URL_MFA_CODE_PROTECTION",
-        "alt": "Protecting MFA codes"
+        "src": "/images/mfa_push_fatigue.png",
+        "alt": "Example of repeated MFA approval requests",
+        "maxWidth": 420
       }
     },
 
     {
       "type": "textImage",
       "title": "What to do if something seems wrong",
-      "text": "If you receive an unexpected MFA prompt or think your account may be under attack:\n\n<ol><li>Do not approve the request</li><li>Change your password if needed</li><li>Report the incident using your organization’s process</li><li>Review your account activity if available</li></ol>\n\nQuick action helps reduce the risk of unauthorized access.",
-      "image": {
-        "src": "IMAGE_URL_MFA_RESPONSE",
-        "alt": "Safe response to suspicious MFA activity"
-      }
+      "text": "<p>If you receive an unexpected MFA prompt or think your account may be under attack:</p><ol><li>Do not approve the request.</li><li>Change your password if needed.</li><li>Report the incident using your organization's process.</li><li>Review your account activity if available.</li></ol><p style='text-align: center;'><strong style='color: red;'>Quick action helps reduce the risk of unauthorized access.</strong></p>"
     },
 
     {
@@ -114,7 +134,7 @@
     {
       "type": "results",
       "title": "Quiz Results",
-      "subtitle": "Here’s how you did.",
+      "subtitle": "Here's how you did.",
       "showReview": true,
       "buttons": {
         "restartQuizText": "Restart Quiz",

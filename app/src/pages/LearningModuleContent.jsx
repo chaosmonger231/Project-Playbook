@@ -509,6 +509,19 @@ export default function LearningModuleContent() {
   const showLessonPageCount = !isQuizPage && !isResultsPage && lessonPageNumber != null;
   const showTopLessonNav = !isQuizPage && !isResultsPage && !isQuizWelcome;
 
+  const isDidYouKnowVariant = page?.variant === "did_you_know";
+
+  const contentPanelStyle = {
+    marginTop: 16,
+    borderRadius: 16,
+    padding: 24,
+    background: isDidYouKnowVariant ? "#f8fbf4" : "white",
+    border: isDidYouKnowVariant ? "2px solid #7f9853" : "2px solid #60a5fa",
+    boxShadow: isDidYouKnowVariant
+      ? "0 12px 28px rgba(120,140,70,0.34)"
+      : "0 8px 20px rgba(59,130,246,0.18)",
+  };
+
   const liveHasQuizResult = !!quizResult && Number(quizResult.total) > 0;
   const livePassed =
     liveHasQuizResult &&
@@ -713,7 +726,7 @@ export default function LearningModuleContent() {
             {page.subtitle && <p>{page.subtitle}</p>}
             {page.video && (
               <ModuleVideo
-                videoId={page.video.videoId}
+                video={page.video}
                 title={page.video.caption || "Video"}
               />
             )}
@@ -730,6 +743,15 @@ export default function LearningModuleContent() {
                 style={{ lineHeight: 1.6, whiteSpace: "pre-wrap" }}
                 dangerouslySetInnerHTML={{ __html: page.text }}
               />
+            )}
+
+            {page.video && (
+              <div style={{ marginTop: 16 }}>
+                <ModuleVideo
+                  video={page.video}
+                  title={page.video.caption || "Video"}
+                />
+              </div>
             )}
 
             {Array.isArray(page.bullets) && page.bullets.length > 0 && (
@@ -753,9 +775,11 @@ export default function LearningModuleContent() {
                 alt={page.image.alt || ""}
                 style={{
                   width: "100%",
-                  maxWidth: 900,
+                  maxWidth: page.image.maxWidth || 900,
                   borderRadius: 12,
                   marginTop: 16,
+                  display: "block",
+                  marginInline: "auto",
                 }}
               />
             )}
@@ -767,7 +791,13 @@ export default function LearningModuleContent() {
                     key={idx}
                     src={img.src}
                     alt={img.alt || ""}
-                    style={{ width: "100%", maxWidth: 900, borderRadius: 12 }}
+                    style={{
+                      width: "100%",
+                      maxWidth: img.maxWidth || 900,
+                      borderRadius: 12,
+                      display: "block",
+                      marginInline: "auto",
+                    }}
                   />
                 ))}
               </div>
@@ -800,7 +830,7 @@ export default function LearningModuleContent() {
             <h2>{page.title}</h2>
             {page.video && (
               <ModuleVideo
-                videoId={page.video.videoId}
+                video={page.video}
                 title={page.video.caption || "Video"}
               />
             )}
@@ -1155,18 +1185,7 @@ export default function LearningModuleContent() {
 
       {showTopLessonNav && renderTopLessonNav()}
 
-      <div
-        style={{
-          marginTop: 16,
-          background: "white",
-          borderRadius: 16,
-          padding: 24,
-          border: "2px solid #60a5fa",
-          boxShadow: "0 8px 20px rgba(59,130,246,0.18)",
-        }}
-      >
-        {renderPage()}
-      </div>
+      <div style={contentPanelStyle}>{renderPage()}</div>
     </div>
   );
 }

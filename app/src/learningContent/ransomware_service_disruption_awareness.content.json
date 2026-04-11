@@ -7,56 +7,40 @@
       "title": "Welcome to Ransomware & Service Disruption Awareness",
       "subtitle": "Learn how ransomware can disrupt public services, why reporting and isolation matter, and how local government employees can reduce harm.",
       "video": {
-        "videoId": "VIDEO_ID_GOV_RANSOMWARE_WELCOME",
-        "caption": "Introduction to ransomware and service disruption for local government (replace later)"
+        "provider": "youtube",
+        "videoId": "t4R7UlBOCgg",
+        "caption": "Introduction to ransomware and service disruption for local government"
       }
     },
 
     {
       "type": "textImage",
       "title": "Why ransomware hits governments hard",
-      "text": "Ransomware is a type of malware that can <b>lock systems, encrypt files, and disrupt normal operations</b> until a ransom is demanded.\n\nFor local governments, that does not just mean computer trouble. It can delay payroll, utility billing, records access, permits, court functions, police workflows, and other public services.\n\nWhen services stop working, the impact is felt by both employees and the public.",
-      "video": {
-        "videoId": "VIDEO_ID_GOV_RANSOMWARE_IMPACT",
-        "caption": "Why ransomware is especially disruptive for government services"
-      },
-      "image": {
-        "src": "IMAGE_URL_GOV_RANSOMWARE_IMPACT",
-        "alt": "Local government service disruption caused by ransomware (replace later)"
-      }
+      "text": "<p>Ransomware is a type of malware that can <strong>lock systems, encrypt files, and disrupt normal operations</strong> while attackers demand payment.</p><p>For local governments, that does not just mean computer trouble. It can delay payroll, utility billing, records access, permits, court functions, police workflows, and other public services.</p><p style='text-align: center;'><strong style='color: #b91c1c;'>When services stop working, the impact is felt by both employees and the public.</strong></p>"
     },
 
     {
       "type": "textImage",
       "title": "Close to home: the Golf Manor example",
-      "text": "Ransomware is not just a big-city or federal problem. In Ohio, FOX19 reported that the <b>Village of Golf Manor</b> was hit by a ransomware attack.\n\nAccording to that reporting, the village lost computer files <b>including all backups</b>. The article also described a proposed resolution involving third-party expert guidance that could include advice about a ransom payment.\n\nThat example matters because it shows how a ransomware incident can put a local government under pressure quickly, especially when recovery options are limited.",
+      "text": "<p>Ransomware is not just a big-city or federal problem. In Ohio, the Village of Golf Manor reported a ransomware incident that disrupted systems and raised questions about whether officials should pay to restore access.</p><p>Later coverage said the village considered a larger ransom demand and that council approved payment of <strong>$2,000</strong>. The case also drew attention because Ohio law now restricts when a political subdivision may comply with a ransom demand.</p><p><strong>Ohio Revised Code 9.64</strong> says a political subdivision experiencing a ransomware incident <strong>shall not pay or otherwise comply</strong> unless its legislative authority formally approves the payment or compliance in a resolution or ordinance explaining why it is in the political subdivision's best interest.</p><p style='text-align: center;'><strong style='color: #b91c1c;'>A ransomware incident can put a local government under pressure very quickly, especially when systems and services are already disrupted.</strong></p><p><strong>References:</strong> <a href='https://databreaches.net/2025/12/11/village-of-golf-manor-considering-paying-ransom-amid-cyberattack/' target='_blank' rel='noopener noreferrer'>DataBreaches coverage</a> | <a href='https://codes.ohio.gov/ohio-revised-code/section-9.64' target='_blank' rel='noopener noreferrer'>Ohio Revised Code 9.64</a></p>",
       "video": {
-        "videoId": "VIDEO_ID_GOLF_MANOR_CASE",
-        "caption": "Ohio case study: local government ransomware disruption"
-      },
-      "image": {
-        "src": "IMAGE_URL_GOLF_MANOR_CASE",
-        "alt": "Ohio local government ransomware case study (replace later)"
+        "provider": "youtube",
+        "videoId": "OTOOhi3Q8Hg",
+        "caption": "Ohio village ransomware incident coverage"
       }
     },
 
     {
       "type": "textImage",
       "title": "How ransomware often starts",
-      "text": "Ransomware often begins with something that seems small at first.\n\nCommon entry points include:\n\n• <b>Phishing emails</b> and malicious attachments\n• <b>Compromised accounts</b> or weak passwords\n• <b>Remote access abuse</b>\n• <b>Malicious downloads</b> or unsafe links\n• <b>Unpatched systems</b> or exposed services\n\nEmployees may not always see the technical side, but they can still notice the warning signs early.",
-      "video": {
-        "videoId": "VIDEO_ID_GOV_RANSOMWARE_ENTRY",
-        "caption": "How ransomware commonly enters organizations"
-      },
-      "image": {
-        "src": "IMAGE_URL_GOV_RANSOMWARE_ENTRY",
-        "alt": "Common ransomware entry points in government environments (replace later)"
-      }
+      "text": "<p>Ransomware often begins with something that seems small at first.</p><p><strong>Common entry points include:</strong></p><ul><li><strong>Phishing emails</strong> and malicious attachments.</li><li><strong>Compromised accounts</strong> or weak passwords.</li><li><strong>Remote access abuse.</strong></li><li><strong>Malicious downloads</strong> or unsafe links.</li><li><strong>Unpatched systems</strong> or exposed services.</li></ul><p>Employees may not always see the technical side, but they can still notice warning signs early.</p>"
     },
 
     {
       "type": "textImage",
+      "variant": "did_you_know",
       "title": "Did you know?",
+      "text": "<p>Ransomware is not only a technical problem. It can become a service continuity problem very quickly.</p>",
       "bullets": [
         {
           "title": "Backups can be affected too",
@@ -74,37 +58,21 @@
           "title": "Ransom payment is not a simple solution",
           "text": "Federal guidance warns that paying does not guarantee recovery and may encourage future attacks."
         }
-      ],
-      "image": {
-        "src": "IMAGE_URL_GOV_RANSOMWARE_FACTS",
-        "alt": "Ransomware awareness facts for local government (replace later)"
-      }
+      ]
     },
 
     {
       "type": "textImage",
       "title": "What employees may notice first",
-      "text": "Early warning signs do not always look dramatic.\n\nEmployees may notice:\n\n• Files that suddenly cannot be opened\n• Shared drives becoming unavailable\n• Strange file extensions or ransom notes\n• Systems slowing down or locking users out\n• Unexpected account activity or security alerts\n• Multiple departments losing access at the same time\n\n<b>Do not assume someone else has already reported it.</b>",
-      "video": {
-        "videoId": "VIDEO_ID_GOV_RANSOMWARE_SIGNS",
-        "caption": "Common warning signs of a ransomware incident"
-      },
-      "image": {
-        "src": "IMAGE_URL_GOV_RANSOMWARE_SIGNS",
-        "alt": "Early signs of ransomware in a government office (replace later)"
-      }
+      "text": "<p>Early warning signs do not always look dramatic.</p><p><strong>Employees may notice:</strong></p><ul><li>Files that suddenly cannot be opened.</li><li>Shared drives becoming unavailable.</li><li>Strange file extensions or ransom notes.</li><li>Systems slowing down or locking users out.</li><li>Unexpected account activity or security alerts.</li><li>Multiple departments losing access at the same time.</li></ul><p style='text-align: center;'><strong style='color: #b91c1c;'>Do not assume someone else has already reported it.</strong></p>"
     },
 
     {
       "type": "textImage",
       "title": "What to do first",
-      "text": "If ransomware is suspected:\n\n1) <b>Stop interacting with the affected system</b>\n2) <b>Report the incident immediately</b> through your agency's process\n3) <b>Do not delete files, wipe devices, or try to fix it quietly</b>\n4) <b>If directed by your agency</b>, disconnect affected devices from the network\n5) <b>Follow response instructions</b> from IT, leadership, and incident responders\n\nQuick reporting and isolation can reduce spread and protect other systems.",
-      "video": {
-        "videoId": "VIDEO_ID_GOV_RANSOMWARE_FIRST_STEPS",
-        "caption": "Immediate response steps for suspected ransomware"
-      },
+      "text": "<p>If ransomware is suspected:</p><ol><li><strong>Stop interacting with the affected system.</strong></li><li><strong>Report the incident immediately</strong> through your agency's process.</li><li><strong>Do not delete files, wipe devices, or try to fix it quietly.</strong></li><li><strong>If directed by your agency, disconnect affected devices from the network.</strong></li><li><strong>Follow response instructions</strong> from IT, leadership, and incident responders.</li></ol><p style='text-align: center;'><strong style='color: #b91c1c;'>Quick reporting and isolation can reduce spread and protect other systems.</strong></p>",
       "image": {
-        "src": "IMAGE_URL_GOV_RANSOMWARE_FIRST_STEPS",
+        "src": "/images/govt_systems_flow.png",
         "alt": "Immediate ransomware response flow for local government (replace later)"
       }
     },
@@ -112,52 +80,19 @@
     {
       "type": "textImage",
       "title": "Reporting and outside support",
-      "text": "Ransomware incidents often involve both internal response and outside reporting.\n\nAgencies may need to coordinate with:\n\n• <b>OCIC</b> for Ohio reporting and coordination\n• <b>Auditor of State</b> for the required reporting process\n• <b>FBI and IC3</b> for cybercrime reporting and investigative support\n\nFederal guidance also points to the <b>U.S. Joint Ransomware Task Force</b>, a collaborative effort co-chaired by the FBI and CISA to improve coordination against ransomware threats.",
-      "video": {
-        "videoId": "VIDEO_ID_GOV_RANSOMWARE_REPORTING",
-        "caption": "Ransomware reporting and coordination partners"
-      },
-      "image": {
-        "src": "IMAGE_URL_GOV_RANSOMWARE_REPORTING",
-        "alt": "Ransomware reporting and response partners (replace later)"
-      }
+      "text": "<p>Ransomware incidents often involve both internal response and outside reporting.</p><p><strong>Agencies may need to coordinate with:</strong></p><ul><li><strong>OCIC / Ohio Homeland Security</strong> for Ohio reporting and coordination.</li><li><strong>Auditor of State</strong> for the required reporting process.</li><li><strong>FBI and IC3</strong> for cybercrime reporting and investigative support.</li><li><strong>CISA and the Joint Ransomware Task Force</strong> for broader ransomware coordination and guidance.</li></ul><p><strong>Ohio law</strong> requires political subdivisions to notify Ohio Homeland Security as soon as possible but no later than 7 days after discovery, and the Auditor of State no later than 30 days after discovery.</p><p><strong>Helpful links:</strong> <a href='https://cyber.ohio.gov/priorities/ocic' target='_blank' rel='noopener noreferrer'>OCIC</a> | <a href='https://www.ic3.gov/' target='_blank' rel='noopener noreferrer'>IC3</a> | <a href='https://tips.fbi.gov/' target='_blank' rel='noopener noreferrer'>FBI Tips</a> | <a href='https://www.cisa.gov/joint-ransomware-task-force' target='_blank' rel='noopener noreferrer'>Joint Ransomware Task Force</a></p>"
     },
 
     {
       "type": "textImage",
       "title": "Why backups and continuity matter",
-      "text": "Good backups are important, but they are not enough by themselves.\n\nBackups help only if they are:\n\n• <b>Regularly maintained</b>\n• <b>Tested</b> to confirm recovery works\n• <b>Protected from unauthorized access</b>\n• <b>Separated well enough</b> that attackers cannot easily encrypt them too\n\nGovernment organizations also need continuity planning so critical services can keep functioning during recovery.",
-      "video": {
-        "videoId": "VIDEO_ID_GOV_RANSOMWARE_BACKUPS",
-        "caption": "Why backups and continuity planning matter"
-      },
-      "image": {
-        "src": "IMAGE_URL_GOV_RANSOMWARE_BACKUPS",
-        "alt": "Backups and continuity planning for local government (replace later)"
-      }
-    },
-
-    {
-      "type": "video",
-      "title": "Real-world ransomware scenario",
-      "video": {
-        "videoId": "VIDEO_ID_GOV_RANSOMWARE_SCENARIO",
-        "caption": "Example of how ransomware can spread and disrupt public services (replace later)"
-      }
+      "text": "<p>Good backups are important, but they are not enough by themselves.</p><p>Backups help only if they are:</p><ul><li><strong>Regularly maintained.</strong></li><li><strong>Tested</strong> to confirm recovery works.</li><li><strong>Protected from unauthorized access.</strong></li><li><strong>Separated well enough</strong> that attackers cannot easily encrypt them too.</li></ul><p>Government organizations also need continuity planning so critical services can keep functioning during recovery.</p>"
     },
 
     {
       "type": "textImage",
       "title": "What employees should remember",
-      "text": "Ransomware response is not just a technical issue. It is about protecting operations, services, and public trust.\n\nRemember:\n\n• <b>Report early</b>\n• <b>Do not hide the problem</b>\n• <b>Do not destroy evidence</b>\n• <b>Follow agency response procedures</b>\n• <b>Support continuity and recovery efforts</b>\n\n<b>Fast action can reduce damage across the whole organization.</b>",
-      "video": {
-        "videoId": "VIDEO_ID_GOV_RANSOMWARE_RECAP",
-        "caption": "Final takeaways for ransomware and service disruption awareness"
-      },
-      "image": {
-        "src": "IMAGE_URL_GOV_RANSOMWARE_RECAP",
-        "alt": "Ransomware awareness takeaways for government employees (replace later)"
-      }
+      "text": "<p>Ransomware response is not just a technical issue. It is about protecting operations, services, and public trust.</p><p><strong>Remember:</strong></p><ul><li><strong>Report early.</strong></li><li><strong>Do not hide the problem.</strong></li><li><strong>Do not destroy evidence.</strong></li><li><strong>Follow agency response procedures.</strong></li><li><strong>Support continuity and recovery efforts.</strong></li></ul><p style='text-align: center;'><strong style='color: #b91c1c;'>Fast action can reduce damage across the whole organization.</strong></p>"
     },
 
     {
@@ -176,7 +111,7 @@
     {
       "type": "results",
       "title": "Quiz Results",
-      "subtitle": "Here’s how you did.",
+      "subtitle": "Here's how you did.",
       "showReview": true,
       "buttons": {
         "restartQuizText": "Restart Quiz",

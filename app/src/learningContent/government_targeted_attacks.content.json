@@ -7,56 +7,33 @@
       "title": "Welcome to Government Systems & Targeted Attacks",
       "subtitle": "Learn why local governments are attractive cyber targets and how employees can help reduce risk.",
       "video": {
-        "videoId": "VIDEO_ID_GOV_WELCOME",
-        "caption": "Introduction to targeted attacks against government systems (replace later)"
+        "provider": "youtube",
+        "videoId": "JGa9jsbTWAg",
+        "caption": "Introduction to targeted attacks against government systems"
       }
     },
 
     {
       "type": "textImage",
       "title": "Why local governments are targeted",
-      "text": "Local governments may not seem like obvious cyber targets, but they often manage <b>essential public services</b> and sensitive operational data.\n\nThat can include public safety systems, water or utility operations, payroll, court or administrative records, finance systems, permits, citizen services, and internal communications.\n\nAttackers know that even a small government office may feel pressure to restore services quickly. That makes local agencies attractive targets for ransomware, account compromise, and other disruptive attacks.",
-      "video": {
-        "videoId": "VIDEO_ID_GOV_TARGETED",
-        "caption": "Why local governments are frequent cyberattack targets"
-      },
-      "image": {
-        "src": "IMAGE_URL_GOV_TARGETED",
-        "alt": "Local government systems and services illustration (replace later)"
-      }
+      "text": "<p>Local governments may not seem like obvious cyber targets, but they often manage essential public services and sensitive operational data, including public safety systems, water or utility operations, payroll and finance systems, court or administrative records, permits and citizen services, and internal communications.</p><p>Attackers know that even a small government office may feel pressure to restore services quickly. That makes local agencies attractive targets for <strong>ransomware</strong>, <strong>account compromise</strong>, <strong>payment fraud</strong>, and <strong>other disruptive attacks</strong>.</p><p style='text-align: center;'><strong style='color: #b91c1c;'>A cyber incident in local government can affect real services that communities depend on every day.</strong></p>"
     },
 
     {
       "type": "textImage",
       "title": "Not every attacker wants the same thing",
-      "text": "Government agencies can face different types of cyber threats.\n\nSome attackers want <b>money</b>, such as through ransomware or payment fraud.\n\nOthers want <b>access</b> to systems, sensitive information, or internal communications. Some highly organized groups may try to stay hidden for a long time and quietly collect information or wait for the right moment to cause disruption.\n\nYou may hear these groups described as <b>advanced persistent threats (APTs)</b>. Employees do not need to memorize that term, but it is important to understand that some attacks are planned, patient, and highly targeted.",
-      "video": {
-        "videoId": "VIDEO_ID_GOV_ATTACKER_TYPES",
-        "caption": "Different kinds of attackers and their goals"
-      },
+      "text": "<p>Government agencies can face different types of cyber threats.</p><ul><li><strong>Some attackers want money</strong> through ransomware, extortion, or fraud.</li><li><strong>Others want access</strong> to systems, sensitive information, or internal communications.</li><li><strong>Some groups are patient and highly targeted</strong> and may stay hidden while collecting information or waiting for the right time to cause disruption.</li></ul><p>You may hear these more organized groups described as <strong>Advanced Persistent Threats (APTs)</strong>. Employees do not need to memorize that term, but it helps to understand that some attacks are planned, patient, and highly targeted.</p>",
       "image": {
-        "src": "IMAGE_URL_GOV_ATTACKER_TYPES",
+        "src": "/images/govt_systems_attacker.png",
         "alt": "Different government cyber threat actors (replace later)"
       }
     },
 
     {
       "type": "textImage",
-      "title": "Why this matters to everyday staff",
-      "text": "Cybersecurity is not only about servers and technical tools. Government employees can become targets through everyday work.\n\nAttackers may impersonate vendors, supervisors, agency partners, law enforcement, state officials, or IT support. They may use email, phone calls, text messages, fake login pages, or urgent requests to manipulate employees into sharing information or taking unsafe action.\n\nA single mistake can lead to account compromise, data exposure, service disruption, or a larger incident affecting the community.",
-      "video": {
-        "videoId": "VIDEO_ID_GOV_STAFF_ROLE",
-        "caption": "How everyday staff can become part of a targeted attack"
-      },
-      "image": {
-        "src": "IMAGE_URL_GOV_STAFF_ROLE",
-        "alt": "Government employee targeted by cyberattack illustration (replace later)"
-      }
-    },
-
-    {
-      "type": "textImage",
+      "variant": "did_you_know",
       "title": "Did you know?",
+      "text": "<p>Even smaller agencies can be attractive targets when they support important public operations.</p>",
       "bullets": [
         {
           "title": "Small agencies can still be high-value targets",
@@ -83,37 +60,44 @@
 
     {
       "type": "textImage",
+      "title": "Why this matters to everyday staff",
+      "text": "<p>Cybersecurity is not only about servers and technical tools. Government employees can become targets through everyday work. Attackers may impersonate vendors, supervisors, agency partners, law enforcement, state officials, or IT support. They may use email, phone calls, text messages, fake login pages, or urgent requests to manipulate employees into sharing information or taking unsafe action.</p><p>A single mistake can lead to account compromise, data exposure, service disruption, or a larger incident affecting the community.</p><p style='text-align: center;'><strong style='color: #b91c1c;'>Everyday employees can play an important role in stopping targeted attacks early.</strong></p>"
+    },
+
+    {
+      "type": "textImage",
       "title": "Common warning signs",
-      "text": "Some attacks begin with subtle signs before major damage is obvious.\n\nWatch for things like:\n\n• Unexpected password reset or MFA notifications\n• Suspicious messages pretending to be from agency leadership or IT\n• Files, folders, or shared drives behaving strangely\n• Login alerts from unfamiliar devices or locations\n• Requests for sensitive information that feel urgent or unusual\n• Systems suddenly slowing down, failing, or locking users out\n\nThese signs do not always prove an attack, but they should never be ignored.",
+      "text": "<p>Some attacks begin with subtle signs before major damage is obvious.</p><p><strong>Watch for things like:</strong></p><ul><li>Unexpected password reset or MFA notifications</li><li>Suspicious messages pretending to be from leadership, vendors, or IT</li><li>Files, folders, or shared drives behaving strangely</li><li>Login alerts from unfamiliar devices or locations</li><li>Requests for sensitive information that feel urgent or unusual</li><li>Systems suddenly slowing down, failing, or locking users out</li></ul><p style='text-align: center;'><strong style='color: #b91c1c;'>These signs do not always prove an attack, but they should never be ignored.</strong></p>"
+    },
+
+    {
+      "type": "textImage",
+      "title": "Real-world government impact",
+      "text": "<p>A recent Ohio example shows how a cyberattack can quickly affect a local government. In late 2025, the Village of Golf Manor dealt with a ransomware incident that disrupted systems and raised questions about whether officials should pay to restore access.</p><p>Reporting on the case said the village considered a <strong>$10,000</strong> ransom demand, and later coverage noted that council approved payment of <strong>$2,000</strong>. The case also drew attention because Ohio law now places restrictions on when a political subdivision may comply with a ransom demand.</p><p>Under Ohio Revised Code Section 9.64, a political subdivision experiencing a ransomware incident <strong>shall not pay or otherwise comply</strong> unless its legislative authority formally approves the payment or compliance in a resolution or ordinance explaining why it is in the political subdivision's best interest. The same law also requires reporting the incident to the executive director of Ohio Homeland Security as soon as possible, but no later than seven days after discovery.</p><p style='text-align: center;'><strong style='color: #b91c1c;'>When government systems are disrupted, the whole community can feel the impact.</strong></p><p style='text-align: center; font-size: 14px; opacity: 0.8;'>Reference video: <a href='https://www.youtube.com/watch?v=KCFBp9gW4ts' target='_blank' rel='noopener noreferrer'>YouTube source</a>.</p><p><strong>References:</strong> <a href='https://databreaches.net/2025/12/11/village-of-golf-manor-considering-paying-ransom-amid-cyberattack/' target='_blank' rel='noopener noreferrer'>DataBreaches coverage</a> | <a href='https://codes.ohio.gov/ohio-revised-code/section-9.64' target='_blank' rel='noopener noreferrer'>Ohio Revised Code 9.64</a></p>",
       "video": {
-        "videoId": "VIDEO_ID_GOV_WARNING_SIGNS",
-        "caption": "How to recognize warning signs of targeted activity"
-      },
-      "image": {
-        "src": "IMAGE_URL_GOV_WARNING_SIGNS",
-        "alt": "Government cyber warning signs illustration (replace later)"
+        "provider": "youtube",
+        "videoId": "KCFBp9gW4ts",
+        "caption": "Ohio village ransomware incident coverage"
       }
     },
 
     {
-      "type": "video",
-      "title": "Real-world government impact",
+      "type": "textImage",
+      "title": "Targeted threats and national impact",
+      "text": "<p>As mentioned earlier, some advanced targeted attacks are not just about money. Some attackers may want long-term access, disruption, or sensitive information.</p><p>This reference video is older, but it helps show how serious targeted attacks against government systems can be.</p><p style='text-align: center;'><strong style='color: #b91c1c;'>If you think you may be dealing with an advanced targeted attack, notify the federal government as soon as possible. Lives, public safety, and critical services may depend on it.</strong></p><p style='text-align: center; font-size: 14px; opacity: 0.8;'>Reference video: <a href='https://www.youtube.com/watch?v=kqSL4vS_9zw' target='_blank' rel='noopener noreferrer'>YouTube source</a>.</p><p><strong>Federal reporting resources:</strong> <a href='https://www.ic3.gov/' target='_blank' rel='noopener noreferrer'>IC3</a> | <a href='https://www.cisa.gov/report' target='_blank' rel='noopener noreferrer'>CISA Report an Incident</a> | <a href='https://tips.fbi.gov/' target='_blank' rel='noopener noreferrer'>FBI Tips</a></p>",
       "video": {
-        "videoId": "VIDEO_ID_GOV_REAL_WORLD",
-        "caption": "Example of how a cyber incident can affect government operations and services (replace later)"
+        "provider": "youtube",
+        "videoId": "kqSL4vS_9zw",
+        "caption": "Reference video on targeted government cyber threats"
       }
     },
 
     {
       "type": "textImage",
       "title": "What employees should do",
-      "text": "If you notice suspicious activity or receive an unusual request:\n\n1) <b>Pause before acting</b>\n2) <b>Do not share passwords, MFA codes, or sensitive data</b>\n3) <b>Verify unusual requests through trusted channels</b>\n4) <b>Report suspicious activity immediately</b> using your agency's reporting process\n5) <b>Follow guidance from IT, security, or leadership</b>\n\nFast reporting supports the agency's ability to detect, respond, and recover before a problem grows worse.",
-      "video": {
-        "videoId": "VIDEO_ID_GOV_EMPLOYEE_RESPONSE",
-        "caption": "How government employees should respond to suspicious activity"
-      },
+      "text": "<p><strong>Preparation matters before an incident happens.</strong></p><p>Local governments and municipal utilities can reduce risk by taking practical steps ahead of time:</p><ol><li><strong>Keep systems updated.</strong> Regularly patch operating systems, software, and device firmware, especially for internet-facing systems. Remove end-of-life devices and address known vulnerabilities.</li><li><strong>Plan for manual operations.</strong> Critical public services such as water treatment, energy delivery, and emergency communications should have continuity plans if computer systems or automation become unavailable.</li><li><strong>Isolate critical infrastructure.</strong> Separate operational technology and utility control systems from internet-connected business networks whenever possible.</li><li><strong>Limit remote access.</strong> Remote access should be tightly controlled and protected with strong multi-factor authentication.</li><li><strong>Be cautious with fear-based sales tactics.</strong> Security decisions should be based on actual risk and operational need, not pressure or urgency from outside vendors.</li></ol><p><strong>If you notice suspicious activity or receive an unusual request:</strong></p><ol><li><strong>Pause before acting.</strong></li><li><strong>Do not share passwords, MFA codes, or sensitive data.</strong></li><li><strong>Verify unusual requests through trusted channels.</strong></li><li><strong>Follow your agency's incident response or reporting plan</strong> if one exists.</li><li><strong>Report suspicious activity immediately</strong> using your agency's approved reporting process.</li><li><strong>Write down or record useful details</strong> such as the time, sender, phone number, message content, affected system, screenshots, or unusual behavior, if it is safe to do so.</li><li><strong>Contact the appropriate outside resources</strong> when needed.</li></ol><p><strong>Helpful reporting links:</strong></p><ul><li><strong>Ohio Cyber Integration Center (OCIC):</strong> <a href='https://cyber.ohio.gov/priorities/ocic' target='_blank' rel='noopener noreferrer'>CyberOhio OCIC page</a>.</li><li><strong>Ohio reporting guidance:</strong> <a href='https://homelandsecurity.ohio.gov/ohio-cyber-integration-center/reporting-guidance' target='_blank' rel='noopener noreferrer'>Ohio Homeland Security reporting guidance</a>.</li><li><strong>Internet Crime Complaint Center (IC3):</strong> <a href='https://www.ic3.gov/' target='_blank' rel='noopener noreferrer'>www.ic3.gov</a>.</li><li><strong>FBI Cincinnati:</strong> <a href='https://www.fbi.gov/contact-us/field-offices/cincinnati' target='_blank' rel='noopener noreferrer'>FBI Cincinnati Field Office</a>.</li><li><strong>FBI tips:</strong> <a href='https://tips.fbi.gov/' target='_blank' rel='noopener noreferrer'>tips.fbi.gov</a>.</li></ul><p><strong>Preparation resource:</strong> <a href='https://www.lmc.org/news-publications/publications/city-spot/global-cybersecurity-conflicts/' target='_blank' rel='noopener noreferrer'>League of Minnesota Cities – Global Cybersecurity Conflicts</a>.</p><p><strong>Ohio contact details:</strong> OCIC@dps.ohio.gov | 614-387-1089.</p><p style='text-align: center;'><strong style='color: #b91c1c;'>Fast reporting helps the agency detect, respond, and recover before a problem grows worse.</strong></p>",
       "image": {
-        "src": "IMAGE_URL_GOV_EMPLOYEE_RESPONSE",
+        "src": "/images/govt_systems_flow.png",
         "alt": "Government incident reporting and response flow (replace later)"
       }
     },
@@ -134,7 +118,7 @@
     {
       "type": "results",
       "title": "Quiz Results",
-      "subtitle": "Here’s how you did.",
+      "subtitle": "Here's how you did.",
       "showReview": true,
       "buttons": {
         "restartQuizText": "Restart Quiz",

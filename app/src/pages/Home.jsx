@@ -10,7 +10,7 @@ export default function Home() {
 
   async function testSignedUrl() {
     const apiBase = "https://e71s0lsvsd.execute-api.us-east-1.amazonaws.com/prod";
-    const key = "Images/meme2.jpg";
+    const key = "Images/Lessons Module - Multi-Factor Authentication (General).mp4";
 
     try {
       const res = await fetch(

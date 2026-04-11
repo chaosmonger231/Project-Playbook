@@ -7,6 +7,7 @@
       "title": "Welcome to Phishing & Email Safety",
       "subtitle": "Learn how phishing works and how to spot it before damage happens.",
       "video": {
+        "provider": "youtube",
         "videoId": "xIQOLK_GeUo",
         "caption": "Introduction to phishing (replace later)"
       }
@@ -15,8 +16,9 @@
     {
       "type": "textImage",
       "title": "What is phishing?",
-      "text": "Phishing is a <b>social engineering attack</b> where someone pretends to be a trusted source to trick you into clicking a link, opening an attachment, or sharing sensitive information.\n\nSocial engineering means <b>manipulating people</b> into revealing confidential information or performing unsafe actions.\n\nThese messages are designed to look legitimate and often target people through email, text messages, or fake websites.\n\nThe goal is usually to steal passwords, deliver malware, or gain access to internal systems.",
+      "text": "<p>Phishing is a <strong>social engineering attack</strong> where someone pretends to be a trusted source to trick you into clicking a link, opening an attachment, or sharing sensitive information.</p><p>Social engineering means <strong>manipulating people</strong> into revealing confidential information or performing unsafe actions.</p><p>These messages are designed to look legitimate and may target people through email, text messages, fake websites, or even phone calls.</p><p>The goal is often to steal passwords, deliver malware, or gain access to internal systems.</p>",
       "video": {
+        "provider": "youtube",
         "videoId": "VIDEO_ID_PHISHING_EXPLAINED",
         "caption": "Short explanation of phishing attacks"
       },
@@ -29,8 +31,9 @@
     {
       "type": "textImage",
       "title": "Types of phishing",
-      "text": "Phishing can happen through multiple communication channels.\n\nSome common types include:\n\n• <b>Email phishing</b> – Fake emails pretending to be from companies, coworkers, or vendors.\n• <b>Smishing</b> – Phishing messages sent through SMS or text messages.\n• <b>Vishing</b> – Phone calls where attackers impersonate IT staff, banks, or government agencies.\n\nEven if the message seems legitimate, always verify before responding or clicking anything. \n\nSmishing Example impersonating IRS. ",
+      "text": "<p>Phishing can happen through multiple communication channels.</p><p><strong>Common types include:</strong></p><ul><li><strong>Email phishing</strong> – Fake emails pretending to be from companies, coworkers, or vendors.</li><li><strong>Smishing</strong> – Phishing messages sent through SMS or text messages.</li><li><strong>Vishing</strong> – Phone calls where attackers impersonate IT staff, banks, or government agencies.</li></ul><p>Even if the message seems legitimate, always verify before responding or clicking anything.</p><p>This example shows a smishing message impersonating the IRS.</p>",
       "video": {
+        "provider": "youtube",
         "videoId": "VIDEO_ID_PHISHING_TYPES",
         "caption": "Overview of different phishing methods"
       },
@@ -42,53 +45,50 @@
 
     {
       "type": "textImage",
+      "variant": "did_you_know",
       "title": "Did you know?",
+      "text": "<p>Phishing messages can be highly convincing, and attackers often make small changes that are easy to miss.</p>",
       "bullets": [
         {
-          "title": "Phishing emails can look almost identical to real messages",
+          "title": "Phishing messages can look almost identical to real ones",
           "text": "Attackers often copy logos, tone, formatting, and even email signatures to appear legitimate."
         },
         {
           "title": "Some phishing attacks use look-alike domains",
-          "text": "For example, micr0soft.com instead of microsoft.com — a difference that’s easy to miss."
+          "text": "For example, micr0soft.com instead of microsoft.com — a small difference that can be easy to miss."
         },
         {
           "title": "Business Email Compromise (BEC) is common",
-          "text": "Attackers impersonate a boss or vendor to request money, wire transfers, or gift cards."
+          "text": "Attackers may impersonate a boss, executive, or vendor to request money, gift cards, wire transfers, or sensitive data."
         },
         {
           "title": "Urgency is a major red flag",
-          "text": "Messages like \"act now\" or \"final notice\" are designed to pressure you into mistakes."
-        },
-        {
-          "title": "Did you know?",
-          "text": "According to research data by Statista, the number of phishing sites has more than doubled during the Pandemic and while it has come down from top, recent indicates that the numbers are rising again."
+          "text": "Messages like \"act now,\" \"final notice,\" or \"your account will be locked\" are designed to pressure people into mistakes."
         }
-      ],
+      ]
+    },
+
+    {
+      "type": "textImage",
+      "title": "Phishing activity over time",
+      "text": "<p>This chart is meant to show that phishing has remained a major threat over time, with large waves of activity and continued criminal interest in phishing campaigns.</p><p><strong>Reference:</strong> <a href='https://www.statista.com/statistics/266155/number-of-phishing-attacks-worldwide/?srsltid=AfmBOoqK4ZF7OSNLu55KMlu96uBFkdoUB476l82kfNT8R3vCx87WVPAc' target='_blank' rel='noopener noreferrer'>Statista – Number of phishing attacks worldwide</a></p>",
       "image": {
         "src": "/images/phishing_example2.png",
-        "alt": "Did you know graphic (replace later)"
+        "alt": "Chart showing phishing attack activity over time"
       }
     },
 
     {
       "type": "textImage",
       "title": "Common phishing red flags",
-      "text": "Most phishing attempts include warning signs if you know what to look for.\n\nBe cautious of:\n\n• Urgent or threatening language\n• Requests for passwords or MFA codes\n• Unexpected attachments or links\n• Sender addresses that don’t quite match\n• Messages that pressure you to act quickly\n\nWhen in doubt, pause and verify before taking action.",
-      "video": {
-        "videoId": "VIDEO_ID_REDFLAGS",
-        "caption": "How to identify phishing red flags"
-      },
-      "image": {
-        "src": "IMAGE_URL_REDFLAGS",
-        "alt": "Common phishing red flags (replace later)"
-      }
+      "text": "<p>Most phishing attempts include warning signs if you know what to look for.</p><p><strong>Be cautious of:</strong></p><ul><li>Urgent or threatening language.</li><li>Requests for passwords or MFA codes.</li><li>Unexpected attachments, links, or QR codes.</li><li>Sender addresses that do not quite match.</li><li>Messages that pressure you to act quickly.</li></ul><p style='text-align: center;'><strong style='color:red;'>When in doubt, pause and verify before taking action.</strong></p>"
     },
 
     {
       "type": "video",
       "title": "Real-world phishing example",
       "video": {
+        "provider": "youtube",
         "videoId": "V_oukGUTacg",
         "caption": "Breakdown of a realistic phishing attempt (replace later)"
       }
@@ -97,15 +97,7 @@
     {
       "type": "textImage",
       "title": "What to do if you spot phishing",
-      "text": "If you believe a message is phishing:\n\n1) <b>Do not click</b> links or open attachments\n2) <b>Do not reply</b> to the message\n3) <b>Report</b> the incident using your organization’s reporting process\n4) <b>Delete</b> the email after reporting\n\nReporting helps protect not just you, but everyone in your organization.",
-      "video": {
-        "videoId": "VIDEO_ID_REPORT_PROCESS",
-        "caption": "Example of how phishing reporting works"
-      },
-      "image": {
-        "src": "IMAGE_URL_REPORTING_FLOW",
-        "alt": "Phishing reporting process (replace later)"
-      }
+      "text": "<p>If you believe a message is phishing:</p><ol><li><strong>Do not click</strong> links or open attachments.</li><li><strong>Do not reply</strong> to the message.</li><li><strong>Use your email provider's report spam or report phishing feature</strong> if one is available.</li><li><strong>Report</strong> the message using your organization's approved reporting process.</li><li><strong>Delete</strong> the message after reporting, if instructed by your organization.</li></ol><p style='text-align: center; margin-top: 20px;'><strong style='color: #b91c1c;'>Reporting helps protect not just you, but everyone in your organization.</strong></p>"
     },
 
     {
@@ -124,7 +116,7 @@
     {
       "type": "results",
       "title": "Quiz Results",
-      "subtitle": "Here’s how you did.",
+      "subtitle": "Here's how you did.",
       "showReview": true,
       "buttons": {
         "restartQuizText": "Restart Quiz",
