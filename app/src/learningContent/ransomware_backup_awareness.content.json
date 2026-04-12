@@ -7,115 +7,86 @@
       "title": "Welcome to Ransomware & Backup Awareness",
       "subtitle": "Learn how ransomware can affect daily operations, why backups matter, and how employees can reduce business risk.",
       "video": {
-        "videoId": "VIDEO_ID_RANSOMWARE_WELCOME",
+        "provider": "youtube",
+        "videoId": "QIpzpl9lVXQ",
         "caption": "Introduction to ransomware and backup awareness (replace later)"
       }
     },
-
+    
     {
       "type": "textImage",
       "title": "What is ransomware?",
-      "text": "Ransomware is a type of cyberattack where criminals lock, encrypt, or make files and systems unusable until a payment demand is met.\n\nFor a small business, that can mean losing access to customer records, invoices, scheduling systems, shared drives, email, or even the computers employees rely on every day.\n\nRansomware is not just an IT problem. It can disrupt sales, operations, payroll, customer service, and trust.",
-      "video": {
-        "videoId": "VIDEO_ID_RANSOMWARE_EXPLAINED",
-        "caption": "Short explanation of how ransomware affects organizations"
-      },
-      "image": {
-        "src": "IMAGE_URL_RANSOMWARE_EXPLAINED",
-        "alt": "Ransomware warning or locked files example (replace later)"
-      }
+      "text": "<p>Ransomware is a type of cyberattack where criminals lock, encrypt, or make files and systems unusable until a payment demand is met. For a small business, that can mean losing access to customer records, invoices, scheduling systems, shared drives, email, or even the computers employees rely on every day.</p><p style='text-align: center;'><strong style='color: #b91c1c;'>Ransomware is not just an IT problem. It can disrupt sales, operations, payroll, customer service, and trust.</strong></p>"
     },
 
     {
       "type": "textImage",
       "title": "How ransomware often gets in",
-      "text": "Ransomware frequently begins with everyday mistakes or unsafe activity.\n\nCommon entry points include:\n\n• Clicking a phishing email link or attachment\n• Using weak or reused passwords\n• Logging into compromised websites or fake portals\n• Using outdated systems or software\n• Opening suspicious files from unknown senders\n\nAttackers often look for the easiest way in, which is why employee awareness matters so much.",
-      "video": {
-        "videoId": "VIDEO_ID_RANSOMWARE_ENTRY",
-        "caption": "Common ransomware entry points"
-      },
-      "image": {
-        "src": "IMAGE_URL_RANSOMWARE_ENTRY",
-        "alt": "Common ways ransomware enters an organization"
-      }
-    },
-
-    {
-        "type": "textImage",
-        "title": "Close to home: an Ohio example",
-        "text": "Ransomware incidents do not only happen to giant companies. In Ohio, Kettering Health publicly dealt with a ransomware attack that disrupted operations and forced the cancellation of elective inpatient and outpatient procedures.\n\nThat example shows the real danger of ransomware: one cyberattack can interrupt normal work, delay services, create confusion, and put heavy pressure on the organization responding to it.\n\nEven if your business is smaller and in a different industry, the lesson is the same. Ransomware can cause serious disruption close to home, and preparation matters before an incident happens.",
-        "video": {
-            "videoId": "VIDEO_ID_RANSOMWARE_OHIO_CASE",
-            "caption": "Ohio ransomware case study (replace later)"
+      "text": "<p>Ransomware frequently begins with everyday mistakes, weak security practices, or exposed systems.</p><ul><li><strong>Clicking a phishing email link or attachment</strong></li><li><strong>Using weak or reused passwords</strong></li><li><strong>Logging into compromised websites or fake portals</strong></li><li><strong>Using outdated systems or software</strong></li><li><strong>Opening suspicious files from unknown senders</strong></li><li><strong>Leaving internet-facing systems unpatched</strong></li></ul><p>Attackers often look for the easiest way in, which is why <strong>employee awareness</strong> and <strong>basic cyber hygiene</strong> matter so much.</p><p><strong>Real-world examples:</strong></p><p><strong>SamSam:</strong> CrowdStrike says SamSam was observed using <strong>unpatched server-side software</strong> to enter environments. This is a good reminder that ransomware does not always begin with one bad click. In some cases, attackers get in through a vulnerable internet-facing system, create a backdoor, move through the network, and then launch the ransomware later. SamSam was also linked to the 2018 attack on the city of Atlanta, where major city services were disrupted.</p><p><strong>DoppelPaymer:</strong> CrowdStrike describes DoppelPaymer as a later ransomware family related to <strong>BitPaymer</strong>. CrowdStrike’s reporting also connects it to <strong>Dridex-linked intrusion activity</strong>, showing how attackers may first gain access, learn the environment, move laterally, and only then deploy ransomware across a larger organization.</p><p style='text-align: center;'><strong style='color: #b91c1c;'>Ransomware does not always start with one bad click. It can also begin with an unpatched system or an earlier malware infection that gave attackers time to prepare.</strong></p><p><strong>Reference:</strong> <a href='https://www.crowdstrike.com/en-us/cybersecurity-101/ransomware/ransomware-examples/' target='_blank' rel='noopener noreferrer'>CrowdStrike: Ransomware Examples</a></p>",
+      "images": [
+        {
+          "src": "/images/ransomware_DoppelPaymer_example.png",
+          "alt": "DoppelPaymer ransomware example",
+          "maxWidth": 620
         },
-        "image": {
-            "src": "IMAGE_URL_RANSOMWARE_OHIO_CASE",
-            "alt": "Ohio ransomware case study illustration (replace later)"
+        {
+          "src": "/images/ransomware_SamSam_example.png",
+          "alt": "SamSam ransomware example",
+          "maxWidth": 620
         }
+      ]
+    },
+    
+    {
+      "type": "textImage",
+      "title": "Close to home: an Ohio example",
+      "text": "<p>Ransomware incidents do not only happen to large organizations. In Ohio, <strong>Kettering Health</strong> publicly dealt with a ransomware attack that disrupted operations and led to the cancellation of some elective inpatient and outpatient procedures.</p><p style='background: rgba(185, 28, 28, 0.08); border-left: 4px solid #b91c1c; padding: 12px 14px; border-radius: 10px;'><strong>Why this matters:</strong> One cyberattack can interrupt normal work, delay services, create confusion, and put heavy pressure on the organization responding to it.</p><p>Even if your organization is smaller and in a different industry, the lesson is the same: <strong>ransomware can cause serious disruption close to home</strong>, and preparation matters before an incident happens.</p><p><strong>Reference:</strong> <a href='https://www.youtube.com/watch?v=MkGOXbQKp2M' target='_blank' rel='noopener noreferrer'>WLWT coverage of the Kettering Health ransomware incident</a></p><p style='font-size: 0.95em; color: #555;'><em>Project Playbook is not associated with WLWT.</em></p>",
+      "video": {
+        "provider": "youtube",
+        "videoId": "MkGOXbQKp2M",
+        "caption": "WLWT coverage of the Kettering Health ransomware incident"
+      }
     },
 
     {
       "type": "textImage",
       "title": "Did you know?",
-      "bullets": [
-        {
-          "title": "Ransomware can affect backups too",
-          "text": "If backups are connected, exposed, or not protected properly, attackers may encrypt or delete them along with other files."
-        },
-        {
-          "title": "Operations can stop quickly",
-          "text": "Even a short outage can affect billing, orders, payroll, communication, and customer service."
-        },
-        {
-          "title": "Not every ransomware incident starts with a big warning",
-          "text": "Sometimes the first sign is unusual account activity, missing files, or systems acting strangely."
-        },
-        {
-          "title": "Employees play an important role in prevention",
-          "text": "Reporting suspicious messages, avoiding risky clicks, and following safe habits can stop an incident before it spreads."
-        }
-      ],
-      "image": {
-        "src": "IMAGE_URL_RANSOMWARE_DID_YOU_KNOW",
-        "alt": "Did you know ransomware graphic (replace later)"
-      }
+      "variant": "did_you_know",
+      "text": "<ul><li>Ransomware appeared in <strong>44%</strong> of breaches analyzed in Verizon’s 2025 Data Breach Investigations Report, up from 32% the year before.<br><a href='https://www.verizon.com/about/news/2025-data-breach-investigations-report' target='_blank' rel='noopener noreferrer'>Source: Verizon article on the 2025 DBIR</a></li><li>Verizon also reported ransomware attacks rose <strong>37%</strong> year over year.<br><a href='https://www.verizon.com/about/news/2025-data-breach-investigations-report' target='_blank' rel='noopener noreferrer'>Source: Verizon article on the 2025 DBIR</a></li><li>Chainalysis reported a <strong>35%</strong> year-over-year drop in ransomware payments in 2024, and said fewer than half of recorded incidents resulted in a victim payment.<br><a href='https://www.chainalysis.com/blog/crypto-crime-ransomware-victim-extortion-2025/' target='_blank' rel='noopener noreferrer'>Source: Chainalysis 2025 ransomware payments article</a></li><li>IBM reported that the average cost of an extortion or ransomware incident remained high at <strong>$5.08 million</strong> when the incident was disclosed by an attacker.<br><a href='https://newsroom.ibm.com/2025-07-30-ibm-report-13-of-organizations-reported-breaches-of-ai-models-or-applications%2C-97-of-which-reported-lacking-proper-ai-access-controls' target='_blank' rel='noopener noreferrer'>Source: IBM Newsroom article</a></li><li>A real-world example: Reuters reported UnitedHealth said the Change Healthcare ransomware attack affected about <strong>190 million people</strong>, and Reuters separately reported the company expected the attack to cost up to <strong>$1.6 billion</strong>.<br><a href='https://www.reuters.com/business/healthcare-pharmaceuticals/unitedhealth-confirms-190-million-americans-affected-by-hack-tech-unit-2025-01-24/' target='_blank' rel='noopener noreferrer'>Source: Reuters on people affected</a><br><a href='https://www.reuters.com/sustainability/boards-policy-regulation/unitedhealths-string-setbacks-exec-murder-cyber-attack-2025-05-13/' target='_blank' rel='noopener noreferrer'>Source: Reuters on estimated cost</a></li></ul><p style='text-align: center;'><strong style='color: #b91c1c;'>Ransomware is still widespread, and even one incident can create major operational and financial damage.</strong></p>"
     },
 
     {
       "type": "textImage",
       "title": "Why backups matter",
-      "text": "Backups help an organization recover important files and systems after ransomware, accidental deletion, or other disruptions.\n\nBut backups only help if they are:\n\n• Kept regularly\n• Tested to make sure they work\n• Protected from unauthorized access\n• Separated well enough that attackers cannot easily encrypt them too\n\nA backup strategy is part of cybersecurity because it helps reduce damage when prevention fails.",
-      "video": {
-        "videoId": "VIDEO_ID_RANSOMWARE_BACKUPS",
-        "caption": "Why protected backups matter during ransomware incidents"
-      },
-      "image": {
-        "src": "IMAGE_URL_RANSOMWARE_BACKUPS",
-        "alt": "Backup and recovery illustration (replace later)"
-      }
+      "text": "<p>Backups help an organization recover important files and systems after ransomware, accidental deletion, or other disruptions.</p><p>But backups only help if they are properly managed.</p><p><strong>Good backup habits include:</strong></p><ul><li><strong>Back up data regularly</strong> so less work or information is lost.</li><li><strong>Test backups</strong> to confirm they actually work before an emergency happens.</li><li><strong>Protect backup access</strong> so attackers cannot easily change or delete backup copies.</li><li><strong>Keep backups separated</strong> so ransomware cannot encrypt everything at once.</li></ul><p>A backup strategy is part of cybersecurity because it helps reduce damage when prevention fails.</p>"
     },
 
     {
-      "type": "video",
-      "title": "Real-world ransomware scenario",
-      "video": {
-        "videoId": "VIDEO_ID_RANSOMWARE_SCENARIO",
-        "caption": "Example of how a ransomware incident can spread through a small organization (replace later)"
+      "type": "textImage",
+      "title": "What NIST says about ransomware readiness",
+      "text": "<p><strong>NIST</strong> does not just recommend having backups. It recommends <strong>planning, implementing, testing, securing, and isolating</strong> backups so they are more likely to work during a ransomware incident.</p><ul><li><strong>Test backups regularly:</strong> A backup is only useful if it can actually be restored when needed.</li><li><strong>Secure and isolate important backups:</strong> If backups are always exposed to the same environment, ransomware may reach them too.</li><li><strong>Keep response and recovery plans ready:</strong> Organizations should know who to contact and what steps to follow during an incident.</li><li><strong>Prepare before an attack happens:</strong> Recovery is easier when roles, contacts, and backup processes are already in place.</li></ul><p style='text-align: center;'><strong style='color: #b91c1c;'>According to NIST, backups should not only exist — they should be tested, protected, and separated from everyday risk.</strong></p><p><strong>NIST References:</strong></p><ul><li><a href='https://csrc.nist.gov/pubs/other/2020/04/24/protecting-data-from-ransomware-and-other-data-los/final' target='_blank' rel='noopener noreferrer'>NIST: Protecting Data from Ransomware and Other Data Loss Events</a></li><li><a href='https://csrc.nist.gov/CSRC/media/Projects/ransomware-protection-and-response/documents/NIST_Tips_for_Preparing_for_Ransomware_Attacks.pdf' target='_blank' rel='noopener noreferrer'>NIST: Preparing Your Organization for Ransomware Attacks</a></li><li><a href='https://csrc.nist.gov/CSRC/media/Projects/ransomware-protection-and-response/documents/NIST_Ransomware_Tips_and_Tactics_Infographic.pdf' target='_blank' rel='noopener noreferrer'>NIST: Tips and Tactics – Ransomware</a></li><li><a href='https://csrc.nist.gov/files/pubs/other/2022/02/24/getting-started-with-cybersecurity-risk-management/final/docs/quick-start-guide--ransomware.pdf' target='_blank' rel='noopener noreferrer'>NIST: Getting Started with Cybersecurity Risk Management – Ransomware</a></li></ul>",
+      "image": {
+        "src": "/images/ransomware_info.png",
+        "alt": "NIST ransomware readiness and backup guidance illustration (replace later)",
+        "maxWidth": 800
       }
     },
 
     {
       "type": "textImage",
       "title": "What employees should do",
-      "text": "If you suspect ransomware or unusual system activity:\n\n1) <b>Stop interacting with suspicious files or messages</b>\n2) <b>Disconnect from the network if your organization instructs you to do so</b>\n3) <b>Report the problem immediately</b> to IT, security, management, or your incident contact\n4) <b>Do not try to hide the problem</b>\n5) <b>Do not assume backups will fix everything automatically</b>\n\nFast reporting can reduce damage and help protect the rest of the business.",
-      "video": {
-        "videoId": "VIDEO_ID_RANSOMWARE_RESPONSE",
-        "caption": "How employees should respond to suspected ransomware"
-      },
+      "text": "<p>If you suspect ransomware or unusual system activity, act quickly and follow your organization’s reporting process.</p><ol><li><strong>Stop interacting</strong> with suspicious files, links, pop-ups, or messages.</li><li><strong>Disconnect only if your organization instructs you to do so</strong> or if your incident process requires it.</li><li><strong>Report the issue immediately</strong> to IT, security, management, or your incident contact.</li><li><strong>Do not try to hide the problem</strong> or fix it on your own unless that is part of your role.</li><li><strong>Share what you noticed</strong>, including error messages, file changes, suspicious emails, or when the issue started.</li></ol><p style='text-align: center;'><strong style='color: #b91c1c;'>Fast reporting can reduce damage and help protect the rest of the organization.</strong></p><p><strong>CISA also recommends preparing before an incident happens.</strong> That includes creating backups of critical systems and data, using multi-factor authentication, patching systems and software, developing incident response and business continuity plans, conducting cybersecurity risk analysis, segmenting critical systems, using application allowlisting, and performing penetration testing.</p><p><strong>Helpful reporting contacts for organizations:</strong></p><ul><li><strong>Report to CISA:</strong> <a href='https://www.cisa.gov/stopransomware/ive-been-hit-ransomware' target='_blank' rel='noopener noreferrer'>CISA: I’ve Been Hit by Ransomware!</a></li><li><strong>Cyber incident response guidance:</strong> <a href='https://www.cisa.gov/cyber-incident-response' target='_blank' rel='noopener noreferrer'>cisa.gov/cyber-incident-response</a></li><li><strong>Ransomware guide:</strong> <a href='https://www.cisa.gov/publication/ransomware-guide' target='_blank' rel='noopener noreferrer'>CISA Ransomware Guide</a></li><li><strong>Find your local FBI field office:</strong> <a href='https://www.fbi.gov/contact-us/field-offices' target='_blank' rel='noopener noreferrer'>fbi.gov/contact-us/field-offices</a></li><li><strong>Find your local Secret Service field office:</strong> <a href='https://www.secretservice.gov/contact/field-offices' target='_blank' rel='noopener noreferrer'>secretservice.gov/contact/field-offices</a></li></ul><p><strong>Reference:</strong> <a href='https://www.cisa.gov/stopransomware/ive-been-hit-ransomware' target='_blank' rel='noopener noreferrer'>CISA: I’ve Been Hit by Ransomware!</a></p>",
       "image": {
-        "src": "IMAGE_URL_RANSOMWARE_RESPONSE",
-        "alt": "Ransomware response flow (replace later)"
+        "src": "/images/ransomware_cisa_postcard.png",
+        "alt": "CISA reporting and ransomware contact guidance",
+        "maxWidth": 800
       }
+    },
+
+    {
+      "type": "textImage",
+      "title": "Report it quickly and know who to contact",
+      "text": "<p><strong>The Cybersecurity and Infrastructure Security Agency (CISA)</strong> advises organizations to <strong>report ransomware incidents quickly</strong> and not assume that paying will solve the problem.</p><p><strong>Why not pay?</strong></p><ul><li><strong>Paying does not guarantee recovery.</strong> You may not get your files or systems back.</li><li><strong>Paying can encourage more attacks.</strong> It shows that ransomware can be profitable.</li><li><strong>You may still face more demands later.</strong> A payment does not always end the incident.</li></ul><p><strong>For Ohio local governments:</strong> Ohio law places restrictions on ransomware payments. A political subdivision experiencing a ransomware incident generally cannot pay unless its legislative authority formally approves that decision and states why it is in the entity’s best interest.</p><p style='text-align: center;'><strong style='color: #b91c1c;'>Do not treat paying the ransom as the default response.</strong></p><p><strong>Helpful reporting contacts for Ohio-based organizations:</strong></p><table style='width: 100%; border-collapse: collapse; margin-top: 10px;'><tr><th style='border: 1px solid #cbd5e1; padding: 10px; text-align: left; background: #f8fafc;'>Who to contact</th><th style='border: 1px solid #cbd5e1; padding: 10px; text-align: left; background: #f8fafc;'>When to use it</th><th style='border: 1px solid #cbd5e1; padding: 10px; text-align: left; background: #f8fafc;'>Contact / Link</th></tr><tr><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'><strong>CISA</strong></td><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'>Federal cyber guidance, ransomware reporting, and incident assistance</td><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'><a href='https://www.cisa.gov/stopransomware/contact-us' target='_blank' rel='noopener noreferrer'>CISA StopRansomware Contact Page</a><br><a href='mailto:report@cisa.gov'>report@cisa.gov</a><br>1-844-Say-CISA</td></tr><tr><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'><strong>FBI</strong></td><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'>Report ransomware and contact your local FBI field office</td><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'><a href='https://www.fbi.gov/contact-us/field-offices/cincinnati' target='_blank' rel='noopener noreferrer'>FBI Cincinnati Field Office</a><br><a href='https://www.fbi.gov/contact-us/field-offices/cleveland' target='_blank' rel='noopener noreferrer'>FBI Cleveland Field Office</a><br><a href='https://www.ic3.gov/' target='_blank' rel='noopener noreferrer'>IC3.gov</a></td></tr><tr><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'><strong>U.S. Secret Service</strong></td><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'>Report cybercrime and contact the nearest field office</td><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'><a href='https://www.secretservice.gov/contact/field-offices' target='_blank' rel='noopener noreferrer'>Secret Service Field Offices</a></td></tr><tr><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'><strong>CyberOhio</strong></td><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'>Ohio cybersecurity information and local government guidance</td><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'><a href='https://cyber.ohio.gov/' target='_blank' rel='noopener noreferrer'>CyberOhio</a></td></tr></table><p><strong>References:</strong></p><ul><li><a href='https://www.cisa.gov/stopransomware' target='_blank' rel='noopener noreferrer'>CISA: StopRansomware</a></li><li><a href='https://www.cisa.gov/stopransomware/contact-us' target='_blank' rel='noopener noreferrer'>CISA: StopRansomware Contact Us</a></li><li><a href='https://www.fbi.gov/how-we-can-help-you/scams-and-safety/common-frauds-and-scams/ransomware' target='_blank' rel='noopener noreferrer'>FBI: Ransomware</a></li><li><a href='https://codes.ohio.gov/ohio-revised-code/section-9.64' target='_blank' rel='noopener noreferrer'>Ohio Revised Code 9.64</a></li></ul>"
     },
 
     {
@@ -125,12 +96,10 @@
       "quizModulePath": "/learningModule/ransomware_backup_awareness.json",
       "startButtonText": "Start Quiz"
     },
-
     {
       "type": "quiz",
       "quizModulePath": "/learningModule/ransomware_backup_awareness.json"
     },
-
     {
       "type": "results",
       "title": "Quiz Results",

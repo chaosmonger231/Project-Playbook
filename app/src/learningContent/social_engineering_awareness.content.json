@@ -5,70 +5,100 @@
     {
       "type": "welcome",
       "title": "Welcome to Social Engineering Awareness",
-      "subtitle": "Learn how attackers manipulate people, not just systems, to gain access to information, accounts, and physical spaces."
+      "subtitle": "Learn how attackers manipulate people, not just systems, to gain access to information, accounts, and physical spaces.",
+      "video": {
+        "provider": "youtube",
+        "videoId": "eEHQlRqST5A"
+      }
     },
     {
       "type": "textImage",
       "title": "What is social engineering?",
-      "text": "Social engineering is the use of <strong>manipulation, deception, or pressure</strong> to trick people into revealing confidential information or taking unsafe actions.\n\nInstead of breaking into a system through technical means, attackers often try to exploit <strong>trust, fear, urgency, curiosity, or helpfulness</strong>.\n\nThis can happen through email, phone calls, text messages, fake websites, in-person conversations, or physical access attempts.",
+      "text": "<p>Social engineering is the use of <strong>manipulation, deception, or pressure</strong> to trick people into revealing confidential information or taking unsafe actions.</p><p>Instead of breaking into a system through technical means, attackers often try to exploit <strong>trust, fear, urgency, curiosity, or helpfulness</strong>.</p><p>This can happen through email, phone calls, text messages, fake websites, in-person conversations, or physical access attempts.</p><p style='text-align: center;'><strong style='color: #b91c1c;'>Attackers often target people first because people can be easier to influence than systems are to break.</strong></p>"
+    },
+
+    {
+      "type": "textImage",
+      "title": "The 4 key stages of social engineering",
+      "text": "<p>Many social engineering attacks follow a predictable pattern. Understanding these stages can help you recognize suspicious behavior earlier.</p><div style='overflow-x: auto;'><table style='width: 100%; border-collapse: collapse; margin-top: 12px;'><thead><tr><th style='border: 1px solid #d1d5db; padding: 10px; text-align: left; background: #f3f4f6;'>Stage</th><th style='border: 1px solid #d1d5db; padding: 10px; text-align: left; background: #f3f4f6;'>What Happens</th></tr></thead><tbody><tr><td style='border: 1px solid #d1d5db; padding: 10px;'><strong>1. Investigation / Reconnaissance</strong></td><td style='border: 1px solid #d1d5db; padding: 10px;'>Attackers research targets using sources like social media, company websites, and public information to find weak points, high-value employees, and internal language that can help build a believable story.</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'><strong>2. Manipulation / Hook</strong></td><td style='border: 1px solid #d1d5db; padding: 10px;'>The attacker makes contact through phishing, phone calls, text messages, or in-person interaction. They often use urgency, fear, authority, or excitement to lower the target’s guard.</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'><strong>3. Exploitation / Playing the Hook</strong></td><td style='border: 1px solid #d1d5db; padding: 10px;'>Once trust is established, the attacker pressures the victim to take action, such as clicking a malicious link, sharing credentials, approving an MFA request, or allowing physical access.</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'><strong>4. Execution / Exit</strong></td><td style='border: 1px solid #d1d5db; padding: 10px;'>The attacker achieves the goal, such as stealing data, installing malware, or entering a restricted area, and then cuts contact while trying to leave little evidence behind.</td></tr></tbody></table></div><p style='text-align: center;'><strong style='color: #b91c1c;'>The earlier you recognize the pattern, the easier it is to stop the attack before damage happens.</strong></p>",
       "image": {
-        "src": "IMAGE_URL_SOCIAL_ENGINEERING_OVERVIEW",
-        "alt": "Overview of social engineering tactics"
+        "src": "/images/social_stages.png",
+        "alt": "The four key stages of a social engineering attack",
+        "maxWidth": 420
       }
     },
+
     {
       "type": "textImage",
       "title": "Why attackers target people",
-      "text": "People are often the easiest path into an organization.\n\nAn attacker may not need advanced hacking tools if they can convince someone to:\n\n• share a password\n• click a malicious link\n• open an infected attachment\n• approve a login request\n• hold open a secure door\n\nAttackers know that employees want to be helpful, responsive, and cooperative. Social engineering takes advantage of those normal behaviors.",
-      "image": {
-        "src": "IMAGE_URL_TARGET_PEOPLE",
-        "alt": "Why attackers target people instead of systems"
-      }
+      "text": "<p>People are often the easiest path into an organization.</p><p>An attacker may not need advanced hacking tools if they can convince someone to take a risky action.</p><div style='overflow-x: auto;'><table style='width: 100%; border-collapse: collapse; margin-top: 12px;'><thead><tr><th style='border: 1px solid #d1d5db; padding: 10px; text-align: left; background: #f3f4f6;'>Unsafe Action</th><th style='border: 1px solid #d1d5db; padding: 10px; text-align: left; background: #f3f4f6;'>Why It Helps the Attacker</th></tr></thead><tbody><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Share a password</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Gives direct account access</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Click a malicious link</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Can lead to credential theft or malware</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Open an infected attachment</td><td style='border: 1px solid #d1d5db; padding: 10px;'>May install harmful software</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Approve a login request</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Lets the attacker into a real account</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Hold open a secure door</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Creates physical access to restricted areas</td></tr></tbody></table></div><p>Attackers know that employees want to be helpful, responsive, and cooperative. Social engineering takes advantage of those normal behaviors.</p>"
     },
     {
       "type": "textImage",
       "title": "Common manipulation tactics",
-      "text": "Social engineering often relies on emotional pressure or false trust.\n\nCommon tactics include:\n\n• <strong>Urgency</strong> – \"Do this right now.\"\n• <strong>Authority</strong> – \"I’m from IT, HR, or management.\"\n• <strong>Fear</strong> – \"Your account will be locked.\"\n• <strong>Curiosity</strong> – \"Open this file to see the update.\"\n• <strong>Helpfulness</strong> – \"Can you help me real quick?\"\n\nA message or person may sound believable while still being unsafe.",
+      "text": "<p>Social engineering often relies on emotional pressure or false trust.</p><div style='overflow-x: auto;'><table style='width: 100%; border-collapse: collapse; margin-top: 12px;'><thead><tr><th style='border: 1px solid #d1d5db; padding: 10px; text-align: left; background: #f3f4f6;'>Tactic</th><th style='border: 1px solid #d1d5db; padding: 10px; text-align: left; background: #f3f4f6;'>Example</th></tr></thead><tbody><tr><td style='border: 1px solid #d1d5db; padding: 10px;'><strong>Urgency</strong></td><td style='border: 1px solid #d1d5db; padding: 10px;'>“Do this right now.”</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'><strong>Authority</strong></td><td style='border: 1px solid #d1d5db; padding: 10px;'>“I’m from IT, HR, or management.”</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'><strong>Fear</strong></td><td style='border: 1px solid #d1d5db; padding: 10px;'>“Your account will be locked.”</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'><strong>Curiosity</strong></td><td style='border: 1px solid #d1d5db; padding: 10px;'>“Open this file to see the update.”</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'><strong>Helpfulness</strong></td><td style='border: 1px solid #d1d5db; padding: 10px;'>“Can you help me real quick?”</td></tr></tbody></table></div><p>A message or person may sound believable while still being unsafe.</p>",
       "image": {
-        "src": "IMAGE_URL_MANIPULATION_TACTICS",
-        "alt": "Examples of urgency, authority, fear, and curiosity"
+        "src": "/images/social_comic.png",
+        "alt": "Examples of urgency, authority, fear, and curiosity",
+        "maxWidth": 800
       }
     },
+    
+    {
+      "type": "textImage",
+      "variant": "did_you_know",
+      "title": "Did you know?",
+      "text": "<p>Social engineering remains a common and effective attack method.</p><ul><li><strong>43%</strong> of small-business cyber attacks were listed as <strong>phishing / social engineering</strong>.</li><li><strong>41%</strong> of higher-education cybersecurity incidents and breaches were caused by <strong>social engineering attacks</strong>.</li><li><strong>79%</strong> of financial institutions said cybercriminals had become more sophisticated, using highly targeted <strong>social engineering attacks</strong>.</li></ul><p style='text-align: center;'><strong style='color: #b91c1c;'>Attackers often do not need to break systems first — they try to influence people first.</strong></p><p style='font-size: 14px; opacity: 0.8;'>Source: <a href='https://purplesec.us/resources/cybersecurity-statistics/' target='_blank' rel='noopener noreferrer'>PurpleSec Cybersecurity Statistics</a></p>"
+    },
+
     {
       "type": "textImage",
       "title": "Pretexting and fake authority",
-      "text": "Pretexting happens when someone creates a believable story to gain your trust.\n\nExamples include:\n\n• someone claiming to be from IT and asking for your password\n• a caller pretending to be a vendor needing account details\n• a person claiming they were told to pick up records or equipment\n\nAlways verify requests for sensitive information through official channels before taking action.",
+      "text": "<p><strong>Pretexting</strong> happens when someone creates a believable story to gain your trust.</p><p>Examples include:</p><ul><li>someone claiming to be from IT and asking for your password</li><li>a caller pretending to be a vendor needing account details</li><li>a person claiming they were told to pick up records or equipment</li></ul><p>Always verify requests for sensitive information through official channels before taking action.</p>",
       "image": {
-        "src": "IMAGE_URL_PRETEXTING",
-        "alt": "Example of fake authority or pretexting"
+        "src": "/images/social_authority.png",
+        "alt": "Example of fake authority or pretexting",
+        "maxWidth": 500
       }
     },
+    
     {
       "type": "textImage",
       "title": "Tailgating and physical access",
-      "text": "Social engineering is not limited to email or phone scams.\n\n<strong>Tailgating</strong> happens when an unauthorized person follows an employee into a restricted area without proper access.\n\nThis may happen when someone says they forgot their badge, are in a hurry, or are delivering something.\n\nDo not assume someone belongs in a secure area just because they act confident or familiar.",
+      "text": "<p>Social engineering is not limited to email, phone calls, or fake messages.</p><p><strong>Tailgating</strong> happens when an unauthorized person follows an employee into a restricted area without proper access.</p><p>This may happen when someone says they forgot their badge, are in a hurry, are carrying items, or claim they were told to come in.</p><p style='text-align: center;'><strong style='color: #b91c1c;'>Do not assume someone belongs in a secure area just because they act confident, familiar, or rushed.</strong></p><div style='overflow-x: auto;'><table style='width: 100%; border-collapse: collapse; margin-top: 12px;'><thead><tr><th style='border: 1px solid #d1d5db; padding: 10px; text-align: left; background: #f3f4f6;'>Do</th><th style='border: 1px solid #d1d5db; padding: 10px; text-align: left; background: #f3f4f6;'>Do Not</th></tr></thead><tbody><tr><td style='border: 1px solid #d1d5db; padding: 10px;'><ul><li>Ask visitors to use the proper check-in process</li><li>Verify access if someone does not have a visible badge</li><li>Politely direct the person to security or the front desk</li><li>Report suspicious attempts to enter restricted spaces</li></ul></td><td style='border: 1px solid #d1d5db; padding: 10px;'><ul><li>Hold secure doors open for unknown individuals</li><li>Assume someone is authorized because they look professional</li><li>Ignore badge, visitor, or escort procedures</li><li>Feel pressured to break policy just to avoid awkwardness</li></ul></td></tr></tbody></table></div>",
       "image": {
-        "src": "IMAGE_URL_TAILGATING",
-        "alt": "Unauthorized person entering behind an employee"
+        "src": "/images/social_tailgaiting.png",
+        "alt": "Unauthorized person entering behind an employee",
+        "maxWidth": 600
       }
     },
+
     {
       "type": "textImage",
       "title": "Baiting and curiosity traps",
-      "text": "Attackers may also use baiting to tempt someone into unsafe action.\n\nExamples include:\n\n• a USB drive left in a parking lot or lobby\n• a file labeled \"Payroll\" or \"Confidential\"\n• an unexpected attachment that looks important\n• a free download or reward that requires login information\n\nCuriosity is normal, but unknown files, devices, or downloads should never be trusted automatically.",
-      "image": {
-        "src": "IMAGE_URL_BAITING",
-        "alt": "Examples of baiting and curiosity-based attacks"
+      "text": "<p>Attackers may also use baiting to tempt someone into unsafe action.</p><p>Examples include:</p><ul><li>a USB drive left in a parking lot or lobby</li><li>a file labeled “Payroll” or “Confidential”</li><li>an unexpected attachment that looks important</li><li>a free download or reward that requires login information</li></ul><p>Curiosity is normal, but unknown files, devices, or downloads should never be trusted automatically.</p>"
+    },
+    
+    {
+      "type": "textImage",
+      "title": "Real-life example video",
+      "text": "<p>This short video shows how social engineering can be used to gain unauthorized access by manipulating people rather than attacking systems directly.</p><p>As you watch, pay attention to how trust, urgency, and human interaction are used to bypass normal security expectations.</p><p style='text-align: center;'><strong style='color: #b91c1c;'>Social engineering attacks often succeed because someone appears believable, helpful, or urgent.</strong></p><p style='font-size: 14px; opacity: 0.8;'>This video is provided for educational and awareness purposes only. Project Playbook is not affiliated with, endorsed by, or sponsored by CNN.</p>",
+      "video": {
+        "provider": "youtube",
+        "videoId": "PWVN3Rq4gzw"
       }
+    },
+
+    
+    {
+      "type": "textImage",
+      "title": "Common mistakes people make",
+      "text": "<div style='overflow-x: auto;'><table style='width: 100%; border-collapse: collapse; margin-top: 12px;'><thead><tr><th style='border: 1px solid #d1d5db; padding: 10px; text-align: left; background: #f3f4f6;'>Common Mistake</th><th style='border: 1px solid #d1d5db; padding: 10px; text-align: left; background: #f3f4f6;'>Safer Response</th></tr></thead><tbody><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Acting too quickly because a request feels urgent</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Pause and verify first</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Trusting someone just because they sound official</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Confirm identity through known channels</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Opening unexpected files or links</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Check the source before interacting</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Letting someone into a secure space without confirmation</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Follow badge and access procedures</td></tr></tbody></table></div>"
     },
     {
       "type": "textImage",
       "title": "What to do when something feels off",
-      "text": "If a request feels unusual, rushed, or manipulative:\n\n1) <strong>Pause</strong> before acting\n2) <strong>Verify</strong> the request through official channels\n3) <strong>Do not share</strong> passwords, MFA codes, or confidential data\n4) <strong>Do not grant access</strong> to secure spaces without authorization\n5) <strong>Report</strong> suspicious behavior using your organization’s process\n\nIt is always better to verify than to guess wrong.",
-      "image": {
-        "src": "IMAGE_URL_VERIFY_AND_REPORT",
-        "alt": "Safe response steps for suspicious requests"
-      }
+      "text": "<p>If a request feels unusual, rushed, or manipulative:</p><ol><li><strong>Pause</strong> before acting</li><li><strong>Verify</strong> the request through official channels</li><li><strong>Do not share</strong> passwords, MFA codes, or confidential data</li><li><strong>Do not grant access</strong> to secure spaces without authorization</li><li><strong>Report</strong> suspicious behavior using your organization’s process</li></ol><p>It is always better to verify than to guess wrong.</p><p style='text-align: center;'><strong style='color: #b91c1c;'>Pause, verify, and report. A few extra seconds can prevent a much bigger problem.</strong></p>"
     },
     {
       "type": "quizWelcome",

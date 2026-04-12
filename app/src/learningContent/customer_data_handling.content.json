@@ -5,119 +5,45 @@
     {
       "type": "welcome",
       "title": "Welcome to Customer Data Handling Basics",
-      "subtitle": "Learn how everyday business habits can help protect customer and employee information from cyber risk.",
+      "subtitle": "Learn how simple daily habits can help protect customer and employee information from unnecessary exposure, misuse, and cyber risk.",
       "video": {
-        "videoId": "VIDEO_ID_CUSTOMER_DATA_WELCOME",
-        "caption": "Introduction to safe customer data handling (replace later)"
+        "provider": "youtube",
+        "videoId": "nvfweo4yOSA"
       }
     },
-
+    
     {
       "type": "textImage",
       "title": "Why data handling matters",
-      "text": "Small businesses often store or use <b>sensitive information</b> such as customer contact details, payment information, employee records, invoices, and account documents.\n\nThis becomes a cybersecurity issue when information is shared too broadly, stored in unsafe places, left exposed on devices, or sent through insecure channels.\n\nPoor data handling can lead to unauthorized access, fraud, identity theft, customer distrust, and legal or business consequences.",
-      "video": {
-        "videoId": "VIDEO_ID_CUSTOMER_DATA_IMPORTANCE",
-        "caption": "Why safe handling of customer data matters"
-      },
-      "image": {
-        "src": "IMAGE_URL_CUSTOMER_DATA_IMPORTANCE",
-        "alt": "Customer data protection illustration (replace later)"
-      }
+      "text": "<p>Businesses often store and use information such as customer contact details, payment records, employee files, invoices, and account documents.</p><p>When this information is handled carelessly, the risk is not just technical — it can affect customers, employees, and the business itself.</p><p><strong>Common risks include:</strong></p><ul><li>sending information to the wrong person</li><li>storing files in unsafe or unapproved locations</li><li>leaving records visible on shared or unsecured devices</li><li>sharing access more broadly than necessary</li></ul><p style='text-align: center;'><strong style='color: #b91c1c;'>Good data handling is not just an IT issue — it is part of everyday business safety.</strong></p>"
     },
 
     {
       "type": "textImage",
       "title": "What kind of data needs protection?",
-      "text": "Not all business data has the same risk, but many common records should be handled carefully.\n\nExamples include:\n\n• Customer names, addresses, phone numbers, and email addresses\n• Payment or billing information\n• Employee records and payroll information\n• Contracts, invoices, and account files\n• Login credentials or account recovery information\n\nIf the information could harm a person, customer, employee, or business if exposed, it should be handled with care.",
-      "video": {
-        "videoId": "VIDEO_ID_CUSTOMER_DATA_TYPES",
-        "caption": "Examples of sensitive business and customer data"
-      },
-      "image": {
-        "src": "IMAGE_URL_CUSTOMER_DATA_TYPES",
-        "alt": "Examples of customer and business data"
-      }
+      "text": "<p>Not all business data has the same level of risk, but many common records should still be handled carefully.</p><div style='overflow-x: auto;'><table style='width: 100%; border-collapse: collapse; margin-top: 12px;'><thead><tr><th style='border: 1px solid #d1d5db; padding: 10px; text-align: left; background: #f3f4f6;'>Type of Data</th><th style='border: 1px solid #d1d5db; padding: 10px; text-align: left; background: #f3f4f6;'>Examples</th></tr></thead><tbody><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Customer information</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Names, addresses, phone numbers, email addresses</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Payment or billing data</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Invoices, billing records, payment details</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Employee records</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Payroll information, tax forms, personnel files</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Account or business documents</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Contracts, reports, account files, internal forms</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Access-related information</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Login credentials, recovery details, account access notes</td></tr></tbody></table></div><p>If the information could harm a customer, employee, or the business if exposed, it should be handled with care.</p>"
     },
-
     {
       "type": "textImage",
-      "title": "Sensitive data and regulations",
-      "text": "Some types of information are protected by privacy laws and industry regulations.\n\nFor example:\n\n• <b>HIPAA</b> protects medical and health information handled by healthcare providers.\n• <b>Financial and payment data</b> may fall under payment security standards.\n• <b>Personal identifying information</b> such as addresses, phone numbers, and account data should be handled carefully.\n\nEven if your organization is not directly regulated, protecting this information is still critical to prevent fraud, identity theft, and reputational damage.\n\nAlways follow your organization's policies when storing, sharing, or accessing sensitive data.",
-      "video": {
-        "videoId": "VIDEO_ID_DATA_REGULATIONS",
-        "caption": "Overview of sensitive data regulations (replace later)"
-      },
-      "image": {
-        "src": "IMAGE_URL_DATA_REGULATIONS",
-        "alt": "Sensitive data and compliance illustration (replace later)"
-      }
+      "title": "Why some data is more sensitive",
+      "text": "<p>Some information carries more risk because it can be used for fraud, identity theft, privacy violations, or financial harm.</p><ul><li><strong>Health information</strong> should be handled carefully and may be protected by laws such as HIPAA.</li><li><strong>Payment and billing information</strong> requires extra care because financial misuse can happen quickly.</li><li><strong>Personal identifying information</strong> such as addresses, phone numbers, account details, and employee records should not be shared casually.</li></ul><p>Even when a business is not directly regulated, safe handling still matters because the damage from exposure can be serious.</p>"
     },
-
     {
       "type": "textImage",
+      "variant": "did_you_know",
       "title": "Did you know?",
-      "bullets": [
-        {
-          "title": "Data exposure does not always come from hackers",
-          "text": "Sometimes information is exposed because it was emailed to the wrong person, stored on an unprotected device, or shared too broadly."
-        },
-        {
-          "title": "Employee information matters too",
-          "text": "Payroll records, tax forms, and internal personnel details should be protected just like customer data."
-        },
-        {
-          "title": "Access should be limited",
-          "text": "Not every employee needs access to every file. Limiting access reduces risk."
-        },
-        {
-          "title": "Simple habits can prevent major problems",
-          "text": "Checking recipients, using strong passwords, and storing files in approved locations can prevent many incidents."
-        }
-      ],
-      "image": {
-        "src": "IMAGE_URL_CUSTOMER_DATA_DID_YOU_KNOW",
-        "alt": "Did you know customer data graphic (replace later)"
-      }
+      "text": "<p>Many data incidents come from everyday mistakes, not advanced hacking.</p><ul><li><strong>Data exposure does not always come from hackers</strong> — sometimes information is sent to the wrong person, stored on an unprotected device, or shared too broadly.</li><li><strong>Employee information matters too</strong> — payroll records, tax forms, and personnel details should be protected just like customer data.</li><li><strong>Access should be limited</strong> — not every employee needs access to every file.</li><li><strong>Simple habits can prevent major problems</strong> — checking recipients, using approved storage, and reporting mistakes quickly can reduce risk.</li></ul>"
     },
-
     {
       "type": "textImage",
       "title": "Common data handling mistakes",
-      "text": "Many data incidents happen because of everyday mistakes rather than advanced attacks.\n\nCommon examples include:\n\n• Sending sensitive files to the wrong email recipient\n• Saving business files on personal devices without approval\n• Sharing folders with more people than necessary\n• Reusing weak passwords on business systems\n• Leaving printed or digital records accessible to unauthorized people\n• Storing customer data in unapproved tools or locations\n\nEven small mistakes can create serious privacy and security risks.",
-      "video": {
-        "videoId": "VIDEO_ID_CUSTOMER_DATA_MISTAKES",
-        "caption": "Common small business data handling mistakes"
-      },
-      "image": {
-        "src": "IMAGE_URL_CUSTOMER_DATA_MISTAKES",
-        "alt": "Common customer data handling mistakes (replace later)"
-      }
+      "text": "<div style='overflow-x: auto;'><table style='width: 100%; border-collapse: collapse; margin-top: 12px;'><thead><tr><th style='border: 1px solid #d1d5db; padding: 10px; text-align: left; background: #f3f4f6;'>Common Mistake</th><th style='border: 1px solid #d1d5db; padding: 10px; text-align: left; background: #f3f4f6;'>Why It Creates Risk</th></tr></thead><tbody><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Sending files to the wrong email recipient</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Sensitive information may be exposed immediately</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Saving business files on personal devices without approval</td><td style='border: 1px solid #d1d5db; padding: 10px;'>The business loses control over storage and access</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Sharing folders with more people than necessary</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Too much access increases the chance of misuse or mistakes</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Using weak or reused passwords</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Accounts become easier to compromise</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Leaving printed or digital records exposed</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Unauthorized people may view or take information</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Storing data in unapproved tools or locations</td><td style='border: 1px solid #d1d5db; padding: 10px;'>The information may not be protected properly</td></tr></tbody></table></div>"
     },
-
-    {
-      "type": "video",
-      "title": "Real-world business scenario",
-      "video": {
-        "videoId": "VIDEO_ID_CUSTOMER_DATA_SCENARIO",
-        "caption": "Example of a small business data handling mistake and its impact (replace later)"
-      }
-    },
-
     {
       "type": "textImage",
-      "title": "Safe habits to follow",
-      "text": "To handle customer and employee data more safely:\n\n1) <b>Only access the data you need</b>\n2) <b>Store files in approved business systems</b>\n3) <b>Double-check recipients before sending emails</b>\n4) <b>Use strong passwords and MFA where available</b>\n5) <b>Report lost devices, mistaken sharing, or suspicious access quickly</b>\n\nGood cybersecurity starts with careful daily habits, not just technical tools.",
-      "video": {
-        "videoId": "VIDEO_ID_CUSTOMER_DATA_SAFE_HABITS",
-        "caption": "Safe habits for handling customer and employee data"
-      },
-      "image": {
-        "src": "IMAGE_URL_CUSTOMER_DATA_SAFE_HABITS",
-        "alt": "Safe data handling workflow (replace later)"
-      }
+      "title": "What you should do",
+      "text": "<p>Safe data handling usually comes down to simple, repeatable habits.</p><div style='overflow-x: auto;'><table style='width: 100%; border-collapse: collapse; margin-top: 12px;'><thead><tr><th style='border: 1px solid #d1d5db; padding: 10px; text-align: left; background: #f3f4f6;'>Do</th><th style='border: 1px solid #d1d5db; padding: 10px; text-align: left; background: #f3f4f6;'>Do Not</th></tr></thead><tbody><tr><td style='border: 1px solid #d1d5db; padding: 10px;'><ul><li>Only access the data you need for your role</li><li>Store files in approved business systems</li><li>Double-check recipients before sending emails</li><li>Use strong passwords and MFA when available</li><li>Report mistakes, lost devices, or suspicious access quickly</li></ul></td><td style='border: 1px solid #d1d5db; padding: 10px;'><ul><li>Save sensitive files wherever it is convenient</li><li>Share records with people who do not need them</li><li>Use personal accounts or devices without approval</li><li>Ignore accidental sharing or exposure</li><li>Assume someone else will report the problem</li></ul></td></tr></tbody></table></div><p style='text-align: center;'><strong style='color: #b91c1c;'>Handle customer and employee data carefully, limit access, and report mistakes quickly.</strong></p>"
     },
-
     {
       "type": "quizWelcome",
       "title": "Ready for the quiz?",
@@ -125,12 +51,10 @@
       "quizModulePath": "/learningModule/customer_data_handling.json",
       "startButtonText": "Start Quiz"
     },
-
     {
       "type": "quiz",
       "quizModulePath": "/learningModule/customer_data_handling.json"
     },
-
     {
       "type": "results",
       "title": "Quiz Results",
