@@ -167,7 +167,7 @@ export default function Home() {
               </button>
             </div>
           </ContentPanel>
-
+{/*
           {!isCoordinator && (
             <div className="home-tasks">
               <div className="home-tasks-title">Your Tasks</div>
@@ -182,6 +182,7 @@ export default function Home() {
               Test S3 Signed URL
             </button>
           </div>
+*/}
         </section>
       </div>
     </div>

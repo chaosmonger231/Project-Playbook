@@ -85,7 +85,7 @@
     {
       "moduleId": "classroom-communication-data-safety",
       "title": "Classroom Communication & Data Safety",
-      "synopsis": "Avoid common mistakes when emailing, sharing, and discussing student information across school platforms.",
+      "synopsis": "Learn how to communicate safely across school platforms and avoid common mistakes when emailing, messaging, and sharing.",
       "category": "education",
       "allowedOrgTypes": ["education"],
       "contentKey": "classroom_communication_data_safety",

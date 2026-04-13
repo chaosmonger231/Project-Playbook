@@ -30,6 +30,7 @@ import SuricataMonitoringTool from "./pages/SuricataMonitoringTool";
 import MonitoringGuidance from "./pages/MonitoringGuidance";
 import DetectionResponsePlaybook from "./pages/DetectionResponsePlaybook";
 import RansomwareResponsePlaybook from "./pages/RansomwareResponsePlaybook";
+import BackupRecoveryPlaybook from "./pages/BackupRecoveryPlaybook";
 
 import SecurityReadiness from "./pages/SecurityReadiness.jsx";
 import Playbook1 from "./pages/Playbook1";
@@ -112,6 +113,7 @@ const router = createBrowserRouter([
       { path: "/monitoringguidance", element: <MonitoringGuidance /> },
       { path: "/detectionresponseplaybook", element: <DetectionResponsePlaybook /> },
       { path: "/ransomwareresponseplaybook", element: <RansomwareResponsePlaybook /> },
+      { path: "/backuprecoveryplaybook", element: <BackupRecoveryPlaybook /> },
 
       // Playbook detail pages
       { path: "/securityreadiness", element: <SecurityReadiness /> },

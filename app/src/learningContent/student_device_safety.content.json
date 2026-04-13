@@ -8,81 +8,63 @@
       "subtitle": "Learn how to protect school devices, student accounts, and classroom technology from misuse or unauthorized access.",
       "video": {
         "provider": "youtube",
-        "videoId": "oeo3WdOw654",
+        "videoId": "OKZCbmoECEw",
         "caption": "Introduction to Student Device and Account Safety"
       }
     },
-
     {
       "type": "textImage",
       "title": "Why device and account safety matters",
-      "text": "School devices and student accounts often provide access to classwork, email, cloud storage, grades, and other school systems.\n\nIf a device or account is left unsecured, another person may be able to view information, submit work, change settings, or access school resources without permission.\n\nGood device and account habits help protect students, teachers, and school data.",
+      "text": "<p>School devices and student accounts often provide access to classwork, email, cloud storage, grades, and other school systems.</p><p>If a device or account is left unsecured, another person may be able to view information, submit work, change settings, or access school resources without permission.</p><p>This is also a <strong>cybersecurity issue</strong> because unauthorized access, unsafe browsing, weak passwords, and careless device use can expose school data or lead to misuse of school systems.</p><p style=\"text-align:center; color:#c62828;\"><strong>Simple habits like locking a device and protecting your password help prevent bigger cybersecurity problems.</strong></p>",
       "image": {
-        "src": "IMAGE_URL_STUDENT_DEVICE_OVERVIEW",
-        "alt": "Student using a school device safely"
+        "src": "/images/student_image.png",
+        "alt": "Student using a school device safely - Made with AI (not real kids)"
       }
     },
-
     {
       "type": "textImage",
       "title": "School accounts should stay private",
-      "text": "Each student should use <strong>their own school account</strong> and keep login details private.\n\nPasswords should not be shared with classmates or friends, even if someone says they only need to use the account for a moment.\n\nSharing accounts can expose personal information, schoolwork, and activity history.",
-      "image": {
-        "src": "IMAGE_URL_STUDENT_ACCOUNT_PRIVACY",
-        "alt": "Protecting school account credentials"
-      }
+      "text": "<p>Each student should use <strong>their own school account</strong> and keep login details private.</p><ul><li><strong>Do not share passwords</strong> with classmates or friends.</li><li><strong>Do not let someone borrow your account</strong>, even for a quick task.</li><li><strong>Use a strong password</strong> if your school allows you to create one.</li><li><strong>Keep sign-in details in a safe place</strong> if you need help remembering them.</li></ul><p>Sharing accounts can expose personal information, schoolwork, and activity history.</p><p style=\"text-align:center; color:#c62828;\"><strong>Your school account should only be used by you.</strong></p>"
     },
-
     {
       "type": "textImage",
       "title": "Shared devices require extra care",
-      "text": "Many schools use shared devices such as Chromebooks, tablets, library computers, or lab devices.\n\nWhen using a shared device, students should:\n\n<ul><li>Log in only to their own account</li><li>Log out when finished</li><li>Close school applications when done</li><li>Make sure the next user cannot access their files or account</li></ul>\n\nShared devices are convenient, but they increase the risk of accidental access if users forget to log out.",
-      "image": {
-        "src": "IMAGE_URL_SHARED_DEVICE",
-        "alt": "Shared Chromebook or computer in a classroom"
-      }
+      "text": "<p>Many schools use shared devices such as Chromebooks, tablets, library computers, or lab devices.</p><p>When using a shared device, students should:</p><ul><li><strong>Log in only to their own account</strong></li><li><strong>Log out when finished</strong></li><li><strong>Close school applications when done</strong></li><li><strong>Check that the next user cannot access their files or account</strong></li></ul><p>Shared devices are helpful, but they increase the risk of accidental access if users forget to log out.</p><p style=\"text-align:center; color:#c62828;\"><strong>On a shared device, logging out is one of the most important safety steps.</strong></p>"
     },
-
     {
       "type": "textImage",
-      "title": "Lock devices when unattended",
-      "text": "A device should never be left unlocked and unattended.\n\nAn unlocked device may allow someone else to read messages, change settings, access school systems, or misuse the account.\n\nTeachers and staff should lock devices before stepping away, and students should follow the same habit when appropriate.",
-      "image": {
-        "src": "IMAGE_URL_LOCK_DEVICE",
-        "alt": "Locking a school laptop or tablet"
-      }
+      "title": "Why locking your device matters",
+      "text": "<p>A device should never be left unlocked and unattended.</p><p>An unlocked device may allow someone else to:</p><ul><li><strong>Read messages or email</strong></li><li><strong>Open school files</strong></li><li><strong>Change settings</strong></li><li><strong>Submit work or send messages as you</strong></li><li><strong>Access school systems without permission</strong></li></ul><p>Even a short moment away from a device can create risk. Locking your screen helps prevent unauthorized access and protects both your account and school information.</p><p style=\"text-align:center; color:#c62828;\"><strong>If you step away, lock the device.</strong></p>"
     },
-
     {
       "type": "textImage",
       "title": "Be careful with downloads and websites",
-      "text": "Students may sometimes click links or download files without realizing the risk.\n\nUnsafe downloads, browser extensions, and suspicious websites can cause problems on school devices.\n\nOnly use approved websites, school-assigned tools, and trusted downloads. If something looks unusual, stop and ask a teacher or IT support.",
+      "text": "<p>Students may sometimes click links or download files without realizing the risk.</p><p>Unsafe downloads, browser extensions, and suspicious websites can cause problems on school devices.</p><ul><li><strong>Use approved websites and school-assigned tools</strong></li><li><strong>Avoid unexpected pop-ups, fake alerts, or strange download prompts</strong></li><li><strong>Do not install software or extensions unless allowed</strong></li><li><strong>Ask a teacher or IT support if something looks unusual</strong></li></ul><p style=\"text-align:center; color:#c62828;\"><strong>Clicking the wrong link can affect more than one device or account.</strong></p>",
       "image": {
-        "src": "IMAGE_URL_STUDENT_SAFE_DOWNLOADS",
+        "src": "/images/student_bad_web.png",
         "alt": "Safe browsing and download practices on school devices"
       }
     },
-
+    {
+      "type": "textImage",
+      "title": "Check privacy and security settings",
+      "text": "<p>School apps, accounts, and devices may have privacy and security settings that help protect information.</p><ul><li><strong>Review account settings</strong> if your school allows it</li><li><strong>Use school-approved privacy options</strong> when available</li><li><strong>Be careful what information an app can access</strong></li><li><strong>Ask a teacher or IT support</strong> if you are unsure whether a setting should be changed</li></ul><p>Small settings can make a difference in how information is shared or protected.</p><p><a href=\"https://www.ed.gov/teaching-and-administration/safe-learning-environments/school-safety-and-security/k-12-cybersecurity\" target=\"_blank\" rel=\"noopener noreferrer\">Reference: U.S. Department of Education K-12 Cybersecurity</a></p><p style=\"text-align:center; color:#c62828;\"><strong>Check privacy and security settings before assuming an app or device is safe by default.</strong></p>"
+    },
     {
       "type": "textImage",
       "title": "Do not let others use your signed-in device",
-      "text": "Even a short moment of access can create risk if someone else uses a device while you are still signed in.\n\nThey may be able to send messages, open files, submit assignments, or view personal school information.\n\nIf another person needs access, they should use their own account or go through the proper school process.",
-      "image": {
-        "src": "IMAGE_URL_SIGNED_IN_DEVICE_RISK",
-        "alt": "Risk of letting others use a signed-in school device"
-      }
+      "text": "<p>Even a short moment of access can create risk if someone else uses a device while you are still signed in.</p><p>They may be able to:</p><ul><li><strong>Send messages from your account</strong></li><li><strong>Open files or view personal information</strong></li><li><strong>Submit assignments or change work</strong></li><li><strong>Access school systems as if they were you</strong></li></ul><p>If another person needs access, they should use their own account or go through the proper school process.</p><p style=\"text-align:center; color:#c62828;\"><strong>Never assume a signed-in device is safe to share.</strong></p>"
     },
-
+    {
+      "type": "textImage",
+      "title": "Why this is also a cybersecurity issue",
+      "text": "<p>Device and account safety is not just about following rules. It is also part of cybersecurity.</p><ul><li><strong>Weak account habits</strong> can let someone else sign in as you</li><li><strong>Unlocked devices</strong> can expose files, messages, and school systems</li><li><strong>Unsafe clicks or downloads</strong> can put accounts and devices at risk</li><li><strong>Careless sharing</strong> can expose student or school information to the wrong person</li></ul><p>Cybersecurity includes protecting accounts, controlling access, and reducing the chance of unauthorized use.</p><p><a href=\"https://www.nist.gov/cyberframework\" target=\"_blank\" rel=\"noopener noreferrer\">Reference: NIST Cybersecurity Framework 2.0</a><br/><a href=\"https://studentprivacy.ed.gov/content/unauthorized-disclosure\" target=\"_blank\" rel=\"noopener noreferrer\">Reference: U.S. Department of Education - Unauthorized Disclosure</a></p><p style=\"text-align:center; color:#c62828;\"><strong>Protecting your account and device helps protect both school systems and student information.</strong></p>"
+    },
     {
       "type": "textImage",
       "title": "What to do if something seems wrong",
-      "text": "If a student account or device may be compromised:\n\n<ol><li>Stop using the device if needed</li><li>Log out or lock the account if possible</li><li>Tell a teacher, administrator, or IT support right away</li><li>Change the password if instructed</li></ol>\n\nQuick reporting can help prevent bigger problems.",
-      "image": {
-        "src": "IMAGE_URL_REPORT_DEVICE_ISSUE",
-        "alt": "Reporting a school device or account issue"
-      }
+      "text": "<p>If a student account or device may be compromised:</p><ol><li><strong>Stop using the device if needed</strong></li><li><strong>Log out or lock the account if possible</strong></li><li><strong>Tell an administrator, or IT support right away</strong></li><li><strong>Change the password if instructed</strong></li></ol><p>Quick reporting can help prevent bigger problems and protect other users.</p><p style=\"text-align:center; color:#c62828;\"><strong>Report device or account problems quickly so the school can respond.</strong></p>"
     },
-
     {
       "type": "quizWelcome",
       "title": "Ready for the quiz?",
@@ -90,12 +72,10 @@
       "quizModulePath": "/learningModule/student_device_account_safety.json",
       "startButtonText": "Start Quiz"
     },
-
     {
       "type": "quiz",
       "quizModulePath": "/learningModule/student_device_account_safety.json"
     },
-
     {
       "type": "results",
       "title": "Quiz Results",
