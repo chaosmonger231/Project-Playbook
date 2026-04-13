@@ -5,7 +5,12 @@
     {
       "type": "welcome",
       "title": "Welcome to Classroom Communication & Data Safety",
-      "subtitle": "Learn how to communicate about students safely while protecting sensitive information."
+      "subtitle": "Learn how to communicate about students safely while protecting sensitive information.",
+      "video": {
+        "provider": "youtube",
+        "videoId": "0DrhW-BWv3M",
+        "caption": "Introduction to Classroom Communication & Data Safety"
+      }
     },
 
     {

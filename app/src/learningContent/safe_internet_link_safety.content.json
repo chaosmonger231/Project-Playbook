@@ -5,92 +5,84 @@
     {
       "type": "welcome",
       "title": "Welcome to Safe Internet & Link Safety",
-      "subtitle": "Learn how to identify suspicious links and practice safer browsing habits online."
+      "subtitle": "Learn why link safety matters, how suspicious links can be spotted, why shortened links are tricky, and what habits help people browse more safely.",
+      "video": {
+        "provider": "youtube",
+        "videoId": "50_bsARNqoQ",
+        "caption": "Introduction to safe internet browsing and link safety"
+      }
     },
-
+    
     {
       "type": "textImage",
       "title": "Why link safety matters",
-      "text": "Many cyberattacks begin when someone clicks a malicious link.\n\nA link may lead to:\n\n<ul><li>A fake login page designed to steal passwords</li><li>A website that downloads malware</li><li>A page that tricks users into sharing sensitive information</li></ul>\n\nBeing cautious with links helps prevent many security incidents.",
-      "image": {
-        "src": "IMAGE_URL_LINK_RISK",
-        "alt": "Example of a malicious link"
-      }
+      "text": "<p>Many cyber incidents begin when someone clicks a malicious link. A link may look harmless, but it can lead to a <strong>fake login page</strong>, a <strong>malware download</strong>, or a page designed to trick someone into sharing sensitive information.</p><p>That is why link safety matters so much. One rushed click can expose passwords, company data, or an entire device.</p><p style='text-align: center;'><strong style='color: #b91c1c;'>A suspicious link is often the first step in a larger attack.</strong></p><p style='background: rgba(185, 28, 28, 0.08); border-left: 4px solid #b91c1c; padding: 12px 14px; border-radius: 10px;'><strong>Warning:</strong> The example links below are for <strong>training purposes only</strong>. Do <strong>not</strong> try to visit or test suspicious-looking links. Website names and destinations can change over time.</p><table style='width: 100%; border-collapse: collapse; margin-top: 12px;'><tr><th style='border: 1px solid #cbd5e1; padding: 10px; text-align: left; background: #f8fafc;'>Example suspicious link</th><th style='border: 1px solid #cbd5e1; padding: 10px; text-align: left; background: #f8fafc;'>Why it is not safe</th></tr><tr><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'><code>micr<u>о</u>soft-support.com</code></td><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'>The underlined <strong>о</strong> is meant to represent a <strong>Cyrillic look-alike character</strong>, not a normal English <strong>o</strong>. A link can look correct at a glance while still being fake.</td></tr><tr><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'><code>micr<u>0</u>soft-login.com</code></td><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'>The underlined <strong>0</strong> replaces the letter <strong>o</strong>. This is a <strong>number/letter swap</strong> designed to fool someone reading too quickly.</td></tr><tr><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'><code>paypa<u>I</u>-secure.com</code></td><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'>The underlined <strong>I</strong> is a <strong>capital letter look-alike</strong> replacing a lowercase <strong>l</strong>. That small visual change can be easy to miss.</td></tr><tr><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'><code>microsoft<u>-login-security</u>.com</code></td><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'>The underlined extra words make the site sound official, but they do <strong>not</strong> make it legitimate. Attackers often add trusted-sounding terms to fake domains.</td></tr><tr><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'><code>microsoft.com<u>.security-check.example.com</u></code></td><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'>The underlined section shows the real problem: this is a <strong>misleading subdomain</strong>. People may stop reading after seeing <strong>microsoft.com</strong>, but the real domain is at the end.</td></tr><tr><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'><code>paypal-login<u>.co</u></code></td><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'>The underlined ending uses a <strong>different top-level domain</strong>. A site may look familiar but still use the wrong ending.</td></tr><tr><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'><code>bit.ly<u>/urgent-account-fix</u></code></td><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'>The underlined part is hidden behind a <strong>shortened link</strong>. You cannot clearly see the real destination before clicking.</td></tr><tr><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'><code>facebo<u>oo</u>k-login.com</code></td><td style='border: 1px solid #cbd5e1; padding: 10px; vertical-align: top;'>The underlined extra letters are an example of <strong>typosquatting</strong>. Attackers slightly misspell trusted names so the mistake is easy to overlook.</td></tr></table>"
     },
 
     {
       "type": "textImage",
-      "title": "Check links before clicking",
-      "text": "Before clicking a link, take a moment to inspect it.\n\nMany email programs and browsers allow you to <strong>hover over a link</strong> to see the real destination.\n\nIf the link address looks unfamiliar, misspelled, or unrelated to the sender, it may be unsafe.",
-      "image": {
-        "src": "IMAGE_URL_HOVER_LINK",
-        "alt": "Hovering over a link to see the destination"
-      }
+      "title": "Hover before you click",
+      "text": "<p>One of the easiest safety habits is to <strong>hover over a link</strong> before clicking it. Many email programs and browsers show the real destination when you place your cursor over the link.</p><p>If the destination looks unfamiliar, misspelled, overly long, or unrelated to the sender, stop and double-check before doing anything else.</p><p><strong>Example:</strong></p><ul><li>Displayed text: <strong>Reset your Microsoft password</strong></li><li>Real destination when hovering: <strong>login-security-check.example-site.com</strong></li></ul><p><strong>Reference:</strong> <a href='https://www.cisa.gov/audiences/small-and-medium-businesses/secure-your-business/teach-employees-avoid-phishing' target='_blank' rel='noopener noreferrer'>CISA: Teach Employees to Avoid Phishing</a></p>"
     },
-
     {
       "type": "textImage",
-      "title": "Shortened links",
-      "text": "Shortened links hide the real destination of a website.\n\nExamples include:\n\n<ul><li>bit.ly</li><li>tinyurl.com</li><li>shortened links used on social media</li></ul>\n\nBecause the true destination is hidden, shortened links should be treated carefully unless they come from a trusted source.",
-      "image": {
-        "src": "IMAGE_URL_SHORT_LINK",
-        "alt": "Example of shortened link services"
-      }
+      "title": "Why shortened links are harder to judge",
+      "text": "<p>Shortened links make link safety more difficult because they hide the real destination. Instead of seeing the full website address, you may only see a short service link.</p><p><strong>Examples:</strong> bit.ly, tinyurl.com, and shortened links used on social media or in messages.</p><p>That does not mean every shortened link is malicious, but it does mean you have less information before clicking. This makes it easier for attackers to hide where a link really goes.</p><p style='text-align: center;'><strong style='color: #b91c1c;'>When a link hides its destination, slow down and verify before clicking.</strong></p>"
     },
-
     {
       "type": "textImage",
       "title": "Look-alike domains",
-      "text": "Attackers often create websites that look very similar to legitimate ones.\n\nExamples include:\n\n<ul><li>micr0soft.com instead of microsoft.com</li><li>paypaI.com using a capital letter instead of lowercase L</li></ul>\n\nAlways read website addresses carefully before entering login credentials.",
+      "text": "<p>Attackers often create websites that look very similar to legitimate ones. These are sometimes called <strong>look-alike domains</strong> or <strong>spoofed links</strong>.</p><ul><li><strong>micr0soft.com</strong> instead of <strong>microsoft.com</strong></li><li><strong>paypaI.com</strong> using a capital <strong>I</strong> as in Ice instead of a lowercase <strong>l</strong> as in lima</li><li><strong>company-login-support.com</strong> instead of the organization’s real domain</li></ul><p>Always read the address carefully before entering credentials or payment information.</p>"
+    },
+    {
+      "type": "textImage",
+      "title": "HTTPS helps, but it is not enough",
+      "text": "<p>Many legitimate websites use <strong>HTTPS</strong>, which helps protect data moving between your browser and the site.</p><p>You may also see a lock icon in the browser address bar. That is helpful, but it does <strong>not</strong> prove the site is trustworthy. A fake website can still use HTTPS.</p><p><strong>Good rule:</strong> HTTP = bad, HTTPS = good. Treat HTTPS as one helpful sign, not final proof that a site is safe.</p>",
       "image": {
-        "src": "IMAGE_URL_LOOKALIKE_DOMAIN",
-        "alt": "Example of a look-alike domain"
+        "src": "/images/safelink_http.png",
+        "alt": "HTTPS and browser lock icon example",
+        "maxWidth": 420
+      }
+    },
+    
+    {
+      "type": "textImage",
+      "title": "Pop-ups, fake warnings, and surprise downloads",
+      "text": "<p>Unsafe browsing is not only about links in email. It can also involve <strong>pop-ups</strong>, <strong>fake warnings</strong>, and online ads that try to scare or rush you into clicking.</p><p><strong>The FBI recommends using pop-up blockers</strong> and being cautious with unexpected warnings, downloads, and pop-up ads. This matters even more when you are using a <strong>company computer</strong> or connected to a <strong>company network</strong>, because one bad click can put work systems, accounts, or shared data at risk.</p><ul><li><strong>Do not click inside a suspicious pop-up</strong>, even if it claims your device is infected.</li><li><strong>Do not click pop-up ads or urgent warning ads</strong> just because they look professional or “safe.”</li><li><strong>Do not download software or browser extensions</strong> from unexpected alerts.</li><li><strong>Be extra cautious on a company machine or company network</strong>, where unsafe browsing can affect more than one device.</li></ul><p>If a page is pressuring you, asking for a download, or trying to frighten you into acting fast, <strong>stop and report it through a trusted source</strong> instead of interacting with it.</p><p style='text-align: center;'><strong style='color: #b91c1c;'>A pop-up that looks helpful or urgent can still be malicious. Do not trust it just because it appears professional.</strong></p><p><strong>Reference:</strong> <a href='https://www.fbi.gov/contact-us/field-offices/losangeles/news/fbi-releases-2023-elder-fraud-report-with-tech-support-scams-generating-the-most-complaints-and-investment-scams-proving-the-costliest' target='_blank' rel='noopener noreferrer'>FBI guidance on pop-ups and malware</a></p>",
+      "image": {
+        "src": "/images/safelink_popup.png",
+        "alt": "Example of a pop-up or ad that may look safe but should not be trusted automatically",
+        "maxWidth": 520
       }
     },
 
     {
       "type": "textImage",
-      "title": "HTTPS and secure connections",
-      "text": "Most legitimate websites use <strong>HTTPS</strong>, which encrypts communication between your browser and the website.\n\nYou can often see a lock icon in the browser address bar.\n\nHTTPS does not guarantee a website is trustworthy, but it is an important indicator of a secure connection.",
+      "title": "Safe link habits that actually help",
+      "text": "<p>Good link safety is mostly about small habits followed consistently.</p><table style='width: 100%; border-collapse: collapse; margin-top: 8px;'><tr><th style='border: 1px solid #d1d5db; padding: 8px; text-align: left;'>Habit</th><th style='border: 1px solid #d1d5db; padding: 8px; text-align: left;'>Why it helps</th></tr><tr><td style='border: 1px solid #d1d5db; padding: 8px;'><strong>Hover before clicking</strong></td><td style='border: 1px solid #d1d5db; padding: 8px;'>Lets you inspect the real destination first</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 8px;'><strong>Read the full domain carefully</strong></td><td style='border: 1px solid #d1d5db; padding: 8px;'>Helps catch spoofed or look-alike sites</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 8px;'><strong>Avoid rushed clicking</strong></td><td style='border: 1px solid #d1d5db; padding: 8px;'>Reduces mistakes caused by urgency or fear</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 8px;'><strong>Type known websites yourself when possible</strong></td><td style='border: 1px solid #d1d5db; padding: 8px;'>Safer for well-known sites because it avoids relying on links from messages, ads, or pop-ups</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 8px;'><strong>Use trusted bookmarks</strong></td><td style='border: 1px solid #d1d5db; padding: 8px;'>Helps you return to sites you already know instead of clicking fresh links each time</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 8px;'><strong>Pause before downloading</strong></td><td style='border: 1px solid #d1d5db; padding: 8px;'>Prevents unsafe files or software from being opened</td></tr></table><p><strong>Reference:</strong> <a href='https://www.cisa.gov/secure-our-world/recognize-and-report-phishing' target='_blank' rel='noopener noreferrer'>CISA: Recognize and Report Phishing</a></p>",
       "image": {
-        "src": "IMAGE_URL_HTTPS_LOCK",
-        "alt": "HTTPS lock icon in browser"
+        "src": "/images/safelink_hover.png",
+        "alt": "Safe browsing practices and link-checking habits",
+        "maxWidth": 420
       }
     },
 
     {
       "type": "textImage",
-      "title": "Pop-ups and downloads",
-      "text": "Unexpected pop-ups may try to convince you to download software or click urgent warnings.\n\nExamples include:\n\n<ul><li>Fake virus alerts</li><li>Unexpected software downloads</li><li>Requests to install browser extensions</li></ul>\n\nOnly download files or software from trusted sources.",
-      "image": {
-        "src": "IMAGE_URL_POPUP_WARNING",
-        "alt": "Suspicious pop-up example"
-      }
+      "title": "What to do if you already clicked",
+      "text": "<p>Sometimes people click before realizing something is wrong. What matters next is responding quickly.</p><ol><li><strong>Stop interacting</strong> with the page, download, or pop-up.</li><li><strong>Do not enter credentials</strong> or payment information.</li><li><strong>Close the page</strong> if possible.</li><li><strong>Report it quickly</strong> to IT, security, a supervisor, or your organization’s reporting contact.</li><li><strong>Tell them what happened</strong>, including what you clicked and whether you entered any information.</li></ol><p style='text-align: center;'><strong style='color: #b91c1c;'>Quick reporting can keep one bad click from becoming a larger incident.</strong></p>"
     },
-
-    {
-      "type": "textImage",
-      "title": "Safe browsing habits",
-      "text": "To browse the internet more safely:\n\n<ul><li>Pause before clicking unfamiliar links</li><li>Verify website addresses carefully</li><li>Avoid downloading unknown files</li><li>Use trusted websites when entering credentials</li></ul>\n\nTaking a few seconds to verify a link can prevent many cyber incidents.",
-      "image": {
-        "src": "IMAGE_URL_SAFE_BROWSING",
-        "alt": "Safe browsing practices"
-      }
-    },
-
     {
       "type": "quizWelcome",
       "title": "Ready for the quiz?",
-      "subtitle": "This quiz will test your understanding of link safety and safe browsing habits.",
+      "subtitle": "This quiz will test your understanding of link safety, suspicious links, shortened URLs, and safe browsing habits.",
       "quizModulePath": "/learningModule/safe_internet_link_safety.json",
       "startButtonText": "Start Quiz"
     },
-
     {
       "type": "quiz",
       "quizModulePath": "/learningModule/safe_internet_link_safety.json"
     },
-
     {
       "type": "results",
       "title": "Quiz Results",

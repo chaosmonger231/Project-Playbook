@@ -17,11 +17,6 @@
       "type": "textImage",
       "title": "What is phishing?",
       "text": "<p>Phishing is a <strong>social engineering attack</strong> where someone pretends to be a trusted source to trick you into clicking a link, opening an attachment, or sharing sensitive information.</p><p>Social engineering means <strong>manipulating people</strong> into revealing confidential information or performing unsafe actions.</p><p>These messages are designed to look legitimate and may target people through email, text messages, fake websites, or even phone calls.</p><p>The goal is often to steal passwords, deliver malware, or gain access to internal systems.</p>",
-      "video": {
-        "provider": "youtube",
-        "videoId": "VIDEO_ID_PHISHING_EXPLAINED",
-        "caption": "Short explanation of phishing attacks"
-      },
       "image": {
         "src": "/images/phishing_example1.png",
         "alt": "Example of a phishing email (replace later)"
@@ -32,11 +27,6 @@
       "type": "textImage",
       "title": "Types of phishing",
       "text": "<p>Phishing can happen through multiple communication channels.</p><p><strong>Common types include:</strong></p><ul><li><strong>Email phishing</strong> – Fake emails pretending to be from companies, coworkers, or vendors.</li><li><strong>Smishing</strong> – Phishing messages sent through SMS or text messages.</li><li><strong>Vishing</strong> – Phone calls where attackers impersonate IT staff, banks, or government agencies.</li></ul><p>Even if the message seems legitimate, always verify before responding or clicking anything.</p><p>This example shows a smishing message impersonating the IRS.</p>",
-      "video": {
-        "provider": "youtube",
-        "videoId": "VIDEO_ID_PHISHING_TYPES",
-        "caption": "Overview of different phishing methods"
-      },
       "image": {
         "src": "/images/smishing_example1.png",
         "alt": "Examples of email, SMS, and phone phishing"

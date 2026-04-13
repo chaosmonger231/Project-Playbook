@@ -51,11 +51,7 @@
           "title": "Early reporting can stop bigger problems",
           "text": "Strange login alerts, unusual messages, missing files, or unexpected system behavior should be reported quickly."
         }
-      ],
-      "image": {
-        "src": "IMAGE_URL_GOV_DID_YOU_KNOW",
-        "alt": "Government cybersecurity awareness facts graphic (replace later)"
-      }
+      ]
     },
 
     {

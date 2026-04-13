@@ -5,7 +5,12 @@
     {
       "type": "welcome",
       "title": "Welcome to Student Device and Account Safety",
-      "subtitle": "Learn how to protect school devices, student accounts, and classroom technology from misuse or unauthorized access."
+      "subtitle": "Learn how to protect school devices, student accounts, and classroom technology from misuse or unauthorized access.",
+      "video": {
+        "provider": "youtube",
+        "videoId": "oeo3WdOw654",
+        "caption": "Introduction to Student Device and Account Safety"
+      }
     },
 
     {

@@ -5,105 +5,52 @@
     {
       "type": "welcome",
       "title": "Welcome to Vendor Invoice and Email Fraud",
-      "subtitle": "Learn how cybercriminals use fake emails, impersonation, and payment scams to target small businesses.",
+      "subtitle": "Learn how fake emails, impersonation, and payment scams can trick businesses into sending money to the wrong place.",
       "video": {
-        "videoId": "VIDEO_ID_VENDOR_WELCOME",
-        "caption": "Introduction to vendor invoice and email fraud (replace later)"
+        "provider": "youtube",
+        "videoId": "NYBU_HhBojE",
+        "caption": "Introduction to vendor invoice and email fraud"
       }
+    },
+    {
+      "type": "textImage",
+      "title": "Why this matters",
+      "text": "<p>Vendor invoice fraud is not just an accounting problem. It is often a <strong>cybersecurity issue</strong> because attackers use email compromise, fake domains, impersonation, or stolen accounts to make a payment request look real.</p><p>A criminal may pretend to be a trusted vendor, coworker, manager, or executive. They may ask for updated banking details, a rushed payment, or a wire transfer.</p><p>If someone acts without verifying the request, the organization could lose money, expose sensitive information, or create a larger security incident.</p>"
+    },
+    
+    {
+      "type": "textImage",
+      "title": "How this fraud usually works",
+      "text": "<p>Most vendor payment scams follow a similar pattern:</p><ol><li>A scammer sends a message that appears to come from a real vendor or internal employee.</li><li>The message asks for a payment, invoice approval, or bank account change.</li><li>The request is made to look routine, urgent, or confidential.</li><li>If no one verifies it, payment may be sent to the attacker instead of the real vendor.</li></ol><p>Sometimes the attacker uses a look-alike email address. In other cases, they may have access to a real account and continue an existing email conversation.</p><p><strong>Sample suspicious email patterns:</strong></p><table style=\"width:100%; border-collapse:collapse;\"><thead><tr><th style=\"text-align:left; border:1px solid #ccc; padding:8px;\">Example</th><th style=\"text-align:left; border:1px solid #ccc; padding:8px;\">What is wrong</th></tr></thead><tbody><tr><td style=\"border:1px solid #ccc; padding:8px;\"><strong>From:</strong> billing@acme-suppl1es.com<br><strong>Subject:</strong> Updated banking details for future payments<br><strong>Message:</strong> Please use our new account information for this month’s invoice.</td><td style=\"border:1px solid #ccc; padding:8px;\">The sender address is look-alike and the message is asking for a banking change by email.</td></tr><tr><td style=\"border:1px solid #ccc; padding:8px;\"><strong>From:</strong> accounts@realvendor.com<br><strong>Subject:</strong> Urgent: Pay today to avoid service interruption<br><strong>Message:</strong> We need immediate payment today. Do not delay.</td><td style=\"border:1px solid #ccc; padding:8px;\">The message uses urgency to push quick action before verification.</td></tr><tr><td style=\"border:1px solid #ccc; padding:8px;\"><strong>From:</strong> ceo.company.request@gmail.com<br><strong>Subject:</strong> Need you to process this wire now<br><strong>Message:</strong> I am in a meeting. Handle this quietly and send confirmation once done.</td><td style=\"border:1px solid #ccc; padding:8px;\">It uses a non-company email address, secrecy, and pressure to bypass normal approval steps.</td></tr></tbody></table><p>These examples are for training only. Do not trust a payment request just because it looks familiar.</p>"
     },
 
     {
       "type": "textImage",
-      "title": "Why this is a cybersecurity issue",
-      "text": "Vendor invoice fraud is not just an accounting problem. It is often a <b>cybersecurity issue</b> because attackers use email compromise, fake domains, impersonation, or stolen accounts to trick businesses into sending money to the wrong place.\n\nA criminal may pretend to be a trusted vendor, office manager, or executive and ask for a payment update, urgent wire transfer, or new banking instructions.\n\nIf an employee trusts the message without verifying it, the business may lose money, expose sensitive data, or create a larger security incident.",
+      "title": "Real-life incident example",
+      "text": "<p>Vendor and payment fraud are not just training topics. Real organizations have lost money because a request looked routine enough to trust.</p><p>This short news clip gives a real-world example of how financial fraud can affect an organization and why strong verification steps matter.</p><p>Use this example to reinforce one key point: even familiar processes like invoices, approvals, or vendor payments can be abused when people rely on appearance instead of verification.</p><p style=\"text-align:center; color:#c62828;\"><strong>This video is included for educational reference only. We are not affiliated with WKYC.</strong></p>",
       "video": {
-        "videoId": "VIDEO_ID_VENDOR_CYBERSECURITY",
-        "caption": "How invoice fraud connects to cybersecurity"
-      },
-      "image": {
-        "src": "IMAGE_URL_VENDOR_CYBER",
-        "alt": "Example of fraudulent vendor payment email (replace later)"
-      }
-    },
-
-    {
-      "type": "textImage",
-      "title": "How vendor invoice fraud usually works",
-      "text": "Many payment fraud attempts follow the same pattern.\n\nA scammer sends an email that appears to come from a real vendor or internal employee. The message may include a fake invoice, a request to change bank details, or instructions to send payment quickly.\n\nSometimes the attacker uses a look-alike email domain. In other cases, they may have access to a real account and continue an existing email conversation.\n\nThe goal is to make the request seem normal enough that someone processes it without stopping to verify.",
-      "video": {
-        "videoId": "VIDEO_ID_VENDOR_HOW_IT_WORKS",
-        "caption": "Common steps in vendor payment fraud"
-      },
-      "image": {
-        "src": "IMAGE_URL_VENDOR_PROCESS",
-        "alt": "Illustration of vendor invoice fraud process"
-      }
-    },
-
-    {
-      "type": "textImage",
-      "title": "Did you know?",
-      "bullets": [
-        {
-          "title": "Attackers often target finance and operations staff",
-          "text": "Anyone who handles invoices, payroll, purchasing, or vendor communication may be targeted."
-        },
-        {
-          "title": "A familiar name does not mean a message is safe",
-          "text": "Scammers can spoof display names or use email addresses that look nearly identical to real ones."
-        },
-        {
-          "title": "Urgency is a common tactic",
-          "text": "Messages may say the payment is overdue, confidential, or needs to be handled immediately."
-        },
-        {
-          "title": "Fraud can happen without malware",
-          "text": "Some attacks succeed simply by manipulating trust, email habits, and weak verification processes."
-        }
-      ],
-      "image": {
-        "src": "IMAGE_URL_VENDOR_DID_YOU_KNOW",
-        "alt": "Did you know vendor fraud graphic (replace later)"
+        "provider": "youtube",
+        "videoId": "-Ncj39asH3A",
+        "caption": "Real-life news example related to financial fraud"
       }
     },
 
     {
       "type": "textImage",
       "title": "Red flags to watch for",
-      "text": "Be extra cautious when a message involves money, account changes, or urgency.\n\nCommon warning signs include:\n\n• A request to change payment or banking information\n• Pressure to act quickly or keep the request secret\n• An email address that is slightly different from the real vendor\n• New payment instructions sent only by email\n• A sudden change in tone, wording, or formatting\n• Unexpected attachments or invoice files\n\nEven if the request looks routine, verify it before processing payment.",
-      "video": {
-        "videoId": "VIDEO_ID_VENDOR_REDFLAGS",
-        "caption": "How to spot payment fraud red flags"
-      },
-      "image": {
-        "src": "IMAGE_URL_VENDOR_REDFLAGS",
-        "alt": "Common vendor fraud red flags (replace later)"
-      }
+      "text": "<p>Be cautious whenever a message involves money, account changes, or urgency.</p><ul><li><strong>New banking instructions</strong> sent by email only</li><li><strong>Pressure to act quickly</strong> or keep the request secret</li><li><strong>An email address that looks slightly different</strong> from the real vendor</li><li><strong>A sudden change in tone, wording, or formatting</strong></li><li><strong>Unexpected attachments</strong>, invoices, or payment requests</li><li><strong>A request that bypasses normal approval steps</strong></li></ul><p>Even if the message looks familiar, verify it before processing payment.</p>"
     },
-
-    {
-      "type": "video",
-      "title": "Real-world business scenario",
-      "video": {
-        "videoId": "VIDEO_ID_VENDOR_SCENARIO",
-        "caption": "Example of a small business targeted by invoice fraud (replace later)"
-      }
-    },
-
     {
       "type": "textImage",
-      "title": "How to respond safely",
-      "text": "If you receive a message about invoices, payment changes, or urgent transfers:\n\n1) <b>Pause before acting</b>\n2) <b>Do not rely on email alone</b> for payment changes\n3) <b>Verify through a trusted method</b>, such as a known phone number or approved vendor contact\n4) <b>Report suspicious messages</b> to your manager, finance lead, IT, or security contact\n5) <b>Do not send payment</b> until the request is confirmed\n\nA simple verification step can prevent major financial loss.",
-      "video": {
-        "videoId": "VIDEO_ID_VENDOR_RESPONSE",
-        "caption": "Safe response process for suspicious vendor emails"
-      },
-      "image": {
-        "src": "IMAGE_URL_VENDOR_RESPONSE",
-        "alt": "Vendor fraud reporting and verification flow (replace later)"
-      }
+      "title": "What you should do",
+      "text": "<p>If you receive a message about invoices, payment changes, or urgent transfers:</p><ol><li><strong>Pause before acting.</strong></li><li><strong>Do not rely on email alone</strong> to confirm payment changes.</li><li><strong>Verify the request using a trusted method</strong>, such as a known phone number or approved vendor contact.</li><li><strong>Report suspicious messages</strong> to your manager, finance lead, IT, or security contact.</li><li><strong>Do not send payment</strong> until the request has been confirmed.</li></ol><p>A short verification step can prevent a major financial loss.</p>"
     },
-
+    {
+      "type": "textImage",
+      "variant": "did_you_know",
+      "title": "Did you know?",
+      "text": "<ul><li><strong>Finance, payroll, purchasing, and operations staff</strong> are common targets because they regularly handle payments and vendor communication.</li><li><strong>A familiar display name is not enough</strong> to prove an email is legitimate.</li><li><strong>Urgency is a common tactic</strong> because attackers want people to act before they verify.</li><li><strong>These scams do not always use malware</strong>. Many succeed by manipulating trust and routine business processes.</li></ul>"
+    },
     {
       "type": "quizWelcome",
       "title": "Ready for the quiz?",
@@ -111,12 +58,10 @@
       "quizModulePath": "/learningModule/vendor_email_fraud.json",
       "startButtonText": "Start Quiz"
     },
-
     {
       "type": "quiz",
       "quizModulePath": "/learningModule/vendor_email_fraud.json"
     },
-
     {
       "type": "results",
       "title": "Quiz Results",

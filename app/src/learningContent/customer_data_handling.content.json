@@ -20,6 +20,17 @@
 
     {
       "type": "textImage",
+      "title": "Real World Incident",
+      "text": "<p>When customer or patient information is handled carelessly, the impact can be serious. Carelessness can expose sensitive records, damage trust, disrupt operations, and lead to legal or regulatory consequences.</p><p>For organizations that handle health information, <strong>HIPAA</strong> is especially important. The <strong>HIPAA Privacy Rule</strong> sets national standards for protecting <strong>protected health information (PHI)</strong>, and the <strong>HIPAA Security Rule</strong> requires safeguards for certain electronic protected health information.</p><p style='background: rgba(185, 28, 28, 0.08); border-left: 4px solid #b91c1c; padding: 12px 14px; border-radius: 10px;'><strong>Why this matters:</strong> Customer data handling is not just about being careful. In some industries, it is also tied to legal duties to protect sensitive information.</p><p><strong>Reference:</strong> <a href='https://www.hhs.gov/hipaa/for-professionals/privacy/index.html' target='_blank' rel='noopener noreferrer'>HHS: HIPAA Privacy Rule</a> | <a href='https://www.hhs.gov/hipaa/for-professionals/security/index.html' target='_blank' rel='noopener noreferrer'>HHS: HIPAA Security Rule</a></p><p style='font-size: 0.95em; color: #555;'><em>Project Playbook is not affiliated with WDTN-TV.</em></p>",
+      "video": {
+        "provider": "youtube",
+        "videoId": "pfo1Dy3zNsk",
+        "caption": "Real-world incident example involving sensitive information handling"
+      }
+    },
+
+    {
+      "type": "textImage",
       "title": "What kind of data needs protection?",
       "text": "<p>Not all business data has the same level of risk, but many common records should still be handled carefully.</p><div style='overflow-x: auto;'><table style='width: 100%; border-collapse: collapse; margin-top: 12px;'><thead><tr><th style='border: 1px solid #d1d5db; padding: 10px; text-align: left; background: #f3f4f6;'>Type of Data</th><th style='border: 1px solid #d1d5db; padding: 10px; text-align: left; background: #f3f4f6;'>Examples</th></tr></thead><tbody><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Customer information</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Names, addresses, phone numbers, email addresses</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Payment or billing data</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Invoices, billing records, payment details</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Employee records</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Payroll information, tax forms, personnel files</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Account or business documents</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Contracts, reports, account files, internal forms</td></tr><tr><td style='border: 1px solid #d1d5db; padding: 10px;'>Access-related information</td><td style='border: 1px solid #d1d5db; padding: 10px;'>Login credentials, recovery details, account access notes</td></tr></tbody></table></div><p>If the information could harm a customer, employee, or the business if exposed, it should be handled with care.</p>"
     },
