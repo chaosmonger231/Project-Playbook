@@ -46,7 +46,7 @@ export default function DetectionResponsePlaybook() {
         <button
           type="button"
           className="security-tools-back"
-          onClick={() => navigate("/incidentresponseandoperations")}
+          onClick={() => navigate("/playbooks")}
         >
           ← Back to Incident Response &amp; Operations
         </button>
