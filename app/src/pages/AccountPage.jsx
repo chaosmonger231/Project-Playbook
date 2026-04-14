@@ -327,8 +327,8 @@ export default function AccountPage() {
                 }}
               >
                 <iframe
-                  src="https://www.youtube.com/embed/watch?v=K4TOrB7at0Y"
-                  title="How to invite others"
+                  src="https://www.youtube.com/embed/LnbywIkBw-4?si=38ZsKrnKrn09EZX5"
+                  title="How to Invite Others"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
