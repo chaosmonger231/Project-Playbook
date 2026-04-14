@@ -114,7 +114,7 @@ const PLAYBOOK_ZONES = [
         id: "backup-recovery",
         title: "Backup & Recovery Playbook",
         path: "/backuprecoveryplaybook",
-        icon: "/images/backuprecoverylogo.svg",
+        icon: "/images/playbookImage3.png",
         type: "support",
         status: "not-started",
       },
